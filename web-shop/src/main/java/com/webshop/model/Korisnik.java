@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Set;
 
 enum Uloga { KUPAC, PRODAVAC, ADMINISTRATOR };
 
@@ -44,5 +45,11 @@ public class Korisnik implements Serializable {
 
     @Column
     private boolean blokiran;
+
+    @OneToMany(mappedBy = "podnosilac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<PrijavaProfila> prijavaProfila;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private PrijavaProfila prijavljenKorisnik;
 
 }
