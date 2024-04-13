@@ -32,6 +32,10 @@ public class Korisnik implements Serializable {
     private String brojTelefona;
 
     @Column
+    private String lozinka;
+
+    @Column
+    @Temporal(TemporalType.DATE)
     private LocalDate datumRodjenja;
 
     @Column
@@ -41,15 +45,23 @@ public class Korisnik implements Serializable {
     private String opis;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private Uloga uloga;
 
     @Column
     private boolean blokiran;
 
-    @OneToMany(mappedBy = "podnosilac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<PrijavaProfila> prijavaProfila;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private PrijavaProfila prijavljenKorisnik;
+    //zbog recenzija
+    @OneToOne(mappedBy = "korisnik",cascade = CascadeType.ALL)
+    private Recenzija recenzija;
+
+    //zbog prijava profila
+    @OneToOne(mappedBy = "korisnikPodnosilac",cascade = CascadeType.ALL)
+    private PrijavaProfila prijava;
+
+    //zbog prijava profila
+    @OneToOne(mappedBy = "korisnikOdnosilac",cascade = CascadeType.ALL)
+    private PrijavaProfila prijava2;
 
 }

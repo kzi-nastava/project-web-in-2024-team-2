@@ -15,6 +15,8 @@ public class Kategorija implements Serializable {
     @Column
     private String naziv;
 
-    @OneToOne(mappedBy = "kategorija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //zbog proizvod
+    @OneToOne(mappedBy = "kategorija",cascade = CascadeType.ALL)
     private Proizvod proizvod;
+
 }

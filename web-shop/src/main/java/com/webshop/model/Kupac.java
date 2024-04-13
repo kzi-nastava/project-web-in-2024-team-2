@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+
+
 @Entity
 public class Kupac extends Korisnik implements Serializable {
 
@@ -15,9 +17,16 @@ public class Kupac extends Korisnik implements Serializable {
 
     @OneToMany(mappedBy = "kupac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Proizvod> kupljeniProizvodi = new HashSet<>();
+
     @OneToMany(mappedBy = "kupac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Recenzija> recenzije = new HashSet<>();
 
     @Column
-    private double prosecnaOcena;
+    private Double prosecnaOcena;
+
+
+    //zbog ponuda
+    @OneToOne(mappedBy = "kupac",cascade = CascadeType.ALL)
+    private Ponuda ponuda;
+
 }

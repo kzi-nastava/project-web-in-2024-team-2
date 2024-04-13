@@ -24,25 +24,29 @@ public class Proizvod implements Serializable {
     private String opis;
 
     @Column
-    private URL profilnaURL;
+    private URL slika;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "kategorija_id")
     private Kategorija kategorija;
 
     @Column
     private Double cena;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private TipProdaje tipProdaje;
 
     @Column
+    @Temporal(TemporalType.DATE)
     private LocalDate datumObjave;
 
     @OneToMany(mappedBy = "proizvod", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Ponuda> ponude = new HashSet<>();
 
-//    @Column
-//    private Prodavac prodavacRecenzija;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "prodavac_proizvoda_id")
+    private Prodavac prodavacProizvoda;
 
     @Column
     private boolean recenzijaKupca;
@@ -53,10 +57,14 @@ public class Proizvod implements Serializable {
     @Column
     private boolean prodat;
 
+    //zbog prodavac
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Kupac kupac;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "prodavac_id")
     private Prodavac prodavac;
+
+    //zbog kupac
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "kupac_id")
+    private Kupac kupac;
 
 }

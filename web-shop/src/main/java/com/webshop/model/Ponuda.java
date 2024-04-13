@@ -14,6 +14,15 @@ public class Ponuda implements Serializable {
     @Column
     private Double cena;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "kupac_id")
+    private Kupac kupac;
+
+
+    //zbog proizvod
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "proizvod_id")
     private Proizvod proizvod;
+
+
 }

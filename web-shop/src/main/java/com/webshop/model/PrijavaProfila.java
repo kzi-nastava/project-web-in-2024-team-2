@@ -15,15 +15,26 @@ public class PrijavaProfila implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @Column
+    private String razlogPrijave;
+
+    @Column
+    @Temporal(TemporalType.DATE)
     private LocalDate datumPodnosenjaPrijave;
 
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "korisnik_podnosilac_prijave_id")
+    private Korisnik korisnikPodnosilac;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "korisnik_na_koga_se_odnosi_prijava_id")
+    private Korisnik korisnikOdnosilac;
+
     @Column
+    @Enumerated(EnumType.STRING)
     private StatusPrijave statusPrijave;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Korisnik podnosilac;
-
-    @OneToMany(mappedBy = "prijavljenKorisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Korisnik> prijavljen;
 }
+

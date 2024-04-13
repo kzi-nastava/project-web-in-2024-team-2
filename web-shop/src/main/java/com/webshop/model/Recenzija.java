@@ -19,11 +19,24 @@ public class Recenzija implements Serializable {
     private String komentar;
 
     @Column
+    @Temporal(TemporalType.DATE)
     private LocalDate datumRecenzije;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "korisnik_id")
+    private Korisnik korisnik;
+
+
+    //zbog prodavac
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "prodavac_id")
+    private Prodavac prodavac;
+
+    //zbog kupac
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "kupac_id")
     private Kupac kupac;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Korisnik korisnik;
 }
+
+
