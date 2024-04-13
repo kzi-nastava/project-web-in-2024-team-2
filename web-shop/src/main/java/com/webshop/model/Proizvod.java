@@ -17,54 +17,36 @@ public class Proizvod implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
     private String naziv;
 
-    @Column
     private String opis;
 
-    @Column
-    private URL slika;
+    private URL profilnaURL;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "kategorija_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Kategorija kategorija;
 
-    @Column
     private Double cena;
 
-    @Column
     @Enumerated(EnumType.STRING)
     private TipProdaje tipProdaje;
 
-    @Column
-    @Temporal(TemporalType.DATE)
     private LocalDate datumObjave;
 
     @OneToMany(mappedBy = "proizvod", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Ponuda> ponude = new HashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "prodavac_proizvoda_id")
-    private Prodavac prodavacProizvoda;
+    private boolean recenzijaKupcaOstavljena;
 
-    @Column
-    private boolean recenzijaKupca;
+    private boolean recenzijaProdavcaOstavljena;
 
-    @Column
-    private boolean recenzijaProdavca;
-
-    @Column
     private boolean prodat;
 
-    //zbog prodavac
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "prodavac_id")
+    private Kupac kupac;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Prodavac prodavac;
 
-    //zbog kupac
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "kupac_id")
-    private Kupac kupac;
 
 }

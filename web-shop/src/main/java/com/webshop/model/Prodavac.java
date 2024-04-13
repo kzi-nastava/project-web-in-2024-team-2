@@ -7,24 +7,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@DiscriminatorValue("Prodavac")
 public class Prodavac extends Korisnik implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @OneToMany(mappedBy = "prodavac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Proizvod> proizvodiNaProdaju = new HashSet<>();
 
-    @OneToMany(mappedBy = "prodavac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "korisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Recenzija> recenzije = new HashSet<>();
 
-    @Column
-    private Double prosecnaOcena;
-
-    //zbog proizvod
-    @OneToOne(mappedBy = "prodavacProizvoda",cascade = CascadeType.ALL)
-    private Proizvod proizvod;
-
+    private double prosecnaOcena;
 }
-

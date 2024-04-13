@@ -3,6 +3,7 @@ package com.webshop.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.Set;
 
 
 @Entity
@@ -12,11 +13,8 @@ public class Kategorija implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
     private String naziv;
 
-    //zbog proizvod
-    @OneToOne(mappedBy = "kategorija",cascade = CascadeType.ALL)
-    private Proizvod proizvod;
-
+    @OneToMany(mappedBy = "kategorija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Proizvod> proizvod;
 }

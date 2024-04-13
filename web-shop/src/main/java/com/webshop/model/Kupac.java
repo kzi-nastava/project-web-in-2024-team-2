@@ -6,27 +6,15 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-
-
 @Entity
+@DiscriminatorValue("Kupac")
 public class Kupac extends Korisnik implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @OneToMany(mappedBy = "kupac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "kupac", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Proizvod> kupljeniProizvodi = new HashSet<>();
 
-    @OneToMany(mappedBy = "kupac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Recenzija> recenzije = new HashSet<>();
+    @OneToMany(mappedBy = "kupac", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Ponuda> ponude = new HashSet<>();
 
-    @Column
-    private Double prosecnaOcena;
-
-
-    //zbog ponuda
-    @OneToOne(mappedBy = "kupac",cascade = CascadeType.ALL)
-    private Ponuda ponuda;
-
+    private double prosecnaOcena;
 }

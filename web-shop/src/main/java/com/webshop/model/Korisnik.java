@@ -10,20 +10,22 @@ import java.util.Set;
 enum Uloga { KUPAC, PRODAVAC, ADMINISTRATOR };
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "uloga", discriminatorType = DiscriminatorType.STRING)
 public class Korisnik implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
     private String ime;
 
-    @Column
     private String prezime;
 
     @Column(unique = true)
     private String username;
+
+    private String password;
 
     @Column(unique = true)
     private String mail;
@@ -31,37 +33,15 @@ public class Korisnik implements Serializable {
     @Column(unique = true)
     private String brojTelefona;
 
-    @Column
-    private String lozinka;
-
-    @Column
-    @Temporal(TemporalType.DATE)
     private LocalDate datumRodjenja;
 
-    @Column
     private URL profilnaURL;
 
-    @Column
     private String opis;
 
-    @Column
-    @Enumerated(EnumType.STRING)
+    @Column(insertable = false, updatable = false)
     private Uloga uloga;
 
-    @Column
     private boolean blokiran;
-
-
-    //zbog recenzija
-    @OneToOne(mappedBy = "korisnik",cascade = CascadeType.ALL)
-    private Recenzija recenzija;
-
-    //zbog prijava profila
-    @OneToOne(mappedBy = "korisnikPodnosilac",cascade = CascadeType.ALL)
-    private PrijavaProfila prijava;
-
-    //zbog prijava profila
-    @OneToOne(mappedBy = "korisnikOdnosilac",cascade = CascadeType.ALL)
-    private PrijavaProfila prijava2;
 
 }

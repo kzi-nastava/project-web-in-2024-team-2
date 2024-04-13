@@ -11,18 +11,11 @@ public class Ponuda implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
     private Double cena;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "kupac_id")
-    private Kupac kupac;
-
-
-    //zbog proizvod
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "proizvod_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Proizvod proizvod;
 
-
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Kupac kupac;
 }
