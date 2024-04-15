@@ -23,8 +23,9 @@ public class Proizvod implements Serializable {
 
     private URL profilnaURL;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Kategorija kategorija;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "kategorija_proizvoda", joinColumns = @JoinColumn(name = "proizvod_id"), inverseJoinColumns = @JoinColumn(name = "kategorija_id"))
+    private Set<Kategorija> kategorije;
 
     private Double cena;
 

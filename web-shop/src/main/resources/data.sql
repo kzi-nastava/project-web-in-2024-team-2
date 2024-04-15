@@ -10,11 +10,13 @@ INSERT INTO PRIJAVA_PROFILA (datum_podnosenja_prijave, status_prijave, odnosi_se
 INSERT INTO KATEGORIJA (naziv) VALUES ('Alat');
 INSERT INTO KATEGORIJA (naziv) VALUES ('IT');
 INSERT INTO KATEGORIJA (naziv) VALUES ('Namestaj');
+INSERT INTO KATEGORIJA (naziv) VALUES ('Elektronika');
 
-INSERT INTO PROIZVOD (cena, datum_objave, prodat, recenzija_kupca_ostavljena, recenzija_prodavca_ostavljena, tip_prodaje, kategorija_id, kupac_id, prodavac_id, naziv, opis, profilnaurl) VALUES (12342, current_date, false, true, true, 'FIKSNA_CENA', 1, 2, 1, 'Hilti busilica', 'jaka busilica', 'url');
-INSERT INTO PROIZVOD (cena, datum_objave, prodat, recenzija_kupca_ostavljena, recenzija_prodavca_ostavljena, tip_prodaje, kategorija_id, kupac_id, prodavac_id, naziv, opis, profilnaurl) VALUES (34500, current_date, true, false, true, 'AUKCIJA', 2, 2, 1, 'Ugaona garnitura', 'Simpo ugaona garnitura', 'url');
-INSERT INTO PROIZVOD (cena, datum_objave, prodat, recenzija_kupca_ostavljena, recenzija_prodavca_ostavljena, tip_prodaje, kategorija_id, kupac_id, prodavac_id, naziv, opis, profilnaurl) VALUES (5000, current_date, true, false, true, 'FIKSNA_CENA', 3, 2, 1, 'RAM', '16GB DDR5 6400MHz', 'url');
-INSERT INTO PROIZVOD (cena, datum_objave, prodat, recenzija_kupca_ostavljena, recenzija_prodavca_ostavljena, tip_prodaje, kategorija_id, kupac_id, prodavac_id, naziv, opis, profilnaurl) VALUES (5000, current_date, true, false, true, 'FIKSNA_CENA', 3, 2, 1, 'RAM', '16GB DDR5 6400MHz', 'url');
+INSERT INTO PROIZVOD (cena, datum_objave, prodat, recenzija_kupca_ostavljena, recenzija_prodavca_ostavljena, tip_prodaje, kupac_id, prodavac_id, naziv, opis, profilnaurl) VALUES (12342, current_date, false, true, true, 'FIKSNA_CENA', 2, 1, 'Hilti busilica', 'jaka busilica', 'url');
+INSERT INTO PROIZVOD (cena, datum_objave, prodat, recenzija_kupca_ostavljena, recenzija_prodavca_ostavljena, tip_prodaje, kupac_id, prodavac_id, naziv, opis, profilnaurl) VALUES (34500, current_date, true, false, true, 'AUKCIJA', 2, 1, 'Ugaona garnitura', 'Simpo ugaona garnitura', 'url');
+INSERT INTO PROIZVOD (cena, datum_objave, prodat, recenzija_kupca_ostavljena, recenzija_prodavca_ostavljena, tip_prodaje, kupac_id, prodavac_id, naziv, opis, profilnaurl) VALUES (5000, current_date, true, false, true, 'FIKSNA_CENA', 2, 1, 'RAM', '16GB DDR5 6400MHz', 'url');
+INSERT INTO PROIZVOD (cena, datum_objave, prodat, recenzija_kupca_ostavljena, recenzija_prodavca_ostavljena, tip_prodaje, kupac_id, prodavac_id, naziv, opis, profilnaurl) VALUES (5000, current_date, true, false, true, 'FIKSNA_CENA', 2, 1, 'Procesor', 'Intel® Core™ i5-12500H Processor up to 4.50 GHz', 'url');
+INSERT INTO PROIZVOD (cena, datum_objave, prodat, recenzija_kupca_ostavljena, recenzija_prodavca_ostavljena, tip_prodaje, kupac_id, prodavac_id, naziv, opis, profilnaurl) VALUES (7800, current_date, false, true, true, 'FIKSNA_CENA', 2, 1, 'Mesalica', 'mesalica neke marke', 'url');
 
 INSERT INTO RECENZIJA (datum_recenzije, ocena, korisnik_id, komentar) VALUES (current_date, 5, 1, 'svaka cast');
 INSERT INTO RECENZIJA (datum_recenzije, ocena, korisnik_id, komentar) VALUES (current_date, 3, 1, 'dobro odradjen posao');
@@ -24,3 +26,9 @@ INSERT INTO PONUDA (cena, kupac_id, proizvod_id) VALUES (5000, 1, 2);
 INSERT INTO PONUDA (cena, kupac_id, proizvod_id) VALUES (5000, 1, 3);
 INSERT INTO PONUDA (cena, kupac_id, proizvod_id) VALUES (5000, 1, 1);
 INSERT INTO PONUDA (cena, kupac_id, proizvod_id) VALUES (5000, 2, 1);
+
+INSERT INTO KATEGORIJA_PROIZVODA (kategorija_id, proizvod_id) VALUES (1, 1);
+INSERT INTO KATEGORIJA_PROIZVODA (kategorija_id, proizvod_id) VALUES (2, 3);
+INSERT INTO KATEGORIJA_PROIZVODA (kategorija_id, proizvod_id) VALUES (4, 4);
+INSERT INTO KATEGORIJA_PROIZVODA (kategorija_id, proizvod_id) VALUES (4, 3);
+INSERT INTO KATEGORIJA_PROIZVODA (kategorija_id, proizvod_id) VALUES (1, 5);

@@ -15,6 +15,6 @@ public class Kategorija implements Serializable {
 
     private String naziv;
 
-    @OneToMany(mappedBy = "kategorija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "kategorije", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Proizvod> proizvod;
 }
