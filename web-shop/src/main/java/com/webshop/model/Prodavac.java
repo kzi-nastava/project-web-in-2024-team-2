@@ -13,7 +13,9 @@ public class Prodavac extends Korisnik implements Serializable {
     @OneToMany(mappedBy = "prodavac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Proizvod> proizvodiNaProdaju = new HashSet<>();
 
-    @OneToMany(mappedBy = "korisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+    //promenjeno sa mappedBy = "korisnik" na mappedBy = "prodavac"(promenjeno i u klasi Recenzije)
+    @OneToMany(mappedBy = "prodavac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Recenzija> recenzije = new HashSet<>();
 
     private double prosecnaOcena;

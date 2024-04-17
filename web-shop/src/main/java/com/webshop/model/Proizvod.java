@@ -43,6 +43,7 @@ public class Proizvod implements Serializable {
 
     private boolean prodat;
 
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Kupac kupac;
 

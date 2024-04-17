@@ -22,9 +22,9 @@ public class PrijavaProfila implements Serializable {
 
     private String razlogPrijave;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "prijava1")
     private Korisnik podnosilac;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "prijava2")
     private Korisnik odnosi_se;
 }

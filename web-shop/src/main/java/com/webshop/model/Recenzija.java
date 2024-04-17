@@ -21,6 +21,12 @@ public class Recenzija implements Serializable {
     @Column
     private LocalDate datumRecenzije;
 
+
+    //promenjeno sa private Korisnik korisnik na private Prodavac prodavac
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Korisnik korisnik;
+    private Prodavac prodavac;
+
+    //dodate recenzije za kupca(vidi klasu kupac)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Kupac kupac;
 }

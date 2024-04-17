@@ -44,4 +44,10 @@ public class Korisnik implements Serializable {
 
     private boolean blokiran;
 
+    @OneToOne
+    PrijavaProfila prijava1;
+
+    @OneToOne
+    PrijavaProfila prijava2;
+
 }

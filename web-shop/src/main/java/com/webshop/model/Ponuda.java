@@ -13,8 +13,10 @@ public class Ponuda implements Serializable {
 
     private Double cena;
 
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Proizvod proizvod;
+
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Kupac kupac;
