@@ -8,8 +8,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-enum TipProdaje { FIKSNA_CENA, AUKCIJA };
-
 @Entity
 public class Proizvod implements Serializable {
 
@@ -34,19 +32,118 @@ public class Proizvod implements Serializable {
     private LocalDate datumObjave;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "proizvod_id")
     private Set<Ponuda> ponuda = new HashSet<>();
 
-    //zbog ova tri nastaje greska!
-/*
     private boolean recenzijaKupcaOstavljena;
 
     private boolean recenzijaProdavcaOstavljena;
 
     private boolean prodat;
-*/
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Prodavac prodavac;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNaziv() {
+        return naziv;
+    }
+
+    public void setNaziv(String naziv) {
+        this.naziv = naziv;
+    }
+
+    public String getOpis() {
+        return opis;
+    }
+
+    public void setOpis(String opis) {
+        this.opis = opis;
+    }
+
+    public URL getProfilnaURL() {
+        return profilnaURL;
+    }
+
+    public void setProfilnaURL(URL profilnaURL) {
+        this.profilnaURL = profilnaURL;
+    }
+
+    public Kategorija getKategorija() {
+        return kategorija;
+    }
+
+    public void setKategorija(Kategorija kategorija) {
+        this.kategorija = kategorija;
+    }
+
+    public Double getCena() {
+        return cena;
+    }
+
+    public void setCena(Double cena) {
+        this.cena = cena;
+    }
+
+    public TipProdaje getTipProdaje() {
+        return tipProdaje;
+    }
+
+    public void setTipProdaje(TipProdaje tipProdaje) {
+        this.tipProdaje = tipProdaje;
+    }
+
+    public LocalDate getDatumObjave() {
+        return datumObjave;
+    }
+
+    public void setDatumObjave(LocalDate datumObjave) {
+        this.datumObjave = datumObjave;
+    }
+
+    public Set<Ponuda> getPonuda() {
+        return ponuda;
+    }
+
+    public void setPonuda(Set<Ponuda> ponuda) {
+        this.ponuda = ponuda;
+    }
+
+    public boolean isRecenzijaKupcaOstavljena() {
+        return recenzijaKupcaOstavljena;
+    }
+
+    public void setRecenzijaKupcaOstavljena(boolean recenzijaKupcaOstavljena) {
+        this.recenzijaKupcaOstavljena = recenzijaKupcaOstavljena;
+    }
+
+    public boolean isRecenzijaProdavcaOstavljena() {
+        return recenzijaProdavcaOstavljena;
+    }
+
+    public void setRecenzijaProdavcaOstavljena(boolean recenzijaProdavcaOstavljena) {
+        this.recenzijaProdavcaOstavljena = recenzijaProdavcaOstavljena;
+    }
+
+    public boolean isProdat() {
+        return prodat;
+    }
+
+    public void setProdat(boolean prodat) {
+        this.prodat = prodat;
+    }
+
+    public Prodavac getProdavac() {
+        return prodavac;
+    }
+
+    public void setProdavac(Prodavac prodavac) {
+        this.prodavac = prodavac;
+    }
 }

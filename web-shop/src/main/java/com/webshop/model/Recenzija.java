@@ -22,6 +22,6 @@ public class Recenzija implements Serializable {
     private LocalDate datumRecenzije;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Korisnik korisnik;
+    private Korisnik podnosilac;
 
 }

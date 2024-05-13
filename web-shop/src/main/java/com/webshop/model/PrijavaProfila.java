@@ -6,8 +6,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
-enum StatusPrijave { PODNETA, ODBIJENA, PRIHVACENA };
-
 @Entity
 public class PrijavaProfila implements Serializable {
 

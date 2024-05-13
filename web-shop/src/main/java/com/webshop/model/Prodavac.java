@@ -15,8 +15,7 @@ public class Prodavac extends Korisnik implements Serializable {
     private Set<Proizvod> proizvodiNaProdaju = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "recenzija_za_prodavca")
     private Set<Recenzija> recenzije = new HashSet<>();
 
-    private double prosecnaOcena;
+    private Double prosecnaOcena;
 }

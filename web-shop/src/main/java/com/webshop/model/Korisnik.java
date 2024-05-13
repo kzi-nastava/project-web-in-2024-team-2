@@ -7,8 +7,6 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.Set;
 
-enum Uloga { KUPAC, PRODAVAC, ADMINISTRATOR };
-
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "uloga", discriminatorType = DiscriminatorType.STRING)

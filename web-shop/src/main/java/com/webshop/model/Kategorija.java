@@ -15,6 +15,4 @@ public class Kategorija implements Serializable {
     private Long id;
 
     private String naziv;
-
-
 }
