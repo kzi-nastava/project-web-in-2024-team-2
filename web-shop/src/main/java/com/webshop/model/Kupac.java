@@ -10,17 +10,11 @@ import java.util.Set;
 @DiscriminatorValue("Kupac")
 public class Kupac extends Korisnik implements Serializable {
 
-    @OneToMany(mappedBy = "kupac", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Proizvod> kupljeniProizvodi = new HashSet<>();
 
-    //dodate recenzije za kupca(dodato i u klasi recenzije)
-    @OneToMany(mappedBy = "kupac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Recenzija> recenzija = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Recenzija> recenzije = new HashSet<>();
 
-
-
-    @OneToMany(mappedBy = "kupac", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Ponuda> ponude = new HashSet<>();
-
-    private double prosecnaOcena;
+    private Double prosecnaOcena;
 }
