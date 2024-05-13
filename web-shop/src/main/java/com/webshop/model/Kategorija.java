@@ -3,6 +3,7 @@ package com.webshop.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -15,6 +16,5 @@ public class Kategorija implements Serializable {
 
     private String naziv;
 
-    @ManyToMany(mappedBy = "kategorije", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Proizvod> proizvod;
+
 }

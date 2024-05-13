@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
    @SpringBootApplication anotacija nastala je od @EnableAutoConfiguration anotacije koja
    upravlja konfiguracijom aplikacije.
  */
+
 @SpringBootApplication
 public class WebShopApplication implements CommandLineRunner {
 

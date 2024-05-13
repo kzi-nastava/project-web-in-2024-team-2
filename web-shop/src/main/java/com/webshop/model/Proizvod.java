@@ -23,9 +23,8 @@ public class Proizvod implements Serializable {
 
     private URL profilnaURL;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "kategorija_proizvoda", joinColumns = @JoinColumn(name = "proizvod_id"), inverseJoinColumns = @JoinColumn(name = "kategorija_id"))
-    private Set<Kategorija> kategorije;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Kategorija kategorija;
 
     private Double cena;
 
@@ -34,20 +33,20 @@ public class Proizvod implements Serializable {
 
     private LocalDate datumObjave;
 
-    @OneToMany(mappedBy = "proizvod", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Ponuda> ponude = new HashSet<>();
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "proizvod_id")
+    private Set<Ponuda> ponuda = new HashSet<>();
 
+    //zbog ova tri nastaje greska!
+/*
     private boolean recenzijaKupcaOstavljena;
 
     private boolean recenzijaProdavcaOstavljena;
 
     private boolean prodat;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Kupac kupac;
+*/
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Prodavac prodavac;
-
 
 }
