@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface ProizvodRepository extends JpaRepository<Proizvod, Long> {
     Page<Proizvod> findAll(Pageable pageable);
+    Proizvod findById(long id);
 }

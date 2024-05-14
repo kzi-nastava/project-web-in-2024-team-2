@@ -42,10 +42,51 @@ public class Korisnik implements Serializable {
 
     private boolean blokiran;
 
-    @OneToOne
-    PrijavaProfila prijava1;
+    public Long getId() {
+        return id;
+    }
 
-    @OneToOne
-    PrijavaProfila prijava2;
+    public String getIme() {
+        return ime;
+    }
 
+    public String getPrezime() {
+        return prezime;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public String getBrojTelefona() {
+        return brojTelefona;
+    }
+
+    public LocalDate getDatumRodjenja() {
+        return datumRodjenja;
+    }
+
+    public String getProfilnaURL() {
+        return profilnaURL;
+    }
+
+    public String getOpis() {
+        return opis;
+    }
+
+    public Uloga getUloga() {
+        return uloga;
+    }
+
+    public boolean isBlokiran() {
+        return blokiran;
+    }
 }

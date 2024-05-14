@@ -21,4 +21,8 @@ public class ProizvodService {
         Pageable tenProductPage = PageRequest.of(page, size);
         return proizvodRepository.findAll(tenProductPage);
     }
+
+    public Proizvod getProizvodById(int id) {
+        return proizvodRepository.findById(id);
+    }
 }

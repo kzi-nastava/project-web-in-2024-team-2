@@ -18,4 +18,24 @@ public class Ponuda implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Kupac kupac;
 
+    public Long getId() {
+        return id;
+    }
+
+    public Double getCena() {
+        return cena;
+    }
+
+    public void setCena(Double cena) {
+        this.cena = cena;
+    }
+
+    public Kupac getKupac() {
+        return kupac;
+    }
+
+    public void setKupac(Kupac kupac) {
+        this.kupac = kupac;
+    }
+
 }
