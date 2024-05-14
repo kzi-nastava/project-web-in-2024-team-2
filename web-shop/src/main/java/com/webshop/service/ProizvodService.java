@@ -27,4 +27,9 @@ public class ProizvodService {
         Optional<Proizvod> proizvod = proizvodRepository.findById(id);
         return proizvod.orElse(null);
     }
+
+    public List<Proizvod> getProizvodListByNazivOrOpis(String naziv, String opis) {
+        Optional<List<Proizvod>> proizvodList = proizvodRepository.findAllByNazivContainsIgnoreCaseOrOpisContainsIgnoreCase(naziv, opis);
+        return proizvodList.orElse(null);
+    }
 }

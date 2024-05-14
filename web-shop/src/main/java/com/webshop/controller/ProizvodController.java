@@ -30,7 +30,6 @@ public class ProizvodController {
         for (Proizvod proizvod : proizvodi) {
             proizvodDtos.add(new ProizvodDto(proizvod));
         }
-
         return ResponseEntity.ok(proizvodDtos);
     }
 
@@ -43,5 +42,16 @@ public class ProizvodController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(new ProizvodDto(proizvod));
+    }
+
+    @GetMapping("/products")
+    public ResponseEntity<List<ProizvodDto>> getProizvodiByNazivOrOpis(@RequestParam(required = false) String naziv, @RequestParam(required = false) String opis) {
+        List<Proizvod> proizvodList = proizvodService.getProizvodListByNazivOrOpis(naziv, opis);
+        List<ProizvodDto> proizvodDtos = new ArrayList<>();
+
+        for (Proizvod proizvod : proizvodList) {
+            proizvodDtos.add(new ProizvodDto(proizvod));
+        }
+        return ResponseEntity.ok(proizvodDtos);
     }
 }
