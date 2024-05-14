@@ -1,6 +1,8 @@
 package com.webshop.service;
 
+import com.webshop.model.Kategorija;
 import com.webshop.model.Proizvod;
+import com.webshop.model.TipProdaje;
 import com.webshop.repository.ProizvodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,11 @@ public class ProizvodService {
 
     public List<Proizvod> getProizvodListByNazivOrOpis(String naziv, String opis) {
         Optional<List<Proizvod>> proizvodList = proizvodRepository.findAllByNazivContainsIgnoreCaseOrOpisContainsIgnoreCase(naziv, opis);
+        return proizvodList.orElse(null);
+    }
+
+    public List<Proizvod> getProizvodListByFilter(Double cenaMin, Double cenaMax, TipProdaje tip, String kategorija) {
+        Optional<List<Proizvod>> proizvodList = proizvodRepository.findAllByFilter(cenaMin, cenaMax, tip, kategorija);
         return proizvodList.orElse(null);
     }
 }

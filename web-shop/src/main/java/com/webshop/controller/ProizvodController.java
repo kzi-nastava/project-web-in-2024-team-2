@@ -1,8 +1,10 @@
 package com.webshop.controller;
 
 import com.webshop.dto.ProizvodDto;
+import com.webshop.model.Kategorija;
 import com.webshop.model.Korisnik;
 import com.webshop.model.Proizvod;
+import com.webshop.model.TipProdaje;
 import com.webshop.service.ProizvodService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ public class ProizvodController {
     private ProizvodService proizvodService;
 
     @GetMapping("/all-products")
-    public ResponseEntity<List<ProizvodDto>> getProizvodi(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size) {
+    public ResponseEntity<List<ProizvodDto>> getProizvodi(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
         Page<Proizvod> proizvodi = proizvodService.getProizvodList(page, size);
         List<ProizvodDto> proizvodDtos = new ArrayList<>();
 
@@ -44,9 +46,20 @@ public class ProizvodController {
         return ResponseEntity.ok(new ProizvodDto(proizvod));
     }
 
-    @GetMapping("/products")
+    @GetMapping("/products/search")
     public ResponseEntity<List<ProizvodDto>> getProizvodiByNazivOrOpis(@RequestParam(required = false) String naziv, @RequestParam(required = false) String opis) {
         List<Proizvod> proizvodList = proizvodService.getProizvodListByNazivOrOpis(naziv, opis);
+        List<ProizvodDto> proizvodDtos = new ArrayList<>();
+
+        for (Proizvod proizvod : proizvodList) {
+            proizvodDtos.add(new ProizvodDto(proizvod));
+        }
+        return ResponseEntity.ok(proizvodDtos);
+    }
+
+    @GetMapping("/products/filter")
+    public ResponseEntity<List<ProizvodDto>> getProizvodiByFilter(@RequestParam(required = false) Double cenaMin, @RequestParam(required = false) Double cenaMax, @RequestParam(required = false) TipProdaje tipProdaje, @RequestParam(required = false) String kategorija) {
+        List<Proizvod> proizvodList = proizvodService.getProizvodListByFilter(cenaMin, cenaMax, tipProdaje, kategorija);
         List<ProizvodDto> proizvodDtos = new ArrayList<>();
 
         for (Proizvod proizvod : proizvodList) {
