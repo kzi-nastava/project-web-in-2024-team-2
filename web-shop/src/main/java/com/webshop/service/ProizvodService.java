@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProizvodService {
@@ -20,5 +21,10 @@ public class ProizvodService {
     public Page<Proizvod> getProizvodList( int page, int size) {
         Pageable tenProductPage = PageRequest.of(page, size);
         return proizvodRepository.findAll(tenProductPage);
+    }
+
+    public Proizvod getProizvodById(int id) {
+        Optional<Proizvod> proizvod = proizvodRepository.findById(id);
+        return proizvod.orElse(null);
     }
 }
