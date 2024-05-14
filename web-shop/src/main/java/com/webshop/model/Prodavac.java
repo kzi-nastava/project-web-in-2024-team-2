@@ -17,4 +17,16 @@ public class Prodavac extends Korisnik implements Serializable {
     private Set<Recenzija> recenzije = new HashSet<>();
 
     private Double prosecnaOcena;
+
+    public Double getProsecnaOcena() {
+        return prosecnaOcena;
+    }
+
+    public Set<Proizvod> getProizvodiNaProdaju() {
+        return proizvodiNaProdaju;
+    }
+
+    public Set<Recenzija> getRecenzije() {
+        return recenzije;
+    }
 }
