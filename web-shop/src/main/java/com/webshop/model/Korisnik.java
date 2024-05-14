@@ -33,7 +33,7 @@ public class Korisnik implements Serializable {
 
     private LocalDate datumRodjenja;
 
-    private URL profilnaURL;
+    private String profilnaURL;
 
     private String opis;
 

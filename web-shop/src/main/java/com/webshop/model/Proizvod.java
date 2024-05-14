@@ -19,7 +19,7 @@ public class Proizvod implements Serializable {
 
     private String opis;
 
-    private URL profilnaURL;
+    private String profilnaURL;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Kategorija kategorija;
@@ -67,11 +67,11 @@ public class Proizvod implements Serializable {
         this.opis = opis;
     }
 
-    public URL getProfilnaURL() {
+    public String getProfilnaURL() {
         return profilnaURL;
     }
 
-    public void setProfilnaURL(URL profilnaURL) {
+    public void setProfilnaURL(String profilnaURL) {
         this.profilnaURL = profilnaURL;
     }
 
