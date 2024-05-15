@@ -18,6 +18,9 @@ public class Prodavac extends Korisnik implements Serializable {
 
     private Double prosecnaOcena;
 
+
+
+
     public Double getProsecnaOcena() {
         return prosecnaOcena;
     }
@@ -34,5 +37,10 @@ public class Prodavac extends Korisnik implements Serializable {
     public void prodajProizvod(Proizvod p) {
         proizvodiNaProdaju.remove(p);
     }
+
+    public void prihvatiRecenziju(Recenzija r) {
+        recenzije.add(r);
+    }
+
 
 }

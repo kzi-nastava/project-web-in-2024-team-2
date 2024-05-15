@@ -88,9 +88,7 @@ public class KorisnikService {
             pr.prodajProizvod(p);
             p.setProdat(true);
         }
-        else if(p.getTipProdaje() == AUKCIJA) {
 
-        }
     }
 
 

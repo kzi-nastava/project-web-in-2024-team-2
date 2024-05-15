@@ -1,10 +1,13 @@
 package com.webshop.controller;
 
 import com.webshop.dto.ProizvodDto;
+import com.webshop.dto.RecenzijaDto;
 import com.webshop.model.*;
+import com.webshop.repository.KorisnikRepository;
 import com.webshop.repository.ProizvodRepository;
 import com.webshop.service.KorisnikService;
 import com.webshop.service.ProizvodService;
+import com.webshop.service.RecenzijeService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +30,11 @@ public class KorisnikController {
 
     @Autowired
     private ProizvodService proizvodService;
+
+    @Autowired
+    private RecenzijeService recenzijeService;
+    @Autowired
+    private KorisnikRepository korisnikRepository;
 
     //2.1 i 3.1
     @PostMapping("/azuriraj-profil")
@@ -111,6 +119,32 @@ public class KorisnikController {
             return new ResponseEntity<>("Nemate mogucnost kupovine proizvoda!", HttpStatus.UNAUTHORIZED);
         }
     }
+
+    //2.4 - Kupac moze da oceni svakog prodavca, a ne samo onog od kog je kupio proizvod
+    @PostMapping("/oceni_prodavca/{id}")
+    public ResponseEntity<String> oceniProdavca(@RequestBody RecenzijaDto recenzijaDto, @PathVariable Long id, HttpSession session)
+    {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+        if(korisnik.getUloga() == KUPAC) {
+            Optional<Korisnik> optionalKorisnik = korisnikRepository.findById(id);
+            if (optionalKorisnik.isPresent() && optionalKorisnik.get().getUloga() == PRODAVAC) {
+                Recenzija recenzija = new Recenzija(recenzijaDto.getID(), recenzijaDto.getOcena(), recenzijaDto.getKomentar(), recenzijaDto.getDatum());
+                recenzijeService.save(recenzija);
+                Prodavac prodavac = (Prodavac) optionalKorisnik.get();
+                prodavac.prihvatiRecenziju(recenzija);
+                return new ResponseEntity<>("Uspesno dodata recenzija", HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>("Nemate pravo za recenziju prodavca!", HttpStatus.FORBIDDEN);
+            }
+
+        }
+        else {
+            return new ResponseEntity<>("Nemate pravo za recenziju prodavca!", HttpStatus.FORBIDDEN);
+        }
+    }
+
+
 
 }
 
