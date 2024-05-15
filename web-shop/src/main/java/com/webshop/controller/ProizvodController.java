@@ -1,12 +1,9 @@
 package com.webshop.controller;
 
 import com.webshop.dto.ProizvodDto;
-import com.webshop.model.Kategorija;
-import com.webshop.model.Korisnik;
 import com.webshop.model.Proizvod;
 import com.webshop.model.TipProdaje;
 import com.webshop.service.ProizvodService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -75,4 +72,11 @@ public class ProizvodController {
         List<Proizvod> proizvodList = proizvodService.getProizvodListByFilter(cenaMin, cenaMax, tipProdaje, kategorija);
         return getListResponseEntity(proizvodList);
     }
+
+    @GetMapping("/products/{naziv}")
+    public ResponseEntity<List<ProizvodDto>> getProizvodiByKategorija(@PathVariable String naziv) {
+        List<Proizvod> proizvodList = proizvodService.getProizvodiByKategorija(naziv);
+        return getListResponseEntity(proizvodList);
+    }
+
 }

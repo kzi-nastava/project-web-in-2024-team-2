@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@DiscriminatorValue("Prodavac")
+@DiscriminatorValue("1")
 public class Prodavac extends Korisnik implements Serializable {
 
     @OneToMany(mappedBy = "prodavac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

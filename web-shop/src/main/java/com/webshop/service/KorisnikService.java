@@ -1,6 +1,7 @@
 package com.webshop.service;
 
 import com.webshop.dto.KorisnikDto;
+import com.webshop.model.Korisnik;
 import com.webshop.model.Kupac;
 import com.webshop.model.Prodavac;
 import com.webshop.repository.KorisnikRepository;
@@ -29,6 +30,15 @@ public class KorisnikService {
 
     public Boolean isExistentByUsername(String username) {
         return korisnikRepo.existsKorisnikByUsername(username);
+    }
+
+    public Korisnik login(String username, String password) {
+        Korisnik korisnik = korisnikRepo.findByUsername(username);
+
+        if (korisnik == null || !korisnik.getPassword().equals(password)) {
+            return null;
+        }
+        return korisnik;
     }
 
 }

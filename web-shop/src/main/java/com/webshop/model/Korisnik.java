@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "uloga", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "uloga", discriminatorType = DiscriminatorType.INTEGER)
 public class Korisnik implements Serializable {
 
     @Id

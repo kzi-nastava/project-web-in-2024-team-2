@@ -37,4 +37,8 @@ public class ProizvodService {
         Optional<List<Proizvod>> proizvodList = proizvodRepository.findAllByFilter(cenaMin, cenaMax, tip, kategorija);
         return proizvodList.orElse(null);
     }
+
+    public  List<Proizvod> getProizvodiByKategorija(String kategorija) {
+        return proizvodRepository.findAllByKategorijaNaziv(kategorija);
+    }
 }

@@ -27,14 +27,4 @@ public class KategorijaController {
         return new ResponseEntity<>(kategorijaService.getKategorijaList(), HttpStatus.OK);
     }
 
-    @GetMapping("/kategorije/search")
-    public ResponseEntity<List<Kategorija>> searchKategorije(@RequestParam String naziv) {
-        List<Kategorija> kategorija = kategorijaService.getKategorija(naziv);
-
-        if (kategorija.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(kategorija, HttpStatus.OK);
-    }
-
 }
