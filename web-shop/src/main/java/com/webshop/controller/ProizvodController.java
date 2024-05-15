@@ -9,6 +9,7 @@ import com.webshop.service.ProizvodService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,10 +30,14 @@ public class ProizvodController {
         Page<Proizvod> proizvodi = proizvodService.getProizvodList(page, size);
         List<ProizvodDto> proizvodDtos = new ArrayList<>();
 
+        if (!proizvodi.hasContent()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
         for (Proizvod proizvod : proizvodi) {
             proizvodDtos.add(new ProizvodDto(proizvod));
         }
-        return ResponseEntity.ok(proizvodDtos);
+        return new ResponseEntity<>(proizvodDtos, HttpStatus.OK);
     }
 
 
@@ -41,30 +46,33 @@ public class ProizvodController {
         Proizvod proizvod =  proizvodService.getProizvodById(id);
 
         if (proizvod == null) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return ResponseEntity.ok(new ProizvodDto(proizvod));
+        return new ResponseEntity<>(new ProizvodDto(proizvod), HttpStatus.OK);
+    }
+
+    private ResponseEntity<List<ProizvodDto>> getListResponseEntity(List<Proizvod> proizvodList) {
+        List<ProizvodDto> proizvodDtos = new ArrayList<>();
+
+        if (proizvodList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        for (Proizvod proizvod : proizvodList) {
+            proizvodDtos.add(new ProizvodDto(proizvod));
+        }
+        return new ResponseEntity<>(proizvodDtos, HttpStatus.OK);
     }
 
     @GetMapping("/products/search")
     public ResponseEntity<List<ProizvodDto>> getProizvodiByNazivOrOpis(@RequestParam(required = false) String naziv, @RequestParam(required = false) String opis) {
         List<Proizvod> proizvodList = proizvodService.getProizvodListByNazivOrOpis(naziv, opis);
-        List<ProizvodDto> proizvodDtos = new ArrayList<>();
-
-        for (Proizvod proizvod : proizvodList) {
-            proizvodDtos.add(new ProizvodDto(proizvod));
-        }
-        return ResponseEntity.ok(proizvodDtos);
+        return getListResponseEntity(proizvodList);
     }
 
     @GetMapping("/products/filter")
     public ResponseEntity<List<ProizvodDto>> getProizvodiByFilter(@RequestParam(required = false) Double cenaMin, @RequestParam(required = false) Double cenaMax, @RequestParam(required = false) TipProdaje tipProdaje, @RequestParam(required = false) String kategorija) {
         List<Proizvod> proizvodList = proizvodService.getProizvodListByFilter(cenaMin, cenaMax, tipProdaje, kategorija);
-        List<ProizvodDto> proizvodDtos = new ArrayList<>();
-
-        for (Proizvod proizvod : proizvodList) {
-            proizvodDtos.add(new ProizvodDto(proizvod));
-        }
-        return ResponseEntity.ok(proizvodDtos);
+        return getListResponseEntity(proizvodList);
     }
 }

@@ -1,6 +1,5 @@
 package com.webshop.repository;
 
-import com.webshop.model.Kategorija;
 import com.webshop.model.Proizvod;
 import com.webshop.model.TipProdaje;
 import org.springframework.data.domain.Page;
