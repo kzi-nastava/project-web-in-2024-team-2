@@ -1,8 +1,10 @@
 package com.webshop.service;
 
+import com.webshop.dto.ProizvodDto;
 import com.webshop.model.*;
 import com.webshop.repository.KorisnikRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -10,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.webshop.model.TipProdaje.AUKCIJA;
+import static com.webshop.model.TipProdaje.FIKSNA_CENA;
 import static com.webshop.model.Uloga.KUPAC;
 import static com.webshop.model.Uloga.PRODAVAC;
 
@@ -70,5 +74,24 @@ public class KorisnikService {
         }
         return new HashSet<>();
     }
+
+    ///////////////////////////
+    public void kupiProizvod(Proizvod p, Long id) {
+
+        if (p.getTipProdaje() == FIKSNA_CENA) {
+            Korisnik korisnik = this.korisnikRepository.findById(id).get();
+            Kupac kupac = (Kupac) korisnik;
+            kupac.kupiProizvod(p);
+            korisnikRepository.save(kupac);
+
+            Prodavac pr = p.getProdavac();
+            pr.prodajProizvod(p);
+            p.setProdat(true);
+        }
+        else if(p.getTipProdaje() == AUKCIJA) {
+
+        }
+    }
+
 
 }

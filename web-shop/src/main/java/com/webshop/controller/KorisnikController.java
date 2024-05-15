@@ -1,8 +1,7 @@
 package com.webshop.controller;
 
 import com.webshop.dto.ProizvodDto;
-import com.webshop.model.Proizvod;
-import com.webshop.model.Recenzija;
+import com.webshop.model.*;
 import com.webshop.repository.ProizvodRepository;
 import com.webshop.service.KorisnikService;
 import com.webshop.service.ProizvodService;
@@ -11,14 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.webshop.model.Korisnik;
 import com.webshop.dto.KorisnikDto;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
+import static com.webshop.model.TipProdaje.FIKSNA_CENA;
 import static com.webshop.model.Uloga.KUPAC;
 import static com.webshop.model.Uloga.PRODAVAC;
 
@@ -93,5 +89,28 @@ public class KorisnikController {
         }
     }
 
+    /////////////////////////////////
+    //2.3
+    @PostMapping("/kupovina-proizvoda/{productID}")
+    public ResponseEntity<String> kupiProizvod(@PathVariable Long productID, HttpSession session) {
+        Optional<Proizvod> op = proizvodService.findById(productID);
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (prijavljeniKorisnik.getUloga() == KUPAC) {
+            if (op.isPresent()) {
+                Proizvod p = op.get();
+                korisnikService.kupiProizvod(p, prijavljeniKorisnik.getId());
+                return new ResponseEntity<>("Kupljen proizvod!", HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>("Proizvod sa datim id-em ne postoji!", HttpStatus.NOT_FOUND);
+            }
+        }
+        else
+        {
+            return new ResponseEntity<>("Nemate mogucnost kupovine proizvoda!", HttpStatus.UNAUTHORIZED);
+        }
+    }
 
 }
+

@@ -24,9 +24,9 @@ public class ProizvodService {
         return proizvodRepository.findAll(tenProductPage);
     }
 
-    public Optional<Proizvod> findById(Long id)
-    {
+    public Optional<Proizvod> findById(Long id) {
         return proizvodRepository.findById(id);
     }
+
 
 }

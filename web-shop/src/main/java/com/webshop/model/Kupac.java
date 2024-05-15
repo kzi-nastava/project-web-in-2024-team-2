@@ -29,4 +29,11 @@ public class Kupac extends Korisnik implements Serializable {
     public Set<Recenzija> getRecenzije() {
         return recenzije;
     }
+
+    ///////////
+    public void kupiProizvod(Proizvod p)
+    {
+        kupljeniProizvodi.add(p);
+    }
+
 }
