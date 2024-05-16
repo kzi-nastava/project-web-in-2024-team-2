@@ -40,7 +40,7 @@ public class KorisnikController {
     ///////
     private KupacProdavacDto kupacProdavacDto;
 
-    //2.1 i 3.1
+    //2.1
     @PostMapping("/azuriraj-profil")
     public ResponseEntity<String> azurirajProfil(@RequestBody KorisnikDto korisnikDto, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
@@ -85,7 +85,7 @@ public class KorisnikController {
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
-    //2.2 i 3.2
+    //2.2
     @GetMapping("/prikaz-profila/{id}")
     public ResponseEntity<KorisnikDto> prikazProfila(@PathVariable Long id) {
         Optional<Korisnik> opk = korisnikService.findById(id);
@@ -111,7 +111,10 @@ public class KorisnikController {
         if (prijavljeniKorisnik.getUloga() == KUPAC) {
             if (op.isPresent()) {
                 Proizvod p = op.get();
+                if(p.isProdat()) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+
                 korisnikService.kupiProizvod(p, prijavljeniKorisnik.getId());
+                kupacProdavacDto.dodajKupacProdavacID(prijavljeniKorisnik.getId(), p.getId());
                 return new ResponseEntity<>("Kupljen proizvod!", HttpStatus.OK);
             }
             else {
@@ -151,6 +154,7 @@ public class KorisnikController {
                             Recenzija recenzija = new Recenzija(recenzijaDto.getOcena(), recenzijaDto.getKomentar(), recenzijaDto.getDatum(), prijavljeniKorisnik);
                             recenzijeService.save(recenzija);
                             prodavac.prihvatiRecenziju(recenzija);
+                            prodavac.setProsecnaOcena((prodavac.getProsecnaOcena()+ recenzija.getOcena())/2);
                             break;
                         }
                     }

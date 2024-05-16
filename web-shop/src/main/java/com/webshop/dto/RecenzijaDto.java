@@ -9,8 +9,7 @@ public class RecenzijaDto implements Serializable {
     private String komentar;
     private LocalDate datum;
 
-    public RecenzijaDto(Long id, int ocena, String komentar, LocalDate datum) {
-        this.id = id;
+    public RecenzijaDto(int ocena, String komentar, LocalDate datum) {
         this.ocena = ocena;
         this.komentar = komentar;
         this.datum = datum;

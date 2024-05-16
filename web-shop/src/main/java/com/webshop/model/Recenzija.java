@@ -50,4 +50,8 @@ public class Recenzija implements Serializable {
     public LocalDate getDatumRecenzije() {
         return datumRecenzije;
     }
+
+    public Korisnik getPodnosilac() {
+        return podnosilac;
+    }
 }
