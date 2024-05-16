@@ -1,10 +1,13 @@
 package com.webshop.model;
 
 import com.webshop.dto.KorisnikDto;
+import com.webshop.dto.KupacDto;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -40,6 +43,9 @@ public class Korisnik implements Serializable {
     private Uloga uloga;
 
     private boolean blokiran;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Recenzija> dobijenaRecenzija = new HashSet<>();
 
     public Korisnik() {}
 
@@ -79,6 +85,18 @@ public class Korisnik implements Serializable {
         this.password = korisnikDto.getPassword();
         this.mail = korisnikDto.getMail();
         this.brojTelefona = korisnikDto.getBrojTelefona();
+    }
+
+    public Korisnik(KupacDto kupacDto) {
+        this.ime = kupacDto.getIme();
+        this.prezime = kupacDto.getPrezime();
+        this.username = kupacDto.getUsername();
+        this.password = kupacDto.getPassword();
+        this.mail = kupacDto.getMail();
+        this.brojTelefona = kupacDto.getBrojTelefona();
+        this.datumRodjenja = kupacDto.getDatumRodjenja();
+        this.profilnaURL = kupacDto.getProfilnaURL();
+        this.opis = kupacDto.getOpis();
     }
 
     public Long getId() {
@@ -129,7 +147,44 @@ public class Korisnik implements Serializable {
         return blokiran;
     }
 
+    public Set<Recenzija> getDobijenaRecenzija() {
+        return dobijenaRecenzija;
+    }
+
     public void setUloga(Uloga uloga) {
         this.uloga = uloga;
     }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public void setIme(String ime) {
+        this.ime = ime;
+    }
+
+    public void setPrezime(String prezime) {
+        this.prezime = prezime;
+    }
+
+    public void setDatumRodjenja(LocalDate datumRodjenja) {
+        this.datumRodjenja = datumRodjenja;
+    }
+
+    public void setProfilnaURL(String profilnaURL) {
+        this.profilnaURL = profilnaURL;
+    }
+
+    public void setOpis(String opis) {
+        this.opis = opis;
+    }
+
+    public void setBrojTelefona(String brojTelefona) {
+        this.brojTelefona = brojTelefona;
+    }
+
 }

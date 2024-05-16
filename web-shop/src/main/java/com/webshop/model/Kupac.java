@@ -1,6 +1,7 @@
 package com.webshop.model;
 
 import com.webshop.dto.KorisnikDto;
+import com.webshop.dto.KupacDto;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -12,11 +13,8 @@ import java.util.Set;
 @DiscriminatorValue("0")
 public class Kupac extends Korisnik implements Serializable {
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Proizvod> kupljeniProizvodi = new HashSet<>();
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Recenzija> recenzije = new HashSet<>();
 
     private Double prosecnaOcena;
 
@@ -41,20 +39,16 @@ public class Kupac extends Korisnik implements Serializable {
         this.prosecnaOcena = 0.0;
     }
 
+    public Kupac(KupacDto kupacDto) {
+        super(kupacDto);
+    }
+
     public Set<Proizvod> getKupljeniProizvodi() {
         return kupljeniProizvodi;
     }
 
     public void setKupljeniProizvodi(Set<Proizvod> kupljeniProizvodi) {
         this.kupljeniProizvodi = kupljeniProizvodi;
-    }
-
-    public Set<Recenzija> getRecenzije() {
-        return recenzije;
-    }
-
-    public void setRecenzije(Set<Recenzija> recenzije) {
-        this.recenzije = recenzije;
     }
 
     public Double getProsecnaOcena() {

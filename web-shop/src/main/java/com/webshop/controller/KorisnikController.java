@@ -1,6 +1,7 @@
 package com.webshop.controller;
 
 import com.webshop.dto.KorisnikDto;
+import com.webshop.dto.KupacDto;
 import com.webshop.dto.LoginDto;
 import com.webshop.model.Korisnik;
 import com.webshop.model.Uloga;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -63,4 +65,53 @@ public class KorisnikController {
         session.invalidate();
         return new ResponseEntity<>("Logged out!", HttpStatus.OK);
     }
+
+    @PutMapping("/logged-user/update")
+    public ResponseEntity<?> updateUser(@RequestBody KupacDto kupacDto, HttpSession session) {
+        Korisnik loggedUser = (Korisnik) session.getAttribute("korisnik");
+
+        if (loggedUser == null) {
+            return new ResponseEntity<>("Nijedan korisnik nije prijavljen!", HttpStatus.BAD_REQUEST);
+        }
+
+        if (loggedUser.getUloga() != Uloga.KUPAC) {
+            return new ResponseEntity<>("Ulogovani korisnik nije kupac!", HttpStatus.FORBIDDEN);
+        }
+
+        if (kupacDto.getUsername() != null || kupacDto.getMail() != null) {
+            if (!korisnikService.checkPassword(loggedUser.getId(), kupacDto.getPassword())) {
+                return new ResponseEntity<>("Trenutna lozinka nije tačna.", HttpStatus.BAD_REQUEST);
+            }
+
+            if (kupacDto.getUsername() != null) {
+                loggedUser.setUsername(kupacDto.getUsername());
+            }
+
+            if (kupacDto.getMail() != null) {
+                loggedUser.setMail(kupacDto.getMail());
+            }
+        }
+
+        if (kupacDto.getIme() != null)
+            loggedUser.setIme(kupacDto.getIme());
+
+        if (kupacDto.getPrezime() != null)
+            loggedUser.setPrezime(kupacDto.getPrezime());
+
+        if (kupacDto.getBrojTelefona() != null)
+            loggedUser.setBrojTelefona(kupacDto.getBrojTelefona());
+
+        if (kupacDto.getDatumRodjenja() != null)
+            loggedUser.setDatumRodjenja(kupacDto.getDatumRodjenja());
+
+        if (kupacDto.getProfilnaURL() != null)
+            loggedUser.setProfilnaURL(kupacDto.getProfilnaURL());
+
+        if (kupacDto.getOpis() != null)
+            loggedUser.setOpis(kupacDto.getOpis());
+
+        korisnikService.saveKorisnik(loggedUser);
+        return new ResponseEntity<>("Korisnik je uspesno azurirao podatke!", HttpStatus.OK);
+    }
+
 }

@@ -21,9 +21,9 @@ INSERT INTO KORISNIK_KUPLJENI_PROIZVODI (kupac_id, kupljeni_proizvodi_id) VALUES
 INSERT INTO KORISNIK_KUPLJENI_PROIZVODI (kupac_id, kupljeni_proizvodi_id) VALUES (2, 2);
 INSERT INTO KORISNIK_KUPLJENI_PROIZVODI (kupac_id, kupljeni_proizvodi_id) VALUES (2, 4);
 
--- INSERT INTO KORISNIK_RECENZIJE ()
--- INSERT INTO KORISNIK_RECENZIJE ()
--- INSERT INTO KORISNIK_RECENZIJE ()
+INSERT INTO KORISNIK_DOBIJENA_RECENZIJA (dobijena_recenzija_id, korisnik_id) VALUES (1, 1);
+INSERT INTO KORISNIK_DOBIJENA_RECENZIJA (dobijena_recenzija_id, korisnik_id) VALUES (2, 1);
+INSERT INTO KORISNIK_DOBIJENA_RECENZIJA (dobijena_recenzija_id, korisnik_id) VALUES (3, 2);
 
 INSERT INTO PRIJAVA_PROFILA (datum_podnosenja_prijave, status_prijave, odnosi_se_id, podnosilac_id, razlog_prijave) VALUES (current_date, 'PODNETA', 1, 1, 'tako mi doslo');
 INSERT INTO PRIJAVA_PROFILA (datum_podnosenja_prijave, status_prijave, odnosi_se_id, podnosilac_id, razlog_prijave) VALUES (current_date, 'ODBIJENA', 3, 2, 'neadekvatan recnik');
