@@ -1,11 +1,11 @@
 package com.webshop.controller;
 
-import com.webshop.dto.ProizvodDto;
-import com.webshop.dto.RecenzijaDto;
+import com.webshop.dto.*;
 import com.webshop.model.*;
 import com.webshop.repository.KorisnikRepository;
 import com.webshop.repository.ProizvodRepository;
 import com.webshop.service.KorisnikService;
+import com.webshop.service.PrijavaProfilaService;
 import com.webshop.service.ProizvodService;
 import com.webshop.service.RecenzijeService;
 import jakarta.servlet.http.HttpSession;
@@ -13,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.webshop.dto.KorisnikDto;
 
 import java.util.*;
 
+import static com.webshop.model.StatusPrijave.PODNETA;
 import static com.webshop.model.TipProdaje.FIKSNA_CENA;
 import static com.webshop.model.Uloga.KUPAC;
 import static com.webshop.model.Uloga.PRODAVAC;
@@ -33,8 +33,12 @@ public class KorisnikController {
 
     @Autowired
     private RecenzijeService recenzijeService;
+
     @Autowired
-    private KorisnikRepository korisnikRepository;
+    private PrijavaProfilaService prijavaProfilaService;
+
+    ///////
+    private KupacProdavacDto kupacProdavacDto;
 
     //2.1 i 3.1
     @PostMapping("/azuriraj-profil")
@@ -120,18 +124,38 @@ public class KorisnikController {
         }
     }
 
-    //2.4 - Kupac moze da oceni svakog prodavca, a ne samo onog od kog je kupio proizvod
+
+    //2.4
     @PostMapping("/oceni_prodavca/{id}")
     public ResponseEntity<String> oceniProdavca(@RequestBody RecenzijaDto recenzijaDto, @PathVariable Long id, HttpSession session)
     {
-        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
-        if(korisnik.getUloga() == KUPAC) {
-            Optional<Korisnik> optionalKorisnik = korisnikRepository.findById(id);
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if(prijavljeniKorisnik == null)
+        {
+            return new ResponseEntity<>("Nemate pravo za prijavu", HttpStatus.FORBIDDEN);
+        }
+
+        if(prijavljeniKorisnik.getUloga() == KUPAC) {
+
+            Optional<Korisnik> optionalKorisnik = korisnikService.findById(id);
             if (optionalKorisnik.isPresent() && optionalKorisnik.get().getUloga() == PRODAVAC) {
-                Recenzija recenzija = new Recenzija(recenzijaDto.getID(), recenzijaDto.getOcena(), recenzijaDto.getKomentar(), recenzijaDto.getDatum());
-                recenzijeService.save(recenzija);
                 Prodavac prodavac = (Prodavac) optionalKorisnik.get();
-                prodavac.prihvatiRecenziju(recenzija);
+
+                ArrayList<Long> kupci = kupacProdavacDto.vratiKupce();
+                ArrayList<Long> prodavci = kupacProdavacDto.vratiProdavce();
+
+                int i = 0;
+                for(Long kupacID : kupci) {
+                    if (Objects.equals(prijavljeniKorisnik.getId(), kupacID)) {
+                        if (Objects.equals(prodavci.get(i), prodavac.getId())) {
+                            Recenzija recenzija = new Recenzija(recenzijaDto.getOcena(), recenzijaDto.getKomentar(), recenzijaDto.getDatum(), prijavljeniKorisnik);
+                            recenzijeService.save(recenzija);
+                            prodavac.prihvatiRecenziju(recenzija);
+                            break;
+                        }
+                    }
+                    i++;
+                }
                 return new ResponseEntity<>("Uspesno dodata recenzija", HttpStatus.OK);
             }
             else {
@@ -145,6 +169,36 @@ public class KorisnikController {
     }
 
 
+    //2.6 prijava prodavca
+    @PostMapping("/prijava_prodavca/{id}")
+    public ResponseEntity<String> prijaviProdavca(@RequestBody PrijavaProfilaDto prijavaProfilaDto, @PathVariable Long id, HttpSession session)
+    {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if(prijavljeniKorisnik == null)
+        {
+            return new ResponseEntity<>("Nemate pravo za prijavu", HttpStatus.FORBIDDEN);
+        }
 
+        if(prijavljeniKorisnik.getUloga() == KUPAC) {
+            ArrayList<Long> kupci = kupacProdavacDto.vratiKupce();
+            ArrayList<Long> prodavci = kupacProdavacDto.vratiProdavce();
+            Prodavac prodavac = (Prodavac) korisnikService.findById(id).get();
+            int i = 0;
+            for(Long kupacID : kupci) {
+                if (Objects.equals(prijavljeniKorisnik.getId(), kupacID)) {
+                    if (Objects.equals(prodavci.get(i), prodavac.getId())) {
+                        PrijavaProfila prijavaProfila = new PrijavaProfila(prijavaProfilaDto.getDatumPodnosenjaPrijave(), PODNETA, prijavaProfilaDto.getRazlogPrijave(), prijavljeniKorisnik, prodavac);
+                        prijavaProfilaService.save(prijavaProfila);
+                        break;
+                    }
+                }
+                i++;
+            }
+            return new ResponseEntity<>("Uspesno ste podneli prijavu", HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>("Nemate pravo za prijavu", HttpStatus.FORBIDDEN);
+        }
+    }
 }
 
