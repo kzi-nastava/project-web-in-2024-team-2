@@ -30,6 +30,7 @@ public class Kupac extends Korisnik implements Serializable {
         return recenzije;
     }
 
+
     ///////////
     public void kupiProizvod(Proizvod p)
     {
