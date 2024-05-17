@@ -8,6 +8,7 @@ import com.webshop.repository.KorisnikRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,6 +16,10 @@ public class KorisnikService {
 
     @Autowired
     private KorisnikRepository korisnikRepo;
+
+    public List<Korisnik> getKorisnikList() {
+        return korisnikRepo.findAll();
+    }
 
     public Optional<Korisnik> getById(Long id) {
         return korisnikRepo.findById(id);

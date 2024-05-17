@@ -17,9 +17,9 @@ INSERT INTO RECENZIJA (datum_recenzije, ocena, podnosilac_id, komentar) VALUES (
 INSERT INTO RECENZIJA (datum_recenzije, ocena, podnosilac_id, komentar) VALUES (current_date, 3, 1, 'dobro odradjen posao');
 INSERT INTO RECENZIJA (datum_recenzije, ocena, podnosilac_id, komentar) VALUES (current_date, 4, 1, 'bravo');
 
-INSERT INTO KORISNIK_KUPLJENI_PROIZVODI (kupac_id, kupljeni_proizvodi_id) VALUES (2, 1);
-INSERT INTO KORISNIK_KUPLJENI_PROIZVODI (kupac_id, kupljeni_proizvodi_id) VALUES (2, 2);
-INSERT INTO KORISNIK_KUPLJENI_PROIZVODI (kupac_id, kupljeni_proizvodi_id) VALUES (2, 4);
+INSERT INTO KORISNIK_KUPLJENI_PROIZVODI (kupac_id, kupljeni_proizvodi_id) VALUES (1, 1);
+INSERT INTO KORISNIK_KUPLJENI_PROIZVODI (kupac_id, kupljeni_proizvodi_id) VALUES (1, 2);
+INSERT INTO KORISNIK_KUPLJENI_PROIZVODI (kupac_id, kupljeni_proizvodi_id) VALUES (1, 4);
 
 INSERT INTO KORISNIK_DOBIJENA_RECENZIJA (dobijena_recenzija_id, korisnik_id) VALUES (1, 1);
 INSERT INTO KORISNIK_DOBIJENA_RECENZIJA (dobijena_recenzija_id, korisnik_id) VALUES (2, 1);
