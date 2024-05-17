@@ -1,19 +1,25 @@
 package com.webshop.repository;
 
-import com.webshop.model.*;
+import com.webshop.model.Korisnik;
+import com.webshop.model.Kupac;
+import com.webshop.model.Prodavac;
+import com.webshop.model.Uloga;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface KorisnikRepository extends JpaRepository<Korisnik, Long> {
 
-    Korisnik save(Korisnik korisnik);
+    Boolean existsKorisnikByMail(String mail);
+
+    Boolean existsKorisnikByUsername(String username);
+
+    Korisnik findByUsername(String username);
 
     Optional<Korisnik> findById(Long id);
-    Kupac save(Kupac kupac);
 
-    Optional<Prodavac> findByIdAndUloga(long id, Uloga uloga);
+    //dodato
+    Optional<Prodavac> findByIdAndUloga(Long id, Uloga uloga);
+    Optional<Kupac> findByUlogaAndId(Uloga uloga,Long id);
+
 }

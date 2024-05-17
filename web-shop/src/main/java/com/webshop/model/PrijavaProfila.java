@@ -25,15 +25,4 @@ public class PrijavaProfila implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Korisnik odnosiSe;
-
-    //////
-    public PrijavaProfila(LocalDate datumPodnosenjaPrijave, StatusPrijave statusPrijave, String razlogPrijave, Korisnik podnosilac, Korisnik odnosiSe) {
-        this.datumPodnosenjaPrijave = datumPodnosenjaPrijave;
-        this.statusPrijave = statusPrijave;
-        this.razlogPrijave = razlogPrijave;
-        this.podnosilac = podnosilac;
-        this.odnosiSe = odnosiSe;
-    }
-
-    public PrijavaProfila() {}
 }

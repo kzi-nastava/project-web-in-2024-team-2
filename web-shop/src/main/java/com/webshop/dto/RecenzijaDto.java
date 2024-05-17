@@ -1,25 +1,39 @@
 package com.webshop.dto;
 
+import com.webshop.model.Korisnik;
+import com.webshop.model.Recenzija;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
+/**
+ * DTO for {@link com.webshop.model.Recenzija}
+ */
 public class RecenzijaDto implements Serializable {
-    private Long id;
-    private int ocena;
-    private String komentar;
-    private LocalDate datum;
 
-    public RecenzijaDto(int ocena, String komentar, LocalDate datum) {
+    private Integer ocena;
+    private String komentar;
+    private LocalDate datumRecenzije;
+    private Korisnik podnosilac;
+
+    public RecenzijaDto() {}
+
+    public RecenzijaDto(Integer ocena, String komentar, LocalDate datumRecenzije,
+                        Korisnik podnosilac) {
         this.ocena = ocena;
         this.komentar = komentar;
-        this.datum = datum;
+        this.datumRecenzije = datumRecenzije;
+        this.podnosilac = podnosilac;
     }
 
-    public Long getID() {
-        return id;
+    public RecenzijaDto(Recenzija recenzija, Korisnik podnosilac) {
+        this.ocena = recenzija.getOcena();
+        this.komentar = recenzija.getKomentar();
+        this.datumRecenzije = recenzija.getDatumRecenzije();
+        this.podnosilac = podnosilac;
     }
 
-    public int getOcena() {
+    public Integer getOcena() {
         return ocena;
     }
 
@@ -27,7 +41,11 @@ public class RecenzijaDto implements Serializable {
         return komentar;
     }
 
-    public LocalDate getDatum() {
-        return datum;
+    public LocalDate getDatumRecenzije() {
+        return datumRecenzije;
+    }
+
+    public Korisnik getPodnosilac() {
+        return podnosilac;
     }
 }

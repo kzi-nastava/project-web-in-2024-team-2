@@ -4,67 +4,40 @@ import com.webshop.model.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
+/**
+ * DTO for {@link com.webshop.model.Korisnik}
+ */
 public class KorisnikDto implements Serializable {
-    private Long id;
-    private String ime;
-    private String prezime;
-    private String username;
-    private String password;
-    private String mail;
-    private String brojTelefona;
-    private LocalDate datumRodjenja;
-    private String profilnaURL;
-    private String opis;
-    private Uloga uloga;
-    private boolean blokiran;
-    private double prosecnaOcena;
 
+    private final String ime;
+    private final String prezime;
+    private final String username;
+    private  String password;
+    private  String mail;
+    private final String brojTelefona;
+    private  Uloga uloga;
 
-    private String potvrdaLozinke;
-
-    private Set<Proizvod> proizvodi = new HashSet<>();
-    private Set<Recenzija>  recenzija = new HashSet<>();
-
-    public KorisnikDto(Long id, String ime, String prezime, String username, String password, String mail, String brojTelefona,
-                       LocalDate datumRodjenja, String profilnaURL, String opis, Uloga uloga, boolean blokiran) {
-        this.id = id;
+    public KorisnikDto(String ime, String prezime, String username, String password, String mail, String brojTelefona, Uloga uloga) {
         this.ime = ime;
         this.prezime = prezime;
         this.username = username;
         this.password = password;
         this.mail = mail;
         this.brojTelefona = brojTelefona;
-        this.datumRodjenja = datumRodjenja;
-        this.profilnaURL = profilnaURL;
-        this.opis = opis;
         this.uloga = uloga;
-        this.blokiran = blokiran;
-
-        this.potvrdaLozinke = password;
     }
 
     public KorisnikDto(Korisnik korisnik) {
-        this.id = korisnik.getId();
         this.ime = korisnik.getIme();
         this.prezime = korisnik.getPrezime();
         this.username = korisnik.getUsername();
         this.password = korisnik.getPassword();
         this.mail = korisnik.getMail();
         this.brojTelefona = korisnik.getBrojTelefona();
-        this.datumRodjenja = korisnik.getDatumRodjenja();
-        this.profilnaURL = korisnik.getProfilnaURL();
-        this.opis = korisnik.getOpis();
         this.uloga = korisnik.getUloga();
-        this.blokiran = korisnik.isBlokiran();
-
-        this.potvrdaLozinke = korisnik.getPassword();
-    }
-
-    //geteri i seteri
-    public Long getId() {
-        return id;
     }
 
     public String getIme() {
@@ -91,47 +64,60 @@ public class KorisnikDto implements Serializable {
         return brojTelefona;
     }
 
-    public LocalDate getDatumRodjenja() {
-        return datumRodjenja;
-    }
-
-    public String getProfilnaURL() {
-        return profilnaURL;
-    }
-
-    public String getOpis() {
-        return opis;
-    }
-
     public Uloga getUloga() {
         return uloga;
     }
 
-    public boolean isBlokiran() {
-        return blokiran;
-    }
 
-    //zbog potvrde lozinke
-    public String getPotvrdaLozinke() {
-        return potvrdaLozinke;
-    }
+    //dodato sve ispod
+    private  LocalDate datumRodjenja;
+    private  String profilnaURL;
+    private  String opis;
+    private  String potvrda_lozinke;
 
-    //konstruktor za podatke vidljive drugim korisnicima
-    public KorisnikDto(String ime, String prezime, String username, LocalDate datumRodjenja, String profilnaURL, String opis, Uloga uloga, boolean blokiran,
-                       double prosecnaOcena, Set<Proizvod> proizvodi, Set<Recenzija> recenzija) {
+    public KorisnikDto(String ime, String prezime, String username, String password, String mail, String brojTelefona, LocalDate datumRodjenja, String profilnaURL, String opis, String potvrda_lozinke) {
         this.ime = ime;
         this.prezime = prezime;
         this.username = username;
+        this.password = password;
+        this.mail = mail;
+        this.brojTelefona = brojTelefona;
         this.datumRodjenja = datumRodjenja;
         this.profilnaURL = profilnaURL;
         this.opis = opis;
-        this.uloga = uloga;
-        this.blokiran = blokiran;
-        this.prosecnaOcena = prosecnaOcena;
-        this.proizvodi = proizvodi;
-        this.recenzija = recenzija;
+        this.potvrda_lozinke = potvrda_lozinke;
+    }
+
+
+    private double ProsecnaOcena;
+    private Set<Proizvod> proizvodi = new HashSet<>();
+    private Set<Recenzija> recenzije = new HashSet<>();
+
+    public KorisnikDto(Prodavac prodavac) {
+        this.ime = prodavac.getIme();
+        this.prezime = prodavac.getPrezime();
+        this.username = prodavac.getUsername();
+        this.brojTelefona = prodavac.getBrojTelefona();
+        this.datumRodjenja = prodavac.getDatumRodjenja();
+        this.profilnaURL = prodavac.getProfilnaURL();
+        this.opis = prodavac.getOpis();
+        this.ProsecnaOcena = prodavac.getProsecnaOcena();
+        this.proizvodi = prodavac.getProizvodiNaProdaju();
+        //this.recenzije = prodavac.getRecenzije();
+    }
+
+    public KorisnikDto(Kupac kupac) {
+        this.ime = kupac.getIme();
+        this.prezime = kupac.getPrezime();
+        this.username = kupac.getUsername();
+        this.brojTelefona = kupac.getBrojTelefona();
+        this.datumRodjenja = kupac.getDatumRodjenja();
+        this.profilnaURL = kupac.getProfilnaURL();
+        this.opis = kupac.getOpis();
+        this.ProsecnaOcena = kupac.getProsecnaOcena();
+        this.proizvodi = kupac.getKupljeniProizvodi();
+        //this.recenzije = kupac.getRecenzije();
     }
 }
-
 
 
