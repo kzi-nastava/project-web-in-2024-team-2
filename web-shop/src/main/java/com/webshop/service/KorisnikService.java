@@ -88,7 +88,15 @@ public class KorisnikService {
             pr.prodajProizvod(p);
             p.setProdat(true);
         }
+    }
 
+    public Prodavac getProdavacById(int id) {
+        Optional<Prodavac> prodavac = korisnikRepository.findByIdAndUloga(id, PRODAVAC);
+        return prodavac.orElse(null);
+    }
+
+    public void saveKorisnik(Korisnik korisnik) {
+        korisnikRepository.save(korisnik);
     }
 
 
