@@ -15,9 +15,6 @@ public class Prodavac extends Korisnik implements Serializable {
     @OneToMany(mappedBy = "prodavac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Proizvod> proizvodiNaProdaju = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Recenzija> recenzije = new HashSet<>();
-
     private Double prosecnaOcena;
 
     public Prodavac() {
@@ -44,11 +41,15 @@ public class Prodavac extends Korisnik implements Serializable {
         return proizvodiNaProdaju;
     }
 
-    public Set<Recenzija> getRecenzije() {
-        return recenzije;
-    }
-
     public Double getProsecnaOcena() {
         return prosecnaOcena;
+    }
+
+    public void setProsecnaOcena(Double prosecnaOcena) {
+        this.prosecnaOcena = prosecnaOcena;
+    }
+
+    public void prihvatiRecenziju(Recenzija recenzija) {
+        getDobijenaRecenzija().add(recenzija);
     }
 }

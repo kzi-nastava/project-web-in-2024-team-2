@@ -1,8 +1,11 @@
 package com.webshop.controller;
 
 import com.webshop.dto.KorisnikDto;
+import com.webshop.dto.KupacDto;
 import com.webshop.dto.LoginDto;
 import com.webshop.model.Korisnik;
+import com.webshop.model.Kupac;
+import com.webshop.model.Prodavac;
 import com.webshop.model.Uloga;
 import com.webshop.service.KorisnikService;
 import jakarta.servlet.http.HttpSession;
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,17 +27,14 @@ public class KorisnikController {
     public ResponseEntity<?> registerUser(@RequestBody KorisnikDto korisnikDto) {
         if (korisnikService.isExistentByEmail(korisnikDto.getMail()) || korisnikService.isExistentByUsername(korisnikDto.getUsername())) {
             return new ResponseEntity<>("Korisnik vec postoji!", HttpStatus.CONFLICT);
-        }
-        else {
+        } else {
             if (korisnikDto.getUloga() == Uloga.KUPAC) {
                 korisnikService.createKupac(korisnikDto);
                 return new ResponseEntity<>("Kupac se uspesno registrovao!", HttpStatus.OK);
-            }
-            else if (korisnikDto.getUloga() == Uloga.PRODAVAC) {
+            } else if (korisnikDto.getUloga() == Uloga.PRODAVAC) {
                 korisnikService.createProdavac(korisnikDto);
                 return new ResponseEntity<>("Prodavac se uspesno registrovao!", HttpStatus.OK);
-            }
-            else {
+            } else {
                 return new ResponseEntity<>("Bad request!", HttpStatus.BAD_REQUEST);
             }
         }
@@ -64,3 +65,29 @@ public class KorisnikController {
         return new ResponseEntity<>("Logged out!", HttpStatus.OK);
     }
 }
+
+    @PutMapping("/logged-user/update")
+    public ResponseEntity<?> updateUser(@RequestBody KupacDto kupacDto, HttpSession session) {
+        Korisnik loggedUser = (Korisnik) session.getAttribute("korisnik");
+
+        if (loggedUser == null) {
+            return new ResponseEntity<>("Nijedan korisnik nije prijavljen!", HttpStatus.BAD_REQUEST);
+        }
+
+        if (loggedUser.getUloga() != KUPAC) {
+            return new ResponseEntity<>("Ulogovani korisnik nije kupac!", HttpStatus.FORBIDDEN);
+        }
+
+        if (kupacDto.getUsername() != null || kupacDto.getMail() != null) {
+            if (!korisnikService.checkPassword(loggedUser.getId(), kupacDto.getPassword())) {
+                return new ResponseEntity<>("Trenutna lozinka nije tačna.", HttpStatus.BAD_REQUEST);
+            }
+
+            if (kupacDto.getUsername() != null) {
+                loggedUser.setUsername(kupacDto.getUsername());
+            }
+
+            if (kupacDto.getMail() != null) {
+                loggedUser.setMail(kupacDto.getMail());
+            }
+        }

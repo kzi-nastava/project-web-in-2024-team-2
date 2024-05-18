@@ -8,11 +8,20 @@ import com.webshop.repository.KorisnikRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
+import static com.webshop.model.Uloga.KUPAC;
+import static com.webshop.model.Uloga.PRODAVAC;
+
 @Service
 public class KorisnikService {
 
     @Autowired
     private KorisnikRepository korisnikRepo;
+
+    public Optional<Korisnik> getById(Long id) {
+        return korisnikRepo.findById(id);
+    }
 
     public void createKupac(KorisnikDto korisnikDto) {
         Kupac kupac = new Kupac(korisnikDto);
@@ -40,5 +49,31 @@ public class KorisnikService {
         }
         return korisnik;
     }
+
+    public boolean checkPassword(Long id, String password) {
+        Korisnik korisnik = korisnikRepo.findById(id).orElse(null);
+
+        if (korisnik == null) {
+            return false;
+        }
+
+        return korisnik.getPassword().equals(password);
+    }
+
+    public void saveKorisnik(Korisnik korisnik) {
+        korisnikRepo.save(korisnik);
+    }
+
+    //dodato
+    public Prodavac getProdavacById(Long id) {
+        Optional<Prodavac> prodavac = korisnikRepo.findByIdAndUloga(id, PRODAVAC);
+        return prodavac.orElse(null);
+    }
+    //dodato
+    public Kupac getKupacById(Long id) {
+        Optional<Kupac> kupac = korisnikRepo.findByUlogaAndId(KUPAC, id);
+        return kupac.orElse(null);
+    }
+
 
 }

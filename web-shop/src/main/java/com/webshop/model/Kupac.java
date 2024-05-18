@@ -1,6 +1,7 @@
 package com.webshop.model;
 
 import com.webshop.dto.KorisnikDto;
+import com.webshop.dto.KupacDto;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -12,7 +13,7 @@ import java.util.Set;
 @DiscriminatorValue("0")
 public class Kupac extends Korisnik implements Serializable {
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Proizvod> kupljeniProizvodi = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
