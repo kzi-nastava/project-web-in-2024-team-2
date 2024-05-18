@@ -48,4 +48,8 @@ public class RecenzijaDto implements Serializable {
     public Korisnik getPodnosilac() {
         return podnosilac;
     }
+
+    public void setPodnosilac(Korisnik podnosilac) {
+        this.podnosilac = podnosilac;
+    }
 }

@@ -39,7 +39,7 @@ public class ProizvodController {
 
 
     @GetMapping("/product/{id}")
-    public ResponseEntity<ProizvodDto> getProizvod(@PathVariable int id) {
+    public ResponseEntity<ProizvodDto> getProizvod(@PathVariable Long id) {
         Proizvod proizvod =  proizvodService.getProizvodById(id);
 
         if (proizvod == null) {

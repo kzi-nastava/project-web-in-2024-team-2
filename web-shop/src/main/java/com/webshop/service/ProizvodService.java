@@ -23,7 +23,7 @@ public class ProizvodService {
         return proizvodRepository.findAll(tenProductPage);
     }
 
-    public Proizvod getProizvodById(int id) {
+    public Proizvod getProizvodById(Long id) {
         Optional<Proizvod> proizvod = proizvodRepository.findById(id);
         return proizvod.orElse(null);
     }

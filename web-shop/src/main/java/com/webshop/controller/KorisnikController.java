@@ -121,10 +121,6 @@ public class KorisnikController {
             return new ResponseEntity<>("Nema prijavljenih korisnika!", HttpStatus.FORBIDDEN);
         }
 
-        if (loggedKorisnik.getUloga() != Uloga.KUPAC) {
-            return new ResponseEntity<>("Prijavljeni korisnik nije kupac!", HttpStatus.FORBIDDEN);
-        }
-
         List<Korisnik> korisnikList = korisnikService.getKorisnikList();
         List<KorisnikDto> korisnikDtoList = new ArrayList<>();
 

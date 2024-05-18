@@ -4,6 +4,7 @@ import com.webshop.dto.KorisnikDto;
 import com.webshop.model.Korisnik;
 import com.webshop.model.Kupac;
 import com.webshop.model.Prodavac;
+import com.webshop.model.Uloga;
 import com.webshop.repository.KorisnikRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,14 @@ public class KorisnikService {
 
     public void saveKorisnik(Korisnik korisnik) {
         korisnikRepo.save(korisnik);
+    }
+
+    public Prodavac getProdavacById(Long id) {
+        Optional<Korisnik> optionalKorisnik = korisnikRepo.findById(id);
+        if (optionalKorisnik.isPresent() && optionalKorisnik.get().getUloga() == Uloga.PRODAVAC) {
+            return (Prodavac) optionalKorisnik.get();
+        }
+        return null;
     }
 
 }
