@@ -1,10 +1,12 @@
 package com.webshop.model;
 
 import com.webshop.dto.KorisnikDto;
+import com.webshop.dto.KupacDto;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity

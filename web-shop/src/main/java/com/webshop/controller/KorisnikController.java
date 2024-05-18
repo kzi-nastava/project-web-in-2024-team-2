@@ -64,7 +64,6 @@ public class KorisnikController {
         session.invalidate();
         return new ResponseEntity<>("Logged out!", HttpStatus.OK);
     }
-}
 
     @PutMapping("/logged-user/update")
     public ResponseEntity<?> updateUser(@RequestBody KupacDto kupacDto, HttpSession session) {
@@ -74,7 +73,7 @@ public class KorisnikController {
             return new ResponseEntity<>("Nijedan korisnik nije prijavljen!", HttpStatus.BAD_REQUEST);
         }
 
-        if (loggedUser.getUloga() != KUPAC) {
+        if (loggedUser.getUloga() != Uloga.KUPAC) {
             return new ResponseEntity<>("Ulogovani korisnik nije kupac!", HttpStatus.FORBIDDEN);
         }
 
@@ -91,3 +90,26 @@ public class KorisnikController {
                 loggedUser.setMail(kupacDto.getMail());
             }
         }
+
+        if (kupacDto.getIme() != null)
+            loggedUser.setIme(kupacDto.getIme());
+
+        if (kupacDto.getPrezime() != null)
+            loggedUser.setPrezime(kupacDto.getPrezime());
+
+        if (kupacDto.getBrojTelefona() != null)
+            loggedUser.setBrojTelefona(kupacDto.getBrojTelefona());
+
+        if (kupacDto.getDatumRodjenja() != null)
+            loggedUser.setDatumRodjenja(kupacDto.getDatumRodjenja());
+
+        if (kupacDto.getProfilnaURL() != null)
+            loggedUser.setProfilnaURL(kupacDto.getProfilnaURL());
+
+        if (kupacDto.getOpis() != null)
+            loggedUser.setOpis(kupacDto.getOpis());
+
+        korisnikService.saveKorisnik(loggedUser);
+        return new ResponseEntity<>("Korisnik je uspesno azurirao podatke!", HttpStatus.OK);
+    }
+}
