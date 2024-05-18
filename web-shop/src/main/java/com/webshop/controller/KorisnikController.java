@@ -1,11 +1,11 @@
 package com.webshop.controller;
 
+import com.fasterxml.jackson.databind.node.TextNode;
 import com.webshop.dto.KorisnikDto;
 import com.webshop.dto.KupacDto;
 import com.webshop.dto.LoginDto;
 import com.webshop.model.Korisnik;
-import com.webshop.model.Kupac;
-import com.webshop.model.Prodavac;
+import com.webshop.model.PrijavaProfila;
 import com.webshop.model.Uloga;
 import com.webshop.service.KorisnikService;
 import jakarta.servlet.http.HttpSession;
@@ -14,7 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.webshop.model.Uloga.KUPAC;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.webshop.model.StatusPrijave.ODBIJENA;
+import static com.webshop.model.StatusPrijave.PODNETA;
+import static com.webshop.model.Uloga.ADMINISTRATOR;
 
 @RestController
 public class KorisnikController {
@@ -28,7 +33,7 @@ public class KorisnikController {
             return new ResponseEntity<>("Korisnik vec postoji!", HttpStatus.CONFLICT);
         }
         else {
-            if (korisnikDto.getUloga() == KUPAC) {
+            if (korisnikDto.getUloga() == Uloga.KUPAC) {
                 korisnikService.createKupac(korisnikDto);
                 return new ResponseEntity<>("Kupac se uspesno registrovao!", HttpStatus.OK);
             }
@@ -75,7 +80,7 @@ public class KorisnikController {
             return new ResponseEntity<>("Nijedan korisnik nije prijavljen!", HttpStatus.BAD_REQUEST);
         }
 
-        if (loggedUser.getUloga() != KUPAC) {
+        if (loggedUser.getUloga() != Uloga.KUPAC) {
             return new ResponseEntity<>("Ulogovani korisnik nije kupac!", HttpStatus.FORBIDDEN);
         }
 
@@ -115,41 +120,23 @@ public class KorisnikController {
         return new ResponseEntity<>("Korisnik je uspesno azurirao podatke!", HttpStatus.OK);
     }
 
-    //dodato
-    @GetMapping("/profile/buyer/{id}")
-    public ResponseEntity<KorisnikDto> getProdavac(@PathVariable Long id, HttpSession session) {
-        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
-        if(korisnik == null) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    @GetMapping("/profiles")
+    public ResponseEntity<?> getProfiles(HttpSession session) {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (loggedKorisnik == null) {
+            return new ResponseEntity<>("Nema prijavljenih korisnika!", HttpStatus.FORBIDDEN);
         }
-        if(korisnik.getUloga() == KUPAC) {
-            Prodavac prodavac = korisnikService.getProdavacById(id);
-            if(prodavac == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<>(new KorisnikDto(prodavac), HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-    }
-    //dodato
-    @GetMapping("/profile/seller/{id}")
-    public ResponseEntity<KorisnikDto> getKupac(@PathVariable Long id, HttpSession session) {
-        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
-        if(korisnik == null) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        if(korisnik.getUloga() == KUPAC) {
-            Kupac kupac = korisnikService.getKupacById(id);
-            if(kupac == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<>(new KorisnikDto(kupac), HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-    }
 
+        if (loggedKorisnik.getUloga() != Uloga.KUPAC) {
+            return new ResponseEntity<>("Prijavljeni korisnik nije kupac!", HttpStatus.FORBIDDEN);
+        }
+
+        List<Korisnik> korisnikList = korisnikService.getKorisnikList();
+        List<KorisnikDto> korisnikDtoList = new ArrayList<>();
+
+        for (Korisnik korisnik : korisnikList) {
+            korisnikDtoList.add(new KorisnikDto(korisnik));
+        }
+        return new ResponseEntity<>(korisnikDtoList, HttpStatus.OK);
+    }
 }

@@ -41,4 +41,8 @@ public class ProizvodService {
     public  List<Proizvod> getProizvodiByKategorija(String kategorija) {
         return proizvodRepository.findAllByKategorijaNaziv(kategorija);
     }
+
+    public void deleteProizvodByProdavacId(Long id) {
+        proizvodRepository.deleteByProdavacId(id);
+    }
 }

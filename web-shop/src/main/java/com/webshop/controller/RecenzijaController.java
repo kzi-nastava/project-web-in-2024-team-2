@@ -1,5 +1,6 @@
 package com.webshop.controller;
 
+import com.fasterxml.jackson.databind.node.TextNode;
 import com.webshop.dto.KupacProdavacDto;
 import com.webshop.dto.RecenzijaDto;
 import com.webshop.model.Korisnik;
@@ -12,18 +13,14 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.webshop.model.Uloga.KUPAC;
+import static com.webshop.model.Uloga.ADMINISTRATOR;
 
 @RestController
 public class RecenzijaController {
@@ -36,7 +33,6 @@ public class RecenzijaController {
 
     KupacProdavacDto kupacProdavacDto = new KupacProdavacDto();
 
-    /*
     @PostMapping("/oceni-prodavca/{id}")
     public ResponseEntity<?> rateProdavac(@PathVariable(name = "id") Long prodavacId, @RequestBody RecenzijaDto recenzijaDto, HttpSession session) {
 //        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
@@ -92,8 +88,8 @@ public class RecenzijaController {
             return new ResponseEntity<>("Nemate pravo za recenziju prodavca!", HttpStatus.FORBIDDEN);
         }
     }
-    */
-    //dodato
+
+    /*
     @PostMapping("/oceni_prodavca/{id}")
     public ResponseEntity<String> oceniProdavca(@RequestBody RecenzijaDto recenzijaDto, @PathVariable Long id, HttpSession session)
     {
@@ -135,7 +131,40 @@ public class RecenzijaController {
         }
         return new ResponseEntity<>("Kupac nije kupio proizvod od datog prodavca", HttpStatus.NOT_FOUND);
     }
+     */
 
+    //admin moze da izmeni samo komentar recenzije!
+    @PostMapping("/izmeni-recenziju/{id}")
+    public ResponseEntity<?> izmeniRecenziju(@PathVariable Long id, @RequestBody RecenzijaDto komentar, HttpSession session) {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+        if (korisnik == null || korisnik.getUloga() != ADMINISTRATOR) {
+            return new ResponseEntity<>("Ne mozete izmeniti recenziju!",HttpStatus.UNAUTHORIZED);
+        }
+        Recenzija recenzija = recenzijaService.findById(id);
+        if(recenzija == null) {
+            return new ResponseEntity<>("Ne postoji data recenzija!",HttpStatus.NOT_FOUND);
+        }
+        if(komentar.getKomentar() == null) {
+            return new ResponseEntity<>("Niste uneli izmenu recenzije!", HttpStatus.BAD_REQUEST);
+        }
+        recenzija.setKomentar(komentar.getKomentar());
+        recenzijaService.saveRecenzija(recenzija);
+        return new ResponseEntity<>("Uspesno izmenjena recenzija", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/obrisi-recenziju/{id}")
+    public ResponseEntity<?> obrisiRecenziju(@PathVariable Long id, HttpSession session) {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+        if (korisnik == null || korisnik.getUloga() != ADMINISTRATOR) {
+            return new ResponseEntity<>("Ne mozete obrisati recenziju!",HttpStatus.UNAUTHORIZED);
+        }
+        Recenzija recenzija = recenzijaService.findById(id);
+        if(recenzija == null) {
+            return new ResponseEntity<>("Ne postoji data recenzija!",HttpStatus.NOT_FOUND);
+        }
+        recenzijaService.deleteRecenzijaById(id);
+        return new ResponseEntity<>("Uspesno obrisana recenzija", HttpStatus.OK);
+    }
 }
 
 

@@ -48,4 +48,8 @@ public class RecenzijaDto implements Serializable {
     public Korisnik getPodnosilac() {
         return podnosilac;
     }
+
+    public RecenzijaDto(String komentar) {
+        this.komentar = komentar;
+    }
 }

@@ -23,7 +23,7 @@ public class Recenzija implements Serializable {
     @Column
     private LocalDate datumRecenzije;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER /*cascade = CascadeType.ALL*/)
     @JsonIgnore
     private Korisnik podnosilac;
 
@@ -48,15 +48,6 @@ public class Recenzija implements Serializable {
         this.komentar = komentar;
         this.datumRecenzije = datumRecenzije;
         this.podnosilac = prijavljeniKorisnik;
-
-    }
-
-    //dodato
-    public Recenzija(RecenzijaDto recenzijaDto, Korisnik podnosilac) {
-        this.ocena = recenzijaDto.getOcena();
-        this.komentar = recenzijaDto.getKomentar();
-        this.datumRecenzije = recenzijaDto.getDatumRecenzije();
-        this.podnosilac = podnosilac;
     }
 
     public Integer getOcena() {

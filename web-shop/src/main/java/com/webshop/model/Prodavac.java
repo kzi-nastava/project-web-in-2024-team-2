@@ -52,4 +52,8 @@ public class Prodavac extends Korisnik implements Serializable {
     public void prihvatiRecenziju(Recenzija recenzija) {
         getDobijenaRecenzija().add(recenzija);
     }
+
+    public void obrisiProizvode() {
+        proizvodiNaProdaju.clear();
+    }
 }

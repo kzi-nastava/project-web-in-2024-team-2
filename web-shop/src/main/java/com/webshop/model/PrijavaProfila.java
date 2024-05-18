@@ -25,4 +25,33 @@ public class PrijavaProfila implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Korisnik odnosiSe;
+
+
+    public StatusPrijave getStatusPrijave() {
+        return statusPrijave;
+    }
+
+    public void setStatusPrijave(StatusPrijave statusPrijave) {
+        this.statusPrijave = statusPrijave;
+    }
+
+    public Korisnik getOdnosiSe() {
+        return odnosiSe;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDate getDatumPodnosenjaPrijave() {
+        return datumPodnosenjaPrijave;
+    }
+
+    public String getRazlogPrijave() {
+        return razlogPrijave;
+    }
+
+    public Korisnik getPodnosilac() {
+        return podnosilac;
+    }
 }

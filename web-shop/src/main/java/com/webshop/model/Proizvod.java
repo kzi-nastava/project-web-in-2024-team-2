@@ -40,7 +40,7 @@ public class Proizvod implements Serializable {
 
     private boolean prodat;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER /*cascade = CascadeType.ALL*/)
     private Prodavac prodavac;
 
     public Long getId() {

@@ -4,13 +4,14 @@ import com.webshop.dto.KorisnikDto;
 import com.webshop.model.Korisnik;
 import com.webshop.model.Kupac;
 import com.webshop.model.Prodavac;
+import com.webshop.model.Proizvod;
 import com.webshop.repository.KorisnikRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
-import static com.webshop.model.Uloga.KUPAC;
 import static com.webshop.model.Uloga.PRODAVAC;
 
 @Service
@@ -18,6 +19,10 @@ public class KorisnikService {
 
     @Autowired
     private KorisnikRepository korisnikRepo;
+
+    public List<Korisnik> getKorisnikList() {
+        return korisnikRepo.findAll();
+    }
 
     public Optional<Korisnik> getById(Long id) {
         return korisnikRepo.findById(id);
@@ -64,16 +69,8 @@ public class KorisnikService {
         korisnikRepo.save(korisnik);
     }
 
-    //dodato
-    public Prodavac getProdavacById(Long id) {
-        Optional<Prodavac> prodavac = korisnikRepo.findByIdAndUloga(id, PRODAVAC);
-        return prodavac.orElse(null);
+    public Korisnik getProdavacById(Long id) {
+        Optional<Korisnik> korisnik = korisnikRepo.findByIdAndUloga(id, PRODAVAC);
+        return korisnik.orElse(null);
     }
-    //dodato
-    public Kupac getKupacById(Long id) {
-        Optional<Kupac> kupac = korisnikRepo.findByUlogaAndId(KUPAC, id);
-        return kupac.orElse(null);
-    }
-
-
 }

@@ -22,4 +22,13 @@ public class RecenzijaService {
     public void saveRecenzija(Recenzija recenzija) {
         recenzijaRepository.save(recenzija);
     }
+
+    public Recenzija findById(Long id) {
+        Optional<Recenzija> recenzija = recenzijaRepository.findById(id);
+        return recenzija.orElse(null);
+    }
+
+    public void deleteRecenzijaById(Long id) {
+        recenzijaRepository.deleteById(id);
+    }
 }
