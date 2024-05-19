@@ -26,14 +26,6 @@ public class RecenzijaController {
     @Autowired
     private RecenzijaService recenzijaService;
 
-    @Autowired
-    private KorisnikService korisnikService;
-
-    @Autowired
-    private ProizvodService proizvodService;
-
-    KupacProdavacDto kupacProdavacDto = new KupacProdavacDto();
-
     @PostMapping("/oceni-prodavca/{id}")
     public ResponseEntity<?> rateProdavac(@PathVariable(name = "id") Long prodavacId, @RequestBody RecenzijaDto recenzijaDto, HttpSession session) {
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
