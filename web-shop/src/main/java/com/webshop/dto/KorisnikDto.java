@@ -1,11 +1,9 @@
 package com.webshop.dto;
 
-import com.webshop.model.*;
+import com.webshop.model.Korisnik;
+import com.webshop.model.Uloga;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * DTO for {@link com.webshop.model.Korisnik}
@@ -15,10 +13,10 @@ public class KorisnikDto implements Serializable {
     private final String ime;
     private final String prezime;
     private final String username;
-    private  String password;
-    private  String mail;
+    private final String password;
+    private final String mail;
     private final String brojTelefona;
-    private  Uloga uloga;
+    private final Uloga uloga;
 
     public KorisnikDto(String ime, String prezime, String username, String password, String mail, String brojTelefona, Uloga uloga) {
         this.ime = ime;

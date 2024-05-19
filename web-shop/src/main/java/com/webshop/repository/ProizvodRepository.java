@@ -2,9 +2,11 @@ package com.webshop.repository;
 
 import com.webshop.model.Proizvod;
 import com.webshop.model.TipProdaje;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -23,5 +25,10 @@ public interface ProizvodRepository extends JpaRepository<Proizvod, Long> {
     Optional<List<Proizvod>> findAllByFilter(@Param("cenaOd") Double cenaOd, @Param("cenaDo") Double cenaDo, @Param("tipProdaje") TipProdaje tipProdaje, @Param("kategorija") String kategorija);
 
     List<Proizvod> findAllByKategorijaNaziv(String kategorija);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Proizvod p WHERE p.prodavac.id = :id")
+    void deleteByProdavacId(Long id);
 
 }

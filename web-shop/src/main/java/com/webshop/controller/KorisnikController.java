@@ -4,18 +4,16 @@ import com.webshop.dto.KorisnikDto;
 import com.webshop.dto.KupacDto;
 import com.webshop.dto.LoginDto;
 import com.webshop.model.Korisnik;
-import com.webshop.model.Kupac;
-import com.webshop.model.Prodavac;
 import com.webshop.model.Uloga;
 import com.webshop.service.KorisnikService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class KorisnikController {
@@ -111,5 +109,21 @@ public class KorisnikController {
 
         korisnikService.saveKorisnik(loggedUser);
         return new ResponseEntity<>("Korisnik je uspesno azurirao podatke!", HttpStatus.OK);
+    }
+
+    @GetMapping("/profiles")
+    public ResponseEntity<?> getProfiles(HttpSession session) {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (loggedKorisnik == null) {
+            return new ResponseEntity<>("Nema prijavljenih korisnika!", HttpStatus.FORBIDDEN);
+        }
+
+        List<Korisnik> korisnikList = korisnikService.getKorisnikList();
+        List<KorisnikDto> korisnikDtoList = new ArrayList<>();
+
+        for (Korisnik korisnik : korisnikList) {
+            korisnikDtoList.add(new KorisnikDto(korisnik));
+        }
+        return new ResponseEntity<>(korisnikDtoList, HttpStatus.OK);
     }
 }

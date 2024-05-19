@@ -5,7 +5,6 @@ import com.webshop.model.Proizvod;
 import com.webshop.model.TipProdaje;
 
 import java.io.Serializable;
-import java.net.URL;
 
 /**
  * DTO for {@link com.webshop.model.Proizvod}

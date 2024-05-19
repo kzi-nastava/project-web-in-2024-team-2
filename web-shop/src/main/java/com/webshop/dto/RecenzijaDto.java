@@ -33,6 +33,10 @@ public class RecenzijaDto implements Serializable {
         this.podnosilac = podnosilac;
     }
 
+    public RecenzijaDto(String komentar) {
+        this.komentar = komentar;
+    }
+
     public Integer getOcena() {
         return ocena;
     }
@@ -47,5 +51,9 @@ public class RecenzijaDto implements Serializable {
 
     public Korisnik getPodnosilac() {
         return podnosilac;
+    }
+
+    public void setPodnosilac(Korisnik podnosilac) {
+        this.podnosilac = podnosilac;
     }
 }

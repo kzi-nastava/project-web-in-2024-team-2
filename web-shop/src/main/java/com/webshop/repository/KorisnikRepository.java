@@ -1,8 +1,6 @@
 package com.webshop.repository;
 
 import com.webshop.model.Korisnik;
-import com.webshop.model.Kupac;
-import com.webshop.model.Prodavac;
 import com.webshop.model.Uloga;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -18,8 +16,6 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Long> {
 
     Optional<Korisnik> findById(Long id);
 
-    //dodato
-    Optional<Prodavac> findByIdAndUloga(Long id, Uloga uloga);
-    Optional<Kupac> findByUlogaAndId(Uloga uloga,Long id);
+    Optional<Korisnik> findByIdAndUloga(Long id, Uloga uloga);
 
 }

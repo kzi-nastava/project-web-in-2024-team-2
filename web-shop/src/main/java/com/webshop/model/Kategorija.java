@@ -3,8 +3,6 @@ package com.webshop.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 
 @Entity

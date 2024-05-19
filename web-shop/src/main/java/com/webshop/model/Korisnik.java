@@ -151,11 +151,6 @@ public class Korisnik implements Serializable {
         return dobijenaRecenzija;
     }
 
-    //dodato
-    public void dodajRecenziju(Recenzija recenzija) {
-        dobijenaRecenzija.add(recenzija);
-    }
-
     public void setUloga(Uloga uloga) {
         this.uloga = uloga;
     }
@@ -190,6 +185,10 @@ public class Korisnik implements Serializable {
 
     public void setBrojTelefona(String brojTelefona) {
         this.brojTelefona = brojTelefona;
+    }
+
+    public void setBlokiran(boolean blokiran) {
+        this.blokiran = blokiran;
     }
 
 }
