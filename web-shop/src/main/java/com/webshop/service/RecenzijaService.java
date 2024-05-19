@@ -1,18 +1,15 @@
 package com.webshop.service;
 
-import com.webshop.model.Korisnik;
-import com.webshop.model.Kupac;
-import com.webshop.model.Proizvod;
-import com.webshop.model.Recenzija;
+import com.webshop.dto.RecenzijaDto;
+import com.webshop.dto.RecenzijaProdavacaDto;
+import com.webshop.model.*;
 import com.webshop.repository.KorisnikRepository;
 import com.webshop.repository.RecenzijaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class RecenzijaService {
@@ -62,5 +59,32 @@ public class RecenzijaService {
 
     public void deleteRecenzijaById(Long id) {
         recenzijaRepository.deleteById(id);
+    }
+
+    public List<RecenzijaProdavacaDto> getRecenzijaList(Long kupacId) {
+        Optional<List<Korisnik>> prodavci = korisnikRepository.findAllByUloga(Uloga.PRODAVAC);
+        List<RecenzijaProdavacaDto> recenzijaDtoList = new ArrayList<>();
+
+        if (prodavci.isEmpty()) {
+            return null;
+        }
+
+        for (int i = 0; i < prodavci.get().size(); i++) {
+            Korisnik prodavac = prodavci.get().get(i);
+            for (Recenzija r : prodavac.getDobijenaRecenzija()) {
+                if (r.getPodnosilac().getId().equals(kupacId)) {
+                    break;
+                }
+            }
+        }
+
+        for (int i = 0; i < prodavci.get().size(); i++) {
+            Korisnik prodavac = prodavci.get().get(i);
+            for (Recenzija r : prodavac.getDobijenaRecenzija()) {
+                recenzijaDtoList.add(new RecenzijaProdavacaDto(r));
+            }
+        }
+        return recenzijaDtoList;
+
     }
 }

@@ -2,6 +2,7 @@ package com.webshop.controller;
 
 import com.webshop.dto.KupacProdavacDto;
 import com.webshop.dto.RecenzijaDto;
+import com.webshop.dto.RecenzijaProdavacaDto;
 import com.webshop.model.Korisnik;
 import com.webshop.model.Prodavac;
 import com.webshop.model.Recenzija;
@@ -68,6 +69,25 @@ public class RecenzijaController {
         }
         recenzijaService.deleteRecenzijaById(id);
         return new ResponseEntity<>("Uspesno obrisana recenzija", HttpStatus.OK);
+    }
+
+    @GetMapping("/recenzije-prodavaca")
+    public ResponseEntity<?> getRecenzijeProdavaca(HttpSession session) {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (loggedKorisnik == null) {
+            return new ResponseEntity<>("Korisnik nije ulogovan!", HttpStatus.FORBIDDEN);
+        }
+
+        if (loggedKorisnik.getUloga() != Uloga.KUPAC) {
+            return new ResponseEntity<>("Samo kupci mogu pristupiti ovoj funkcionalnosti!", HttpStatus.FORBIDDEN);
+        }
+
+        List<RecenzijaProdavacaDto> listaRecenzija = recenzijaService.getRecenzijaList(loggedKorisnik.getId());
+        if (listaRecenzija.isEmpty()) {
+            return new ResponseEntity<>("Recenzija ne postoji!", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(listaRecenzija, HttpStatus.OK);
     }
 
 }

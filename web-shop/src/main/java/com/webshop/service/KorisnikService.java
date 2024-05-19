@@ -1,10 +1,8 @@
 package com.webshop.service;
 
 import com.webshop.dto.KorisnikDto;
-import com.webshop.model.Korisnik;
-import com.webshop.model.Kupac;
-import com.webshop.model.Prodavac;
-import com.webshop.model.Uloga;
+import com.webshop.dto.RecenzijaDto;
+import com.webshop.model.*;
 import com.webshop.repository.KorisnikRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -4,6 +4,7 @@ import com.webshop.dto.KorisnikDto;
 import com.webshop.dto.KupacDto;
 import com.webshop.dto.LoginDto;
 import com.webshop.model.Korisnik;
+import com.webshop.model.Kupac;
 import com.webshop.model.Uloga;
 import com.webshop.service.KorisnikService;
 import jakarta.servlet.http.HttpSession;

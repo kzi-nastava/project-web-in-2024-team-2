@@ -18,6 +18,8 @@ INSERT INTO PROIZVOD (cena, datum_objave, kategorija_id, tip_prodaje,  naziv, op
 INSERT INTO RECENZIJA (datum_recenzije, ocena, podnosilac_id, komentar) VALUES (current_date, 5, 1, 'svaka cast');
 INSERT INTO RECENZIJA (datum_recenzije, ocena, podnosilac_id, komentar) VALUES (current_date, 3, 1, 'dobro odradjen posao');
 INSERT INTO RECENZIJA (datum_recenzije, ocena, podnosilac_id, komentar) VALUES (current_date, 4, 1, 'bravo');
+INSERT INTO RECENZIJA (datum_recenzije, ocena, podnosilac_id, komentar) VALUES (current_date, 4, 1, 'odlicno');
+INSERT INTO RECENZIJA (datum_recenzije, ocena, podnosilac_id, komentar) VALUES (current_date, 4, 2, 'dobar');
 
 INSERT INTO KORISNIK_KUPLJENI_PROIZVODI (kupac_id, kupljeni_proizvodi_id) VALUES (1, 1);
 INSERT INTO KORISNIK_KUPLJENI_PROIZVODI (kupac_id, kupljeni_proizvodi_id) VALUES (1, 2);
@@ -25,9 +27,11 @@ INSERT INTO KORISNIK_KUPLJENI_PROIZVODI (kupac_id, kupljeni_proizvodi_id) VALUES
 INSERT INTO KORISNIK_KUPLJENI_PROIZVODI (kupac_id, kupljeni_proizvodi_id) VALUES (1, 3);
 INSERT INTO KORISNIK_KUPLJENI_PROIZVODI (kupac_id, kupljeni_proizvodi_id) VALUES (1, 5);
 
-INSERT INTO KORISNIK_DOBIJENA_RECENZIJA (dobijena_recenzija_id, korisnik_id) VALUES (1, 1);
-INSERT INTO KORISNIK_DOBIJENA_RECENZIJA (dobijena_recenzija_id, korisnik_id) VALUES (2, 1);
+INSERT INTO KORISNIK_DOBIJENA_RECENZIJA (dobijena_recenzija_id, korisnik_id) VALUES (1, 3);
+INSERT INTO KORISNIK_DOBIJENA_RECENZIJA (dobijena_recenzija_id, korisnik_id) VALUES (2, 2);
 INSERT INTO KORISNIK_DOBIJENA_RECENZIJA (dobijena_recenzija_id, korisnik_id) VALUES (3, 2);
+INSERT INTO KORISNIK_DOBIJENA_RECENZIJA (dobijena_recenzija_id, korisnik_id) VALUES (4, 3);
+INSERT INTO KORISNIK_DOBIJENA_RECENZIJA (dobijena_recenzija_id, korisnik_id) VALUES (5, 2);
 
 INSERT INTO PRIJAVA_PROFILA (datum_podnosenja_prijave, status_prijave, odnosi_se_id, podnosilac_id, razlog_prijave) VALUES (current_date, 'PODNETA', 1, 1, 'tako mi doslo');
 INSERT INTO PRIJAVA_PROFILA (datum_podnosenja_prijave, status_prijave, odnosi_se_id, podnosilac_id, razlog_prijave) VALUES (current_date, 'ODBIJENA', 3, 2, 'neadekvatan recnik');
