@@ -1,7 +1,7 @@
 package com.webshop.controller;
 
-import com.webshop.model.Korisnik;
-import com.webshop.model.PrijavaProfila;
+import com.webshop.dto.PrijavaProfilaDto;
+import com.webshop.model.*;
 import com.webshop.service.KorisnikService;
 import com.webshop.service.ProizvodService;
 import jakarta.servlet.http.HttpSession;
@@ -82,5 +82,22 @@ public class PrijavaProfilaController {
         prijavaProfila.getOdnosiSe().setBlokiran(true);
         korisnikService.saveKorisnik(prijavaProfila.getOdnosiSe());
         return new ResponseEntity<>("Prijava Profila prihvacena!", HttpStatus.OK);
+    }
+
+    @PostMapping("/prijavi-prodavca/{id}")
+    public ResponseEntity<?> prijaviProdavca(@PathVariable Long id, @RequestBody PrijavaProfilaDto razlogPrijave, HttpSession session) {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (loggedKorisnik == null) {
+            return new ResponseEntity<>("Niste prijavljeni!", HttpStatus.FORBIDDEN);
+        }
+        if (loggedKorisnik.getUloga() != Uloga.KUPAC) {
+            return new ResponseEntity<>("Niste kupac!", HttpStatus.FORBIDDEN);
+        }
+
+        PrijavaProfila prijavaProfila = prijavaProfilaService.prijaviProdavca(id, razlogPrijave, loggedKorisnik);
+        if (prijavaProfila == null) {
+            return new ResponseEntity<>("Kupac nije nista kupio od ovog prodavca!", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(prijavaProfila, HttpStatus.OK);
     }
 }

@@ -1,5 +1,6 @@
 package com.webshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.webshop.dto.KorisnikDto;
 import com.webshop.dto.KupacDto;
 import jakarta.persistence.*;
@@ -45,6 +46,7 @@ public class Korisnik implements Serializable {
     private boolean blokiran;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Recenzija> dobijenaRecenzija = new HashSet<>();
 
     public Korisnik() {}
