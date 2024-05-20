@@ -140,4 +140,21 @@ public class PrijavaProfilaController {
         }
         return new ResponseEntity<>("Uspesno podneta prijava!", HttpStatus.OK);
     }
+
+    @PostMapping("/prijavi-kupca/{id}")
+    public ResponseEntity<?> prijaviKupca(@PathVariable Long id, @RequestBody PrijavaProfilaDto razlogPrijave, HttpSession session) {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (loggedKorisnik == null) {
+            return new ResponseEntity<>("Niste prijavljeni!", HttpStatus.FORBIDDEN);
+        }
+        if(loggedKorisnik.getUloga() != Uloga.PRODAVAC) {
+            return new ResponseEntity<>("Niste prodavac!", HttpStatus.FORBIDDEN);
+        }
+
+        PrijavaProfila prijavaProfila = prijavaProfilaService.prijaviKupca(loggedKorisnik.getId(), razlogPrijave, korisnikService.getById(id).get());
+        if (prijavaProfila == null) {
+            return new ResponseEntity<>("Prodavac nije nista prodao ovom kupcu!", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>("Uspesno podneta prijava!", HttpStatus.OK);
+    }
 }

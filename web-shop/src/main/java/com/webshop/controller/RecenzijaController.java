@@ -56,9 +56,35 @@ public class RecenzijaController {
         if (loggedKorisnik == null) {
             return new ResponseEntity<>("User not logged in", HttpStatus.UNAUTHORIZED);
         }
+        if(loggedKorisnik.getUloga() != Uloga.KUPAC) {
+            return new ResponseEntity<>("Prodavca moze da oceni samo kupac!", HttpStatus.FORBIDDEN);
+        }
         Recenzija recenzija = new Recenzija(recenzijaDto, loggedKorisnik);
-        return new ResponseEntity<>(recenzijaService.addRecenzija(recenzija, prodavacId, loggedKorisnik.getId()), HttpStatus.OK);
+        if(recenzijaService.addRecenzija(recenzija, prodavacId, loggedKorisnik.getId()) == null) {
+            return new ResponseEntity<>("Mozete oceniti prodavca samo ako ste od istog kupili proizvod!", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("Uspesno ste ostavili recenziju prodavca", HttpStatus.OK);
+        //return new ResponseEntity<>(recenzijaService.addRecenzija(recenzija, prodavacId, loggedKorisnik.getId()), HttpStatus.OK);
     }
+
+    @PostMapping("/oceni-kupca/{id}")
+    public ResponseEntity<?> rateKupac(@PathVariable(name = "id") Long kupacId, @RequestBody RecenzijaDto recenzijaDto, HttpSession session) {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (loggedKorisnik == null) {
+            return new ResponseEntity<>("User not logged in", HttpStatus.UNAUTHORIZED);
+        }
+        if(loggedKorisnik.getUloga() != Uloga.PRODAVAC) {
+            return new ResponseEntity<>("Kupca moze da oceni samo prodavac!", HttpStatus.FORBIDDEN);
+        }
+        Recenzija recenzija = new Recenzija(recenzijaDto, loggedKorisnik);
+        if(recenzijaService.addRecenzija(recenzija, loggedKorisnik.getId(), kupacId) == null) {
+            return new ResponseEntity<>("Mozete oceniti prodavca samo ako ste od istog kupili proizvod!", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("Uspesno ste ostavili recenziju prodavca", HttpStatus.OK);
+
+        //return new ResponseEntity<>(recenzijaService.addRecenzija(recenzija, loggedKorisnik.getId(), kupacId), HttpStatus.OK);
+    }
+
 
     @PostMapping("/izmeni-recenziju/{id}")
     public ResponseEntity<?> izmeniRecenziju(@PathVariable Long id, @RequestBody RecenzijaDto komentar, HttpSession session) {
@@ -104,8 +130,8 @@ public class RecenzijaController {
         return new ResponseEntity<>("Uspesno obrisana recenzija", HttpStatus.OK);
     }
 
-    @GetMapping("/recenzije-prodavaca")
-    public ResponseEntity<?> getRecenzijeProdavaca(HttpSession session) {
+    @GetMapping("/recenzije-prodavaca/{prodavacID}")
+    public ResponseEntity<?> getRecenzijeProdavaca(@PathVariable Long prodavacID, HttpSession session) {
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
 
         if (loggedKorisnik == null) {
@@ -116,11 +142,62 @@ public class RecenzijaController {
             return new ResponseEntity<>("Samo kupci mogu pristupiti ovoj funkcionalnosti!", HttpStatus.FORBIDDEN);
         }
 
-        List<RecenzijaProdavacaDto> listaRecenzija = recenzijaService.getRecenzijaList(loggedKorisnik.getId());
-        if (listaRecenzija.isEmpty()) {
-            return new ResponseEntity<>("Recenzija ne postoji!", HttpStatus.NOT_FOUND);
+        Set<Recenzija> recenzijeProdavca = recenzijaService.getRecenzijeProdavca(prodavacID, loggedKorisnik.getId());
+        if(recenzijeProdavca == null) {
+            return new ResponseEntity<>("Nema datih recenzija!", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(listaRecenzija, HttpStatus.OK);
+
+        List<RecenzijaProdavacaDto> recenzijeZaSlanje = new ArrayList<>();
+        for(Recenzija r : recenzijeProdavca) {
+            recenzijeZaSlanje.add(new RecenzijaProdavacaDto(r));
+        }
+
+        return new ResponseEntity<>(recenzijeZaSlanje, HttpStatus.OK);
+    }
+
+    @GetMapping("/recenzije-kupca/{kupacID}")
+    public ResponseEntity<?> getRecenzijeKupca(@PathVariable Long kupacID, HttpSession session) {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if(loggedKorisnik == null) {
+            return new ResponseEntity<>("Korisnik nije ulogovan!", HttpStatus.FORBIDDEN);
+        }
+
+        if(loggedKorisnik.getUloga() != Uloga.PRODAVAC) {
+            return new ResponseEntity<>("Samo prodavci mogu pristupiti ovoj funkcionalnosti!", HttpStatus.FORBIDDEN);
+        }
+
+        Set<Recenzija> recenzijeKupca = recenzijaService.getRecenzijeKupca(loggedKorisnik.getId(), kupacID);
+        if(recenzijeKupca == null) {
+            return new ResponseEntity<>("Nema datih recenzija!", HttpStatus.NOT_FOUND);
+        }
+
+        List<RecenzijaProdavacaDto> recenzijeZaSlanje = new ArrayList<>();
+        for(Recenzija r : recenzijeKupca) {
+            recenzijeZaSlanje.add(new RecenzijaProdavacaDto(r));
+        }
+
+        return new ResponseEntity<>(recenzijeZaSlanje, HttpStatus.OK);
+    }
+
+    @GetMapping("/moje-recenzije")
+    public ResponseEntity<?> mojeRecenzije(HttpSession session) {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+        if(korisnik == null) {
+            return new ResponseEntity<>("Niste prijavljeni!", HttpStatus.FORBIDDEN);
+        }
+        if(korisnik.getUloga() != Uloga.PRODAVAC && korisnik.getUloga() != Uloga.KUPAC) {
+            return new ResponseEntity<>("Niste ni kupac ni prodavac!", HttpStatus.FORBIDDEN);
+        }
+        List<Recenzija> recenzije = recenzijaService.mojeRecenzije(korisnik.getId());
+        if(recenzije.isEmpty()) {
+            return new ResponseEntity<>("Niste dali ni jednu recenziju!", HttpStatus.NOT_FOUND);
+        }
+        List<RecenzijaProdavacaDto> recenzijeZaSlanje = new ArrayList<>();
+        for(Recenzija r : recenzije) {
+            recenzijeZaSlanje.add(new RecenzijaProdavacaDto(r));
+        }
+        return new ResponseEntity<>(recenzijeZaSlanje, HttpStatus.OK);
     }
 
 }
