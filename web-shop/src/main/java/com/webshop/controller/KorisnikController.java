@@ -72,8 +72,8 @@ public class KorisnikController {
             return new ResponseEntity<>("Nijedan korisnik nije prijavljen!", HttpStatus.BAD_REQUEST);
         }
 
-        if (loggedUser.getUloga() != Uloga.KUPAC) {
-            return new ResponseEntity<>("Ulogovani korisnik nije kupac!", HttpStatus.FORBIDDEN);
+        if (loggedUser.getUloga() == Uloga.ADMINISTRATOR) {
+            return new ResponseEntity<>("Ulogovani korisnik nije kupac ni prodavac!", HttpStatus.FORBIDDEN);
         }
 
         if (kupacDto.getUsername() != null || kupacDto.getMail() != null) {
