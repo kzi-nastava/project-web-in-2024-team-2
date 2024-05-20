@@ -28,7 +28,7 @@ public interface ProizvodRepository extends JpaRepository<Proizvod, Long> {
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM Proizvod p WHERE p.prodavac.id = :id")
+    @Query("DELETE FROM Proizvod p WHERE p.prodavac.id = :id AND p.prodat = false")
     void deleteByProdavacId(Long id);
 
 }

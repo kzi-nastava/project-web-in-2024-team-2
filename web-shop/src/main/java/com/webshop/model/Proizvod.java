@@ -40,8 +40,21 @@ public class Proizvod implements Serializable {
 
     private boolean prodat;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Prodavac prodavac;
+
+    public Proizvod() {}
+
+    public Proizvod(String naziv, String opis, String profilnaURL, Kategorija kategorija, Double cena, TipProdaje tipProdaje, Prodavac prodavac, LocalDate datumObjave) {
+        this.naziv = naziv;
+        this.opis = opis;
+        this.profilnaURL = profilnaURL;
+        this.kategorija = kategorija;
+        this.cena = cena;
+        this.tipProdaje = tipProdaje;
+        this.prodavac = prodavac;
+        this.datumObjave = datumObjave;
+    }
 
     public Long getId() {
         return id;

@@ -45,4 +45,8 @@ public class ProizvodService {
     public void deleteProizvodByProdavacId(Long id) {
         proizvodRepository.deleteByProdavacId(id);
     }
+
+    public void saveProizvod(Proizvod proizvod) {
+        proizvodRepository.save(proizvod);
+    }
 }

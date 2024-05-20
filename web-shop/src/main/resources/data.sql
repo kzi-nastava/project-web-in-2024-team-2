@@ -45,5 +45,5 @@ INSERT INTO PONUDA (cena, kupac_id) VALUES (2300, 2);
 
 INSERT INTO PROIZVOD_PONUDA (ponuda_id, proizvod_id) VALUES (2, 4);
 INSERT INTO PROIZVOD_PONUDA (ponuda_id, proizvod_id) VALUES (4, 3);
-INSERT INTO PROIZVOD_PONUDA (ponuda_id, proizvod_id) VALUES (1, 1);
+-- INSERT INTO PROIZVOD_PONUDA (ponuda_id, proizvod_id) VALUES (1, 1);
 INSERT INTO PROIZVOD_PONUDA (ponuda_id, proizvod_id) VALUES (3, 2);

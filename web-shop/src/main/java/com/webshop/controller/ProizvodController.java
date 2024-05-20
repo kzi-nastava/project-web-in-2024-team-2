@@ -1,26 +1,81 @@
 package com.webshop.controller;
 
+import com.webshop.dto.DodajProizvodDto;
 import com.webshop.dto.ProizvodDto;
-import com.webshop.model.Proizvod;
-import com.webshop.model.TipProdaje;
+import com.webshop.model.*;
+import com.webshop.service.KategorijaService;
+import com.webshop.service.KorisnikService;
 import com.webshop.service.ProizvodService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class ProizvodController {
 
     @Autowired
     private ProizvodService proizvodService;
+
+    @Autowired
+    private KategorijaService kategorijaService;
+
+    @Autowired
+    private KorisnikService korisnikService;
+
+    @PostMapping("/dodaj-proizvod")
+    public ResponseEntity<?> dodajProizvod(@RequestBody DodajProizvodDto dodajDto, HttpSession session) {
+        Prodavac prodavac = (Prodavac) session.getAttribute("korisnik");
+        if(prodavac == null || prodavac.getUloga() != Uloga.PRODAVAC) {
+            return new ResponseEntity<>("Nemate pravo za postavljanje proizvoda na prodaju!", HttpStatus.FORBIDDEN);
+        }
+        if(!kategorijaService.isExistentByNaziv(dodajDto.getNazivKategorije())) {
+            kategorijaService.saveKategorija(new Kategorija(dodajDto.getNazivKategorije()));
+        }
+        Kategorija kategorija = kategorijaService.findByNaziv(dodajDto.getNazivKategorije());
+        Proizvod proizvod = new Proizvod(dodajDto.getNaziv(), dodajDto.getOpis(), dodajDto.getProfilnaURL(), kategorija, dodajDto.getCena(), dodajDto.getTipProdaje(), prodavac, LocalDate.now());
+        proizvodService.saveProizvod(proizvod);
+        return new ResponseEntity<>("Uspesno postavljen proizvod na prodaju!", HttpStatus.OK);
+    }
+
+    @PostMapping("/azuriraj-proizvod/{id}")
+    public ResponseEntity<?> azurirajProizvod(@RequestBody DodajProizvodDto dodajDto, @PathVariable Long id, HttpSession session) {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+        if(korisnik == null || korisnik.getUloga() != Uloga.PRODAVAC) {
+            return new ResponseEntity<>("Nemate pravo na azuriranje proizvoda!", HttpStatus.FORBIDDEN);
+        }
+        Proizvod proizvod = proizvodService.getProizvodById(id);
+        if(proizvod == null) {
+            return new ResponseEntity<>("Ne postoji proizvod sa datim id-em", HttpStatus.BAD_REQUEST);
+        }
+        if(!Objects.equals(proizvod.getProdavac().getId(), korisnik.getId())) {
+            return new ResponseEntity<>("Ne mozete da azurirate proizvod drugog prodavca", HttpStatus.FORBIDDEN);
+        }
+        if (proizvod.getTipProdaje() == TipProdaje.FIKSNA_CENA || (proizvod.getTipProdaje() == TipProdaje.AUKCIJA && proizvod.getPonuda().isEmpty())) {
+            proizvod.setNaziv(dodajDto.getNaziv());
+            proizvod.setOpis(dodajDto.getOpis());
+            proizvod.setProfilnaURL(dodajDto.getProfilnaURL());
+            proizvod.setCena(dodajDto.getCena());
+            proizvod.setTipProdaje(dodajDto.getTipProdaje());
+            Kategorija kategorija = new Kategorija(dodajDto.getNazivKategorije());
+            if(!kategorijaService.isExistentByNaziv(dodajDto.getNazivKategorije())) {
+                kategorijaService.saveKategorija(kategorija);
+            }
+            proizvod.setKategorija(kategorija);
+            proizvodService.saveProizvod(proizvod);
+            return new ResponseEntity<>("Izmenili ste podatke o datom proizvodu!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Ne mozete izmeniti podatke o proizvodu jer postoje aktivne ponude za dati proizvod!", HttpStatus.FORBIDDEN);
+    }
+
+
 
     @GetMapping("/all-products")
     public ResponseEntity<List<ProizvodDto>> getProizvodi(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {

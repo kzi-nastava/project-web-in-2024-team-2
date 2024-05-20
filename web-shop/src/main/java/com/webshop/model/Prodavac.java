@@ -13,7 +13,7 @@ import java.util.Set;
 @DiscriminatorValue("1")
 public class Prodavac extends Korisnik implements Serializable {
 
-    @OneToMany(mappedBy = "prodavac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "prodavac", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Proizvod> proizvodiNaProdaju = new HashSet<>();
 

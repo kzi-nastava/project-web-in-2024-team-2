@@ -14,6 +14,12 @@ public class Kategorija implements Serializable {
 
     private String naziv;
 
+    public Kategorija(String naziv) {
+        this.naziv = naziv;
+    }
+
+    public Kategorija() {}
+
     public Long getId() {
         return id;
     }
