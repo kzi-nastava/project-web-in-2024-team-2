@@ -26,9 +26,7 @@ public interface ProizvodRepository extends JpaRepository<Proizvod, Long> {
 
     List<Proizvod> findAllByKategorijaNaziv(String kategorija);
 
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM Proizvod p WHERE p.prodavac.id = :id AND p.prodat = false")
-    void deleteByProdavacId(Long id);
+    void deleteById(Long id);
 
+    List<Proizvod> findAllByProdavacId(Long prodavacId);
 }

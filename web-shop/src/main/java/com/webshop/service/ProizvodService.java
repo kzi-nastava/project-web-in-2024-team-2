@@ -23,6 +23,15 @@ public class ProizvodService {
         return proizvodRepository.findAll(tenProductPage);
     }
 
+    public List<Proizvod> getProizvodByProdavacId(Long prodavacId) {
+        List<Proizvod> proizvodList = proizvodRepository.findAllByProdavacId(prodavacId);
+
+        if (proizvodList.isEmpty()) {
+            return null;
+        }
+        return proizvodList;
+    }
+
     public Proizvod getProizvodById(Long id) {
         Optional<Proizvod> proizvod = proizvodRepository.findById(id);
         return proizvod.orElse(null);
@@ -42,8 +51,8 @@ public class ProizvodService {
         return proizvodRepository.findAllByKategorijaNaziv(kategorija);
     }
 
-    public void deleteProizvodByProdavacId(Long id) {
-        proizvodRepository.deleteByProdavacId(id);
+    public void deleteProizvodById(Long id) {
+        proizvodRepository.deleteById(id);
     }
 
     public void saveProizvod(Proizvod proizvod) {

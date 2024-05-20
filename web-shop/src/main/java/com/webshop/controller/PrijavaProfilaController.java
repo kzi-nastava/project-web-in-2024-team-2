@@ -1,7 +1,10 @@
 package com.webshop.controller;
 
+import com.webshop.dto.AdminPrijavaProfilaDto;
+import com.webshop.dto.OdbijenoDto;
 import com.webshop.dto.PrijavaProfilaDto;
 import com.webshop.model.*;
+import com.webshop.service.EmailService;
 import com.webshop.service.KorisnikService;
 import com.webshop.service.ProizvodService;
 import jakarta.servlet.http.HttpSession;
@@ -16,6 +19,9 @@ import static com.webshop.model.Uloga.PRODAVAC;
 
 import com.webshop.service.PrijavaProfilaService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @RestController
 public class PrijavaProfilaController {
@@ -29,9 +35,31 @@ public class PrijavaProfilaController {
     @Autowired
     ProizvodService proizvodService;
 
+    @Autowired
+    private EmailService emailService;
+
+    @GetMapping("/prijave-profila")
+    public ResponseEntity<?> getPrijaveProfila(HttpSession session) {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (loggedKorisnik == null) {
+            return new ResponseEntity<>("Niste prijavljeni!", HttpStatus.FORBIDDEN);
+        }
+        if (loggedKorisnik.getUloga() != ADMINISTRATOR) {
+            return new ResponseEntity<>("Nemate prava da vidite prijave!", HttpStatus.UNAUTHORIZED);
+        }
+
+        List<PrijavaProfila> prijavaProfilaList = prijavaProfilaService.getPrijavaProfilaList();
+        List<AdminPrijavaProfilaDto> prijavaProfilaDtoList = new ArrayList<>();
+
+        for (PrijavaProfila prijavaProfila : prijavaProfilaList) {
+            prijavaProfilaDtoList.add(new AdminPrijavaProfilaDto(prijavaProfila));
+        }
+
+        return new ResponseEntity<>(prijavaProfilaDtoList, HttpStatus.OK);
+    }
 
     @PostMapping("/odbij-prijavu/{id}")
-    public ResponseEntity<?> odbijPrijavu(/*@RequestBody TextNode razlogOdbijanja,*/ @PathVariable Long id, HttpSession session) {
+    public ResponseEntity<?> odbijPrijavu(@RequestBody OdbijenoDto razlogOdbijanja, @PathVariable Long id, HttpSession session) {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
         if(korisnik == null){
             return new ResponseEntity<>("Niste prijavljeni!", HttpStatus.FORBIDDEN);
@@ -40,6 +68,7 @@ public class PrijavaProfilaController {
             return new ResponseEntity<>("Niste admin!", HttpStatus.FORBIDDEN);
         }
         PrijavaProfila prijavaProfila = prijavaProfilaService.getPrijavaProfilaById(id);
+
         if(prijavaProfila == null) {
             return new ResponseEntity<>("Ne postoji data prijava profila!", HttpStatus.FORBIDDEN);
         }
@@ -48,6 +77,8 @@ public class PrijavaProfilaController {
         }
         prijavaProfila.setStatusPrijave(ODBIJENA);
         prijavaProfilaService.savePrijava(prijavaProfila);
+        OdbijenoDto razlog = new OdbijenoDto(razlogOdbijanja);
+        emailService.sendEmail(prijavaProfila.getOdnosiSe().getMail(), "PRIJAVA ODBIJENA!", razlog.getRazlogOdbijanja());
         return new ResponseEntity<>("Prijava Profila odbijena!", HttpStatus.OK);
     }
 
@@ -75,13 +106,22 @@ public class PrijavaProfilaController {
         if(prijavaProfila.getOdnosiSe().getUloga() == PRODAVAC) {
             Korisnik prodavac = korisnikService.getProdavacById(prijavaProfila.getOdnosiSe().getId());
             prodavac.setBlokiran(true);
-            proizvodService.deleteProizvodByProdavacId(prodavac.getId());
-            korisnikService.saveKorisnik(prodavac);
-            return new ResponseEntity<>("Prijava Profila prihvacena!", HttpStatus.OK);
+            List<Proizvod> proizvodList = proizvodService.getProizvodByProdavacId(prodavac.getId());
+            StringBuilder opis = new StringBuilder();
+            for (Proizvod proizvod : proizvodList) {
+                if (proizvod.isProdat()) {
+                    continue;
+                }
+                opis.append(proizvod.getNaziv()).append(", ");
+                proizvodService.deleteProizvodById(proizvod.getId());
+            }
+            opis.replace(opis.length() - 2, opis.length(), "");
+            emailService.sendEmail(prodavac.getMail(), "Obrisani proizvodi!", opis.toString());
+            return new ResponseEntity<>("Prijava profila prodavca prihvacena!", HttpStatus.OK);
         }
         prijavaProfila.getOdnosiSe().setBlokiran(true);
-        korisnikService.saveKorisnik(prijavaProfila.getOdnosiSe());
-        return new ResponseEntity<>("Prijava Profila prihvacena!", HttpStatus.OK);
+        emailService.sendEmail(prijavaProfila.getOdnosiSe().getMail(), "Obavestenje o blokadi!", "Blokirani ste zbog necega!");
+        return new ResponseEntity<>("Prijava profila kupca prihvacena!", HttpStatus.OK);
     }
 
     @PostMapping("/prijavi-prodavca/{id}")
@@ -98,6 +138,6 @@ public class PrijavaProfilaController {
         if (prijavaProfila == null) {
             return new ResponseEntity<>("Kupac nije nista kupio od ovog prodavca!", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(prijavaProfila, HttpStatus.OK);
+        return new ResponseEntity<>("Uspesno podneta prijava!", HttpStatus.OK);
     }
 }

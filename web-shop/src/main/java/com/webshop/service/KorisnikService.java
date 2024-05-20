@@ -65,10 +65,10 @@ public class KorisnikService {
         korisnikRepo.save(korisnik);
     }
 
-    public Prodavac getProdavacById(Long id) {
+    public Korisnik getProdavacById(Long id) {
         Optional<Korisnik> optionalKorisnik = korisnikRepo.findById(id);
         if (optionalKorisnik.isPresent() && optionalKorisnik.get().getUloga() == Uloga.PRODAVAC) {
-            return (Prodavac) optionalKorisnik.get();
+            return optionalKorisnik.get();
         }
         return null;
     }

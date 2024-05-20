@@ -5,6 +5,7 @@ import com.webshop.dto.RecenzijaProdavacaDto;
 import com.webshop.model.*;
 import com.webshop.repository.KorisnikRepository;
 import com.webshop.repository.RecenzijaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,10 @@ public class RecenzijaService {
 
     @Autowired
     private ProizvodService proizvodService;
+
+    public List<Recenzija> getAllRecenzija() {
+        return recenzijaRepository.findAll();
+    }
 
     public Recenzija addRecenzija(Recenzija recenzija, Long prodavacId, Long kupacId) {
         Proizvod proizvod = proizvodService.getProizvodById(prodavacId);

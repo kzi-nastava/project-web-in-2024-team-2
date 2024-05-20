@@ -16,10 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static com.webshop.model.Uloga.KUPAC;
 
@@ -28,6 +25,30 @@ public class RecenzijaController {
 
     @Autowired
     private RecenzijaService recenzijaService;
+
+    @Autowired
+    private KorisnikService korisnikService;
+
+    @GetMapping("/recenzije")
+    public ResponseEntity<?> GetRecenzije(HttpSession session) {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (loggedKorisnik == null) {
+            return new ResponseEntity<>("Korisnik nije ulogovan!", HttpStatus.FORBIDDEN);
+        }
+        if (loggedKorisnik.getUloga() != Uloga.ADMINISTRATOR) {
+            return new ResponseEntity<>("Korisnik nema prava da vidi sve recenzije!", HttpStatus.UNAUTHORIZED);
+        }
+
+        List<Recenzija> recenzijaList = recenzijaService.getAllRecenzija();
+        List<RecenzijaDto> recenzijaDtoList = new ArrayList<>();
+
+        for (Recenzija recenzija : recenzijaList) {
+            recenzijaDtoList.add(new RecenzijaDto(recenzija));
+        }
+
+        return new ResponseEntity<>(recenzijaDtoList, HttpStatus.OK);
+
+    }
 
     @PostMapping("/oceni-prodavca/{id}")
     public ResponseEntity<?> rateProdavac(@PathVariable(name = "id") Long prodavacId, @RequestBody RecenzijaDto recenzijaDto, HttpSession session) {
@@ -67,6 +88,18 @@ public class RecenzijaController {
         if(recenzija == null) {
             return new ResponseEntity<>("Ne postoji data recenzija!",HttpStatus.NOT_FOUND);
         }
+
+        List<Korisnik> korisnici = korisnikService.getKorisnikList();
+
+        for (Korisnik k : korisnici) {
+            Set<Recenzija> dobijeneRecenzije = k.getDobijenaRecenzija();
+            for (Recenzija r : dobijeneRecenzije) {
+                if (r.getId().equals(id)) {
+                    k.getDobijenaRecenzija().remove(r);
+                }
+            }
+        }
+
         recenzijaService.deleteRecenzijaById(id);
         return new ResponseEntity<>("Uspesno obrisana recenzija", HttpStatus.OK);
     }

@@ -21,7 +21,7 @@ public class Proizvod implements Serializable {
 
     private String profilnaURL;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Kategorija kategorija;
 
     private Double cena;

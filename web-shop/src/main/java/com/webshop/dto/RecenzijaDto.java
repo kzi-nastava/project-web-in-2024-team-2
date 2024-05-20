@@ -37,6 +37,13 @@ public class RecenzijaDto implements Serializable {
         this.komentar = komentar;
     }
 
+    public RecenzijaDto(Recenzija recenzija) {
+        this.ocena = recenzija.getOcena();
+        this.komentar = recenzija.getKomentar();
+        this.datumRecenzije = recenzija.getDatumRecenzije();
+        this.podnosilac = recenzija.getPodnosilac();
+    }
+
     public Integer getOcena() {
         return ocena;
     }

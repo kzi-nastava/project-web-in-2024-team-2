@@ -24,6 +24,10 @@ public class PrijavaProfilaDto implements Serializable {
         this.razlogPrijave = prijavaProfila.getRazlogPrijave();
     }
 
+    public PrijavaProfilaDto(PrijavaProfilaDto prijavaProfilaDto) {
+        this.razlogPrijave = prijavaProfilaDto.getRazlogPrijave();
+    }
+
     public String getRazlogPrijave() {
         return razlogPrijave;
     }
