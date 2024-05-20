@@ -41,6 +41,10 @@ public class KorisnikController {
 
     @PostMapping("/login-user")
     public ResponseEntity<?> loginUser(@RequestBody LoginDto loginDto, HttpSession session) {
+        if (!session.isNew()) {
+            return new ResponseEntity<>("Korisnik je vec ulogovan!", HttpStatus.BAD_REQUEST);
+        }
+
         if (loginDto.getUsername().isEmpty() || loginDto.getPassword().isEmpty()) {
             return new ResponseEntity<>("Invalid login data!", HttpStatus.BAD_REQUEST);
         }
