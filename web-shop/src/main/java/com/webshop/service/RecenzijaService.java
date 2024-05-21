@@ -52,14 +52,6 @@ public class RecenzijaService {
         }
 
         for (Proizvod p : kupljeniProizvodi) {
-            /*
-            if (kupljeniProizvodi.contains(proizvod)) {
-                recenzija.setDatumRecenzije(LocalDate.now());
-                Set<Recenzija> dobijenaRecenzija = prodavac.getDobijenaRecenzija();
-                dobijenaRecenzija.add(recenzija);
-                return recenzijaRepository.save(recenzija);
-            }
-             */
             for (Proizvod p1 : proizvodiProdavca) {
                 if (p1.getId().equals(p.getId())) {
                     recenzija.setDatumRecenzije(LocalDate.now());
@@ -85,37 +77,6 @@ public class RecenzijaService {
     public void deleteRecenzijaById(Long id) {
         recenzijaRepository.deleteById(id);
     }
-
-    /*
-    public List<RecenzijaProdavacaDto> getRecenzijaList(Long kupacId) {
-        Optional<List<Korisnik>> prodavci = korisnikRepository.findAllByUloga(Uloga.PRODAVAC);
-        List<RecenzijaProdavacaDto> recenzijaDtoList = new ArrayList<>();
-
-        if (prodavci.isEmpty()) {
-            return null;
-        }
-        boolean dao = false;
-        for (int i = 0; i < prodavci.get().size(); i++) {
-            Korisnik prodavac = prodavci.get().get(i);
-            for (Recenzija r : prodavac.getDobijenaRecenzija()) {
-                if (r.getPodnosilac().getId().equals(kupacId)) {
-                    dao = true;
-                    break;
-                }
-            }
-        }
-        if (dao) {
-            for (int i = 0; i < prodavci.get().size(); i++) {
-                Korisnik prodavac = prodavci.get().get(i);
-                for (Recenzija r : prodavac.getDobijenaRecenzija()) {
-                    recenzijaDtoList.add(new RecenzijaProdavacaDto(r));
-                }
-            }
-        }
-    }
-        return recenzijaDtoList;
-    }
-     */
 
     public Set<Recenzija> getRecenzijeProdavca(Long prodavacId, Long kupacId) {
         Optional<Korisnik> prodavacOptional = korisnikRepository.findById(prodavacId);
