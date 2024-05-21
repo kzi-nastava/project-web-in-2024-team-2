@@ -1,4 +1,3 @@
-
 package com.webshop.dto;
 
 import com.webshop.model.Uloga;
