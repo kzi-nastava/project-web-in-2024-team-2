@@ -13,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 public class ProizvodController {
@@ -195,4 +192,44 @@ public class ProizvodController {
         }
         return new ResponseEntity<>("Uneli ste los tip prodaje!", HttpStatus.BAD_REQUEST);
     }
+
+    @PostMapping("/zavrsi-aukciju/{id}")
+    public ResponseEntity<?> zavrsiAukciju(@PathVariable Long id, HttpSession session) {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+        if (korisnik == null || korisnik.getUloga() != Uloga.PRODAVAC) {
+            return new ResponseEntity<>("Nemate pravo da zavrsite aukciju!", HttpStatus.FORBIDDEN);
+        }
+        Proizvod proizvod = proizvodService.getProizvodById(id);
+        if (proizvod == null) {
+            return new ResponseEntity<>("Ne postoji proizvod sa datim id-em", HttpStatus.BAD_REQUEST);
+        }
+        if (!Objects.equals(proizvod.getProdavac().getId(), korisnik.getId())) {
+            return new ResponseEntity<>("Ne mozete da zavrsite aukciju za proizvod drugog prodavca", HttpStatus.FORBIDDEN);
+        }
+        if (proizvod.isProdat()) {
+            return new ResponseEntity<>("Proizvod je vec prodat!", HttpStatus.FORBIDDEN);
+        }
+        if (proizvod.getTipProdaje() != TipProdaje.AUKCIJA) {
+            return new ResponseEntity<>("Proizvod nije postavljen kao aukcija", HttpStatus.BAD_REQUEST);
+        }
+        if (proizvod.getPonuda().isEmpty()) {
+            return new ResponseEntity<>("Nema ponuda za dati proizvod", HttpStatus.BAD_REQUEST);
+        }
+
+        Ponuda najvecaPonuda = proizvod.getPonuda().stream().max(Comparator.comparing(Ponuda::getCena)).orElse(null);
+        if (najvecaPonuda == null) {
+            return new ResponseEntity<>("Nema validnih ponuda za dati proizvod", HttpStatus.BAD_REQUEST);
+        }
+        if (najvecaPonuda.getCena() < proizvod.getCena()) {
+            return new ResponseEntity<>("Ponuda je preniska!", HttpStatus.BAD_REQUEST);
+        }
+        proizvod.setCena(najvecaPonuda.getCena());
+        proizvod.setProdat(true);
+        proizvodService.saveProizvod(proizvod);
+        emailService.sendEmail(najvecaPonuda.getKupac().getMail(), "Aukcija zavrsena", proizvod.getNaziv());
+        emailService.sendEmail(proizvod.getProdavac().getMail(), "Aukcija zavrsena", proizvod.getNaziv());
+        proizvod.setProdavac(null);
+        return new ResponseEntity<>("Aukcija je uspesno zavrsena", HttpStatus.OK);
+    }
+
 }
