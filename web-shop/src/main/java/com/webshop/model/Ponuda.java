@@ -36,4 +36,11 @@ public class Ponuda implements Serializable {
         this.kupac = kupac;
     }
 
+    public Ponuda(Double cena, Kupac kupac) {
+        this.cena = cena;
+        this.kupac = kupac;
+    }
+
+    public Ponuda() {}
+
 }
