@@ -3,6 +3,7 @@ package com.webshop.controller;
 import com.webshop.dto.KorisnikDto;
 import com.webshop.dto.KupacDto;
 import com.webshop.dto.LoginDto;
+import com.webshop.dto.RegisterDto;
 import com.webshop.model.Korisnik;
 import com.webshop.model.Kupac;
 import com.webshop.model.Uloga;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class KorisnikController {
@@ -23,7 +25,11 @@ public class KorisnikController {
     private KorisnikService korisnikService;
 
     @PostMapping("/register-user")
-    public ResponseEntity<?> registerUser(@RequestBody KorisnikDto korisnikDto) {
+    public ResponseEntity<?> registerUser(@RequestBody RegisterDto registerDto) {
+        if(!Objects.equals(registerDto.getPassword(), registerDto.getCheckPassword())) {
+            return new ResponseEntity<>("Unesite ispravnu potvrdu lozinke!", HttpStatus.BAD_REQUEST);
+        }
+        KorisnikDto korisnikDto = new KorisnikDto(registerDto.getIme(), registerDto.getPrezime(), registerDto.getUsername(), registerDto.getPassword(), registerDto.getMail(), registerDto.getBrojTelefona(), registerDto.getUloga());
         if (korisnikService.isExistentByEmail(korisnikDto.getMail()) || korisnikService.isExistentByUsername(korisnikDto.getUsername())) {
             return new ResponseEntity<>("Korisnik vec postoji!", HttpStatus.CONFLICT);
         } else {
@@ -80,8 +86,8 @@ public class KorisnikController {
             return new ResponseEntity<>("Ulogovani korisnik nije kupac ni prodavac!", HttpStatus.FORBIDDEN);
         }
 
-        if (kupacDto.getUsername() != null || kupacDto.getMail() != null) {
-            if (!korisnikService.checkPassword(loggedUser.getId(), kupacDto.getPassword())) {
+        if (kupacDto.getUsername() != null || kupacDto.getMail() != null || kupacDto.getPassword() != null) {
+            if (!korisnikService.checkPassword(loggedUser.getId(), kupacDto.getOldPassword())) {
                 return new ResponseEntity<>("Trenutna lozinka nije tačna.", HttpStatus.BAD_REQUEST);
             }
 
@@ -91,6 +97,10 @@ public class KorisnikController {
 
             if (kupacDto.getMail() != null) {
                 loggedUser.setMail(kupacDto.getMail());
+            }
+
+            if(kupacDto.getPassword() != null) {
+                loggedUser.setPassword(kupacDto.getPassword());
             }
         }
 

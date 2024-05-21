@@ -17,8 +17,9 @@ public class KupacDto implements Serializable {
     private final LocalDate datumRodjenja;
     private final String profilnaURL;
     private final String opis;
+    private final String oldPassword;
 
-    public KupacDto(String ime, String prezime, String username, String password, String mail, String brojTelefona, LocalDate datumRodjenja, String profilnaURL, String opis) {
+    public KupacDto(String ime, String prezime, String username, String password, String mail, String brojTelefona, LocalDate datumRodjenja, String profilnaURL, String opis, String oldPassword) {
         this.ime = ime;
         this.prezime = prezime;
         this.username = username;
@@ -28,6 +29,7 @@ public class KupacDto implements Serializable {
         this.datumRodjenja = datumRodjenja;
         this.profilnaURL = profilnaURL;
         this.opis = opis;
+        this.oldPassword = oldPassword;
     }
 
     public String getIme() {
@@ -64,5 +66,9 @@ public class KupacDto implements Serializable {
 
     public String getOpis() {
         return opis;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
     }
 }
