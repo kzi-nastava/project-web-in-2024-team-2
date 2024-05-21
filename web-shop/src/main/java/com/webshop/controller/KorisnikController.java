@@ -47,7 +47,7 @@ public class KorisnikController {
 
     @PostMapping("/login-user")
     public ResponseEntity<?> loginUser(@RequestBody LoginDto loginDto, HttpSession session) {
-        if (!session.isNew()) {
+        if (session.getAttribute("korisnik") != null) {
             return new ResponseEntity<>("Korisnik je vec ulogovan!", HttpStatus.BAD_REQUEST);
         }
 
@@ -68,7 +68,7 @@ public class KorisnikController {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         if (korisnik == null) {
-            return new ResponseEntity<>("KOrisnik nije ulogovan!", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Korisnik nije ulogovan!", HttpStatus.FORBIDDEN);
         }
         session.invalidate();
         return new ResponseEntity<>("Logged out!", HttpStatus.OK);
