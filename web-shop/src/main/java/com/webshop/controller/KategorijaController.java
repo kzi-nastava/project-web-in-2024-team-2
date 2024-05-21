@@ -25,5 +25,5 @@ public class KategorijaController {
         }
         return new ResponseEntity<>(kategorijaService.getKategorijaList(), HttpStatus.OK);
     }
-
+    
 }

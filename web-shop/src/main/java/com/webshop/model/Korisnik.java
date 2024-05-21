@@ -193,4 +193,6 @@ public class Korisnik implements Serializable {
         this.blokiran = blokiran;
     }
 
+    public void setPassword(String password) {this.password = password;}
+
 }
