@@ -66,11 +66,16 @@ public class ProizvodController {
             proizvod.setProfilnaURL(dodajDto.getProfilnaURL());
             proizvod.setCena(dodajDto.getCena());
             proizvod.setTipProdaje(dodajDto.getTipProdaje());
-            Kategorija kategorija = new Kategorija(dodajDto.getNazivKategorije());
+
             if(!kategorijaService.isExistentByNaziv(dodajDto.getNazivKategorije())) {
+                Kategorija kategorija = new Kategorija(dodajDto.getNazivKategorije());
                 kategorijaService.saveKategorija(kategorija);
+                proizvod.setKategorija(kategorija);
             }
-            proizvod.setKategorija(kategorija);
+            else {
+                Kategorija kat = kategorijaService.findByNaziv(dodajDto.getNazivKategorije());
+                proizvod.setKategorija(kat);
+            }
             proizvodService.saveProizvod(proizvod);
             return new ResponseEntity<>("Izmenili ste podatke o datom proizvodu!", HttpStatus.OK);
         }
