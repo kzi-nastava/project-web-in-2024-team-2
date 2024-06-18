@@ -1,5 +1,29 @@
-<script setup>
+<script>
+import axios from 'axios'
 
+export default {
+  name: "GuestUserView",
+  data() {
+    return {
+      proizvodi: [],
+    };
+  },
+  mounted() {
+    this.getProizvodi();
+  },
+  methods: {
+    getProizvodi() {
+      axios.get('http://localhost:8081/all-products', {withCredentials: true})
+      .then((response) => {
+        this.proizvodi = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error.message);
+      });
+    }
+  }
+};
 </script>
 
 <template>
@@ -30,14 +54,25 @@
     </div>
   </nav>
 
-
+  <div><h2 class="proizvod">Proizvodi</h2></div>
+  <div class="card-deck">
+    <div v-for="proizvod in proizvodi" class="card " style="width: 18rem;">
+      <img :src="proizvod.profilnaURL" class="card-img-top" alt="slika">
+      <div class="card-body">
+        <h5 class="card-title">{{proizvod.naziv}}</h5>
+        <p class="card-text">{{proizvod.opis}}</p>
+        <a href="#" class="btn btn-primary">Vidi još</a>
+      </div>
+    </div>
+  </div>
 
   <footer>
-    <p style="user-select: none">&copy; {{new Date().getFullYear()}} - All rights reserved</p>
+    <p style="user-select: none">&copy; {{ new Date().getFullYear() }} - All rights reserved</p>
   </footer>
 </template>
 
 <style scoped>
+
 #loginBtn {
   background-color: #198754;
   border-color: #198754;
@@ -54,5 +89,38 @@
 
 #registerBtn:hover {
   background-color: #12613e;
+}
+
+.card-deck {
+  display: flex;
+  height: fit-content;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.card {
+  display: inline-block;
+  padding: 5px;
+  margin: 0.5%;
+}
+
+.card-text {
+  height: 50px;
+}
+
+.card-img-top {
+  width: 100%;
+}
+.btn-primary {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+.btn-primary:hover {
+  background-color: #12613e;
+}
+
+footer {
+  margin-top: 5%;
 }
 </style>
