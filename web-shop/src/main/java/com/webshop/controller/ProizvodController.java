@@ -1,11 +1,10 @@
 package com.webshop.controller;
 
 import com.webshop.dto.DodajProizvodDto;
+import com.webshop.dto.PonudaDto;
 import com.webshop.dto.ProizvodDto;
 import com.webshop.model.*;
-import com.webshop.service.KategorijaService;
-import com.webshop.service.KorisnikService;
-import com.webshop.service.ProizvodService;
+import com.webshop.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @RestController
 public class ProizvodController {
@@ -29,6 +29,11 @@ public class ProizvodController {
 
     @Autowired
     private KorisnikService korisnikService;
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private PonudaService ponudaService;
 
     @PostMapping("/dodaj-proizvod")
     public ResponseEntity<?> dodajProizvod(@RequestBody DodajProizvodDto dodajDto, HttpSession session) {
@@ -134,4 +139,60 @@ public class ProizvodController {
         return getListResponseEntity(proizvodList);
     }
 
+    @PostMapping("/kupi/proizvod/{id}")
+    public ResponseEntity<?> kupiProizvod(@PathVariable Long id, @RequestBody PonudaDto ponudaDto, HttpSession session) {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (loggedKorisnik == null) {
+            return new ResponseEntity<>("Niste prijavljeni!", HttpStatus.FORBIDDEN);
+        }
+        if (loggedKorisnik.getUloga() != Uloga.KUPAC) {
+            return new ResponseEntity<>("Niste kupac!", HttpStatus.FORBIDDEN);
+        }
+        Proizvod proizvod = proizvodService.getProizvodById(id);
+        if (proizvod == null) {
+            return new ResponseEntity<>("Ne postoji dati proizvod!", HttpStatus.NO_CONTENT);
+        }
+        if (proizvod.isProdat()) {
+            return new ResponseEntity<>("Proizvod je vec prodat!", HttpStatus.FORBIDDEN);
+        }
+        Kupac kupac = (Kupac) loggedKorisnik;
+        Prodavac prodavac = proizvod.getProdavac();
+
+        double cenaPonude = ponudaDto.getCenaPonude();
+        if (proizvod.getTipProdaje() == TipProdaje.FIKSNA_CENA) {
+            proizvod.setProdat(true);
+            kupac.getKupljeniProizvodi().add(proizvod);
+            //ako ne sacuvam kupca i prodavca promene nece biti vidljive u bazi podataka
+            korisnikService.saveKorisnik(kupac);
+            korisnikService.saveKorisnik(prodavac);
+            prodavac.getProizvodiNaProdaju().remove(proizvod);
+            proizvodService.saveProizvod(proizvod);
+            String kupacEMAIL = kupac.getMail();
+            String prodavacEMAIL = prodavac.getMail();
+            emailService.sendEmail(kupacEMAIL, "Kupili ste proizvod ", proizvod.getNaziv());
+            emailService.sendEmail(prodavacEMAIL, "Prodali ste proizvod ", proizvod.getNaziv());
+            return new ResponseEntity<>("Uspesno ste kupili proizvod!", HttpStatus.OK);
+        }
+        if (proizvod.getTipProdaje() == TipProdaje.AUKCIJA) {
+            Set<Ponuda> ponude = proizvod.getPonuda();
+            //ako ne postoji data ponuda za proizvod maxPonuda je 0, a ako postoji pronaci ce najvecu za dati proizvod i upisati je u maxPonuda
+            double maxPonuda = 0;
+            if (!ponude.isEmpty()) {
+                for (Ponuda ponuda : ponude) {
+                    if (maxPonuda < ponuda.getCena()) {
+                        maxPonuda = ponuda.getCena();
+                    }
+                }
+            }
+            //ako je nova ponuda veca od najvece moguce ponude za dati proizvod ta ponuda se dodaje u bazu podataka
+            if (maxPonuda < cenaPonude) {
+                proizvod.getPonuda().add(new Ponuda(cenaPonude, kupac));
+                proizvodService.saveProizvod(proizvod);
+                emailService.sendEmail(proizvod.getProdavac().getMail(), "Nova ponuda za proizvod", "Nova ponuda za prozivod" + proizvod.getNaziv() + "je" + cenaPonude);
+                return new ResponseEntity<>("Uspesno ste podneli ponudu za dati proizvod", HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Morate uneti ponudu koja je veca od vec postojecih", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("Uneli ste los tip prodaje!", HttpStatus.BAD_REQUEST);
+    }
 }
