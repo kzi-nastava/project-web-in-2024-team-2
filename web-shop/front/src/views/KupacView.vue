@@ -1,10 +1,11 @@
 <script>
-import axios from 'axios'
+import axios from "axios";
 
 export default {
-  name: "GuestUserView",
-  data() {
+  name: "KupacView",
+  data: function () {
     return {
+      korisnik: {},
       proizvodi: [],
       query: '',
       kategorije: [],
@@ -19,74 +20,55 @@ export default {
     this.searchProizvodi();
     this.getKategorije();
     this.filterProizvodi();
-    this.isUserLogged();
+    this.getLoggedUser();
   },
   methods: {
-    isUserLogged() {
-      if (localStorage.getItem('korisnik') == null) {
-        this.$router.push('/');
-      }
-      else {
-        const korisnik = JSON.parse(localStorage.getItem('korisnik'));
-        if (korisnik.uloga === 'KUPAC') {
-          this.$router.push('/kupac_view');
-        }
-        else if (korisnik.uloga === 'PRODAVAC') {
-          this.$router.push('/prodavac_view');
-        }
-        else {
-          this.$router.push('/administrator_view');
-        }
-      }
-    },
     getProizvodi() {
       axios.get('http://localhost:8081/all-products', {withCredentials: true})
-      .then((response) => {
-        this.proizvodi = response.data;
-      })
-      .catch((error) => {
-        console.log(error);
-        alert(error.message);
-      });
+          .then((response) => {
+            this.proizvodi = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+            alert(error.message);
+          });
     },
     searchProizvodi() {
       axios.get(`http://localhost:8081/products/search?naziv=${this.query}&opis=${this.query}`, {withCredentials: true})
-        .then((response) => {
-          this.proizvodi = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("Ne postoje proizvodi sa tim nazivom!");
-        });
+          .then((response) => {
+            this.proizvodi = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+            alert("Ne postoje proizvodi sa tim nazivom!");
+          });
     },
     getKategorije() {
       axios.get('http://localhost:8081/kategorije', {withCredentials: true})
-      .then((response) => {
-        this.kategorije = response.data;
-      })
-      .catch((error) => {
-        console.log(error);
-        alert("Ne postoji kategorija!");
-      })
+          .then((response) => {
+            this.kategorije = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+            alert("Ne postoji kategorija!");
+          })
     },
     filterProizvodi() {
       axios.get(`http://localhost:8081/products/filter?tipProdaje=${this.tipProdaje}`, {withCredentials: true})
-        .then((response) => {
-          this.proizvodi = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("Nema proizvoda!");
-        })
+          .then((response) => {
+            this.proizvodi = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+            alert("Nema proizvoda!");
+          })
     },
     seeMore(id) {
       this.$router.push('/product/' + id);
     },
-    login() {
-      this.$router.push('/login');
-    },
-    register() {
-      this.$router.push('/register');
+    getLoggedUser() {
+      this.korisnik = JSON.parse(localStorage.getItem('korisnik'));
+      console.log(this.korisnik);
     }
   }
 };
@@ -105,13 +87,15 @@ export default {
             <a class="nav-link active" aria-current="page" href="/">Home</a>
           </li>
         </ul>
-        <form class="d-flex" role="search" @submit.prevent="searchProizvodi">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="query">
-          <button class="btn btn-outline-success">Search</button>
-        </form>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <button id="loginBtn" class="btn btn-primary me-md-2" style="margin-left: 40px" type="button" v-on:click="login()">Login</button>
-          <button id="registerBtn" class="btn btn-primary" type="button" v-on:click="register()">Register</button>
+        <div @load="getLoggedUser" class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <form class="d-flex" role="search" @submit.prevent="searchProizvodi">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="query">
+            <button class="btn btn-outline-success">Search</button>
+          </form>
+          <div id="user" class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <img id="icon" :src="korisnik.profilnaURL" alt="user icon">
+            <p><b>{{korisnik.username}}</b></p>
+          </div>
         </div>
       </div>
     </div>
@@ -175,22 +159,13 @@ export default {
 
 <style scoped>
 
-#loginBtn {
-  background-color: #198754;
-  border-color: #198754;
+#user {
+  cursor: pointer;
 }
 
-#loginBtn:hover {
-  background-color: #12613e;
-}
-
-#registerBtn {
-  background-color: #198754;
-  border-color: #198754;
-}
-
-#registerBtn:hover {
-  background-color: #12613e;
+#icon {
+  width: 40px;
+  height: 40px;
 }
 
 .card-deck {
