@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-import static com.webshop.model.Uloga.KUPAC;
-import static com.webshop.model.Uloga.PRODAVAC;
+import static com.webshop.model.Uloga.*;
 
 @RestController
 public class KorisnikController {
@@ -87,7 +86,7 @@ public class KorisnikController {
             return new ResponseEntity<>("Nijedan korisnik nije prijavljen!", HttpStatus.BAD_REQUEST);
         }
 
-        if (loggedUser.getUloga() == Uloga.ADMINISTRATOR) {
+        if (loggedUser.getUloga() == ADMINISTRATOR) {
             return new ResponseEntity<>("Ulogovani korisnik nije kupac ni prodavac!", HttpStatus.FORBIDDEN);
         }
 
@@ -142,7 +141,9 @@ public class KorisnikController {
         List<Korisnik> korisnikList = korisnikService.getKorisnikList();
         List<PrikazProfilaFrontDto> profiliDto = new ArrayList<>();
         for (Korisnik korisnik : korisnikList) {
-            profiliDto.add(new PrikazProfilaFrontDto(korisnik, 0));
+            if (korisnik.getUloga() != ADMINISTRATOR) {
+                profiliDto.add(new PrikazProfilaFrontDto(korisnik, 0));
+            }
         }
         return new ResponseEntity<>(profiliDto, HttpStatus.OK);
     }
@@ -181,6 +182,7 @@ public class KorisnikController {
             PrikazProfilaFrontDto profil = new PrikazProfilaFrontDto(kupac,kupac.getProsecnaOcena(), proizvodi, recenzije);
             return new ResponseEntity<>(profil, HttpStatus.OK);
         }
+
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
