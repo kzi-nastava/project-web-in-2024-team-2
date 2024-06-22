@@ -6,6 +6,8 @@ import RegisterView from "@/views/RegisterView.vue";
 import KupacView from "@/views/KupacView.vue";
 import ProdavacView from "@/views/ProdavacView.vue"
 import ProfileUpdate from "@/views/ProfileUpdate.vue";
+import AdministratorRecenzijeView from "@/views/AdministratorRecenzijeView.vue";
+import AdministratorPrijaveView from "@/views/AdministratorPrijaveView.vue";
 
 const routes = [
   {
@@ -48,9 +50,19 @@ const routes = [
     component: ProdavacView,
   },
   {
+    path: '/administrator_view',
+    name: 'administratorView',
+    component: AdministratorRecenzijeView,
+  },
+  {
     path: '/update_profile',
     name: 'update',
     component: ProfileUpdate
+  },
+  {
+    path: '/administrator_prijave',
+    name: 'administratorPrijave',
+    component: AdministratorPrijaveView
   }
 ]
 

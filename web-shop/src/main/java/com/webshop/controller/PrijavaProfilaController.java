@@ -61,10 +61,10 @@ public class PrijavaProfilaController {
     @PostMapping("/odbij-prijavu/{id}")
     public ResponseEntity<?> odbijPrijavu(@RequestBody OdbijenoDto razlogOdbijanja, @PathVariable Long id, HttpSession session) {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
-        if(korisnik == null){
+        if(korisnik == null) {
             return new ResponseEntity<>("Niste prijavljeni!", HttpStatus.FORBIDDEN);
         }
-        if(korisnik.getUloga() != ADMINISTRATOR){
+        if(korisnik.getUloga() != ADMINISTRATOR) {
             return new ResponseEntity<>("Niste admin!", HttpStatus.FORBIDDEN);
         }
         PrijavaProfila prijavaProfila = prijavaProfilaService.getPrijavaProfilaById(id);

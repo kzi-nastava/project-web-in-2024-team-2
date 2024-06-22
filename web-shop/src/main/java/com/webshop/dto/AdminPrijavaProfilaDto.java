@@ -16,17 +16,20 @@ public class AdminPrijavaProfilaDto implements Serializable {
     private final LocalDate datumPodnosenjaPrijave;
     private final StatusPrijave statusPrijave;
     private final String razlogPrijave;
+    private final Korisnik podnosilac;
 
-    public AdminPrijavaProfilaDto(LocalDate datumPodnosenjaPrijave, StatusPrijave statusPrijave, String razlogPrijave) {
+    public AdminPrijavaProfilaDto(LocalDate datumPodnosenjaPrijave, StatusPrijave statusPrijave, String razlogPrijave, Korisnik podnosilac) {
         this.datumPodnosenjaPrijave = datumPodnosenjaPrijave;
         this.statusPrijave = statusPrijave;
         this.razlogPrijave = razlogPrijave;
+        this.podnosilac = podnosilac;
     }
 
     public AdminPrijavaProfilaDto(PrijavaProfila prijavaProfila) {
         this.datumPodnosenjaPrijave = prijavaProfila.getDatumPodnosenjaPrijave();
         this.statusPrijave = prijavaProfila.getStatusPrijave();
         this.razlogPrijave = prijavaProfila.getRazlogPrijave();
+        this.podnosilac = prijavaProfila.getPodnosilac();
     }
 
     public LocalDate getDatumPodnosenjaPrijave() {
@@ -39,6 +42,10 @@ public class AdminPrijavaProfilaDto implements Serializable {
 
     public String getRazlogPrijave() {
         return razlogPrijave;
+    }
+
+    public Korisnik getPodnosilac() {
+        return podnosilac;
     }
 
 }
