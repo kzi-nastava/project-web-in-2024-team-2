@@ -1,9 +1,13 @@
 package com.webshop.dto;
 
 import com.webshop.model.Korisnik;
+import com.webshop.model.Proizvod;
+import com.webshop.model.Recenzija;
 import com.webshop.model.Uloga;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * DTO for {@link com.webshop.model.Korisnik}
@@ -37,6 +41,7 @@ public class KorisnikDto implements Serializable {
         this.brojTelefona = korisnik.getBrojTelefona();
         this.uloga = korisnik.getUloga();
     }
+
 
     public String getIme() {
         return ime;

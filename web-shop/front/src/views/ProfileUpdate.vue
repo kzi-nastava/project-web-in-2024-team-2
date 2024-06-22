@@ -15,7 +15,7 @@ export default {
         datumRodenja: '',
         profilnaURL: '',
         opis: '',
-        oldPassword: ''
+        oldPassword: '',
       }
     };
   },
@@ -26,11 +26,12 @@ export default {
     updateUser() {
       axios.put('http://localhost:8081/logged-user/update', this.userData, {withCredentials: true})
       .then((res) => {
-        console.log(res);
+        localStorage.setItem('korisnik', JSON.stringify(res.data));
+        alert("Korisnik je uspesno azuriran!");
         if(res.data.uloga === 'KUPAC') {
           this.$router.push('/kupac_view');
         }
-        if(res.data.uloga === 'PRODAVAC') {
+        else if(res.data.uloga === 'PRODAVAC') {
           this.$router.push('/prodavac_view');
         }
       })

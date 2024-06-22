@@ -1,29 +1,3 @@
-/*import { createRouter, createWebHistory } from 'vue-router'
-import GuestUserView from "@/views/GuestUserView.vue";
-import ProfileUpdate from "@/views/ProfileUpdate.vue";
-
-const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: GuestUserView
-  },
-  {
-    path: '/updateProfile',
-    name: 'update',
-    component: ProfileUpdate
-  }
-
-
-]
-
-const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
-})
-
-export default router
-*/
 import { createRouter, createWebHistory } from 'vue-router'
 import GuestUserView from "@/views/GuestUserView.vue";
 import ProductView from "@/views/ProductView.vue";
@@ -31,6 +5,9 @@ import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import KupacView from "@/views/KupacView.vue";
 import ProdavacView from "@/views/ProdavacView.vue"
+import ProfileUpdate from "@/views/ProfileUpdate.vue";
+import ProfilesView from "@/views/ProfilesView.vue";
+import ProfileView from "@/views/ProfileView.vue";
 
 const routes = [
   {
@@ -71,6 +48,21 @@ const routes = [
     path: '/prodavac_view',
     name: 'prodavacView',
     component: ProdavacView,
+  },
+  {
+    path: '/updateProfile',
+    name: '/UpdateProfile',
+    component: ProfileUpdate
+  },
+  {
+    path: '/profiles',
+    name: '/Profiles',
+    component: ProfilesView
+  },
+  {
+    path: '/profil/:id',
+    name: 'profil',
+    component: ProfileView
   }
 ]
 
