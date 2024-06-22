@@ -79,6 +79,9 @@ export default {
     logout() {
       localStorage.removeItem('korisnik');
       this.$router.push('/');
+    },
+    goUpdate() {
+      this.$router.push('/update_profile');
     }
   }
 };
@@ -102,10 +105,11 @@ export default {
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="query">
             <button class="btn btn-outline-success">Search</button>
           </form>
-          <div v-if="korisnik != null" id="user" class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <div v-on:click="goUpdate()" v-if="korisnik != null" id="user" class="d-grid gap-2 d-md-flex justify-content-md-end">
             <img id="icon" :src="korisnik.profilnaURL" alt="user icon">
             <p><b>{{korisnik.username}}</b></p>
           </div>
+          <a v-on:click="logout()" href="#">Logout</a>
         </div>
       </div>
     </div>
@@ -161,8 +165,6 @@ export default {
       </div>
     </div>
   </div>
-
-  <a v-on:click="logout()" href="#">Logout</a>
 
   <footer>
     <p style="user-select: none">&copy; {{ new Date().getFullYear() }} - All rights reserved</p>

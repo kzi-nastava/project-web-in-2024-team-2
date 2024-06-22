@@ -20,17 +20,22 @@ export default {
     };
   },
   mounted() {
-    this.updateUser();
+    this.getUser();
   },
   methods: {
+    getUser() {
+      const loggedUser = JSON.parse(localStorage.getItem('korisnik'));
+      this.userData = loggedUser;
+    },
     updateUser() {
       axios.put('http://localhost:8081/logged-user/update', this.userData, {withCredentials: true})
       .then((res) => {
-        console.log(res);
+        localStorage.setItem('korisnik', JSON.stringify(res.data));
+        alert("Korisnik je uspesno azuriran!");
         if(res.data.uloga === 'KUPAC') {
           this.$router.push('/kupac_view');
         }
-        if(res.data.uloga === 'PRODAVAC') {
+        else if(res.data.uloga === 'PRODAVAC') {
           this.$router.push('/prodavac_view');
         }
       })
@@ -38,7 +43,7 @@ export default {
         console.log(err);
         alert(err.response.data);
       })
-  }
+    }
   }
 };
 
@@ -48,7 +53,7 @@ export default {
   <div class="main">
     <h2>Azuriraj profil</h2>
 
-    <form class="profile-form"  @submit.prevent="updateUser">
+    <form class="profile-form" @submit.prevent="updateUser">
       <label for="ime">Ime:</label>
       <input v-model="userData.ime" type="text" id="ime" name="ime" placeholder="Unesite ime">
 

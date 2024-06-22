@@ -5,6 +5,7 @@ import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import KupacView from "@/views/KupacView.vue";
 import ProdavacView from "@/views/ProdavacView.vue"
+import ProfileUpdate from "@/views/ProfileUpdate.vue";
 
 const routes = [
   {
@@ -47,7 +48,7 @@ const routes = [
     component: ProdavacView,
   },
   {
-    path: '/updateProfile',
+    path: '/update_profile',
     name: 'update',
     component: ProfileUpdate
   }

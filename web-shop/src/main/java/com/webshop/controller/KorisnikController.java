@@ -123,7 +123,7 @@ public class KorisnikController {
             loggedUser.setOpis(kupacDto.getOpis());
 
         korisnikService.saveKorisnik(loggedUser);
-        return new ResponseEntity<>("Korisnik je uspesno azurirao podatke!", HttpStatus.OK);
+        return new ResponseEntity<>(loggedUser, HttpStatus.OK);
     }
 
     @GetMapping("/profiles")
