@@ -47,9 +47,9 @@ public class KorisnikController {
 
     @PostMapping("/login-user")
     public ResponseEntity<?> loginUser(@RequestBody LoginDto loginDto, HttpSession session) {
-        if (session.getAttribute("korisnik") != null) {
-            return new ResponseEntity<>("Korisnik je vec ulogovan!", HttpStatus.BAD_REQUEST);
-        }
+//        if (session.getAttribute("korisnik") != null) {
+//            return new ResponseEntity<>("Korisnik je vec ulogovan!", HttpStatus.BAD_REQUEST);
+//        }
 
         if (loginDto.getUsername().isEmpty() || loginDto.getPassword().isEmpty()) {
             return new ResponseEntity<>("Invalid login data!", HttpStatus.BAD_REQUEST);
@@ -60,7 +60,7 @@ public class KorisnikController {
             return new ResponseEntity<>("Korisnik ne postoji!", HttpStatus.BAD_REQUEST);
         }
         session.setAttribute("korisnik", loggedKorisnik);
-        return new ResponseEntity<>("Logged in!", HttpStatus.OK);
+        return new ResponseEntity<>(loggedKorisnik, HttpStatus.OK);
     }
 
     @PostMapping("/logout-user")
@@ -68,7 +68,7 @@ public class KorisnikController {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         if (korisnik == null) {
-            return new ResponseEntity<>("Korisnik nije ulogovan!", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(korisnik, HttpStatus.FORBIDDEN);
         }
         session.invalidate();
         return new ResponseEntity<>("Logged out!", HttpStatus.OK);
