@@ -86,12 +86,9 @@ export default {
         alert(error.response.data);
       });
     },
-    login: function () {
+    login() {
       this.$router.push("/login");
-    },
-    goHome: function () {
-      this.$router.push("/home");
-    },
+    }
   },
 };
 </script>

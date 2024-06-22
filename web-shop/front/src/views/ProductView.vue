@@ -14,9 +14,13 @@
             <a class="nav-link" href="#">Link</a>
           </li>
         </ul>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <button id="loginBtn" class="btn btn-primary me-md-2" style="margin-left: 40px" type="button">Login</button>
-          <button id="registerBtn" class="btn btn-primary" type="button">Register</button>
+        <div v-if="korisnik === null" class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button id="loginBtn" class="btn btn-primary me-md-2" style="margin-left: 40px" type="button" v-on:click="login()">Login</button>
+          <button id="registerBtn" class="btn btn-primary" type="button" v-on:click="register()">Register</button>
+        </div>
+        <div v-else id="user" class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <img id="icon" :src="korisnik.profilnaURL" alt="user icon">
+          <p><b>{{korisnik.username}}</b></p>
         </div>
       </div>
     </div>
@@ -43,10 +47,12 @@ export default {
   data() {
     return {
       proizvod: null,
+      korisnik: {},
     };
   },
   mounted() {
     this.fetchProizvod();
+    this.getLoggedUser();
   },
   methods: {
     fetchProizvod() {
@@ -59,12 +65,31 @@ export default {
         console.log(error);
         alert("Ne postoji proizvod sa tim ID-em");
       });
+    },
+    getLoggedUser() {
+      this.korisnik = JSON.parse(localStorage.getItem('korisnik'));
+      console.log(this.korisnik);
+    },
+    login() {
+      this.$router.push('/login');
+    },
+    register() {
+      this.$router.push('/register');
     }
   }
 };
 </script>
 
 <style scoped>
+
+#user {
+  cursor: pointer;
+}
+
+#icon {
+  width: 40px;
+  height: 40px;
+}
 
 #loginBtn {
   background-color: #198754;

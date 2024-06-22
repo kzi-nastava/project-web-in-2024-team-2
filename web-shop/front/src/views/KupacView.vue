@@ -21,8 +21,14 @@ export default {
     this.getKategorije();
     this.filterProizvodi();
     this.getLoggedUser();
+    this.isUserLogged();
   },
   methods: {
+    isUserLogged() {
+      if (localStorage.getItem('korisnik') == null) {
+        this.$router.push('/');
+      }
+    },
     getProizvodi() {
       axios.get('http://localhost:8081/all-products', {withCredentials: true})
           .then((response) => {
@@ -69,6 +75,10 @@ export default {
     getLoggedUser() {
       this.korisnik = JSON.parse(localStorage.getItem('korisnik'));
       console.log(this.korisnik);
+    },
+    logout() {
+      localStorage.removeItem('korisnik');
+      this.$router.push('/');
     }
   }
 };
@@ -92,7 +102,7 @@ export default {
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="query">
             <button class="btn btn-outline-success">Search</button>
           </form>
-          <div id="user" class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <div v-if="korisnik != null" id="user" class="d-grid gap-2 d-md-flex justify-content-md-end">
             <img id="icon" :src="korisnik.profilnaURL" alt="user icon">
             <p><b>{{korisnik.username}}</b></p>
           </div>
@@ -151,6 +161,8 @@ export default {
       </div>
     </div>
   </div>
+
+  <a v-on:click="logout()" href="#">Logout</a>
 
   <footer>
     <p style="user-select: none">&copy; {{ new Date().getFullYear() }} - All rights reserved</p>
