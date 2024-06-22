@@ -26,6 +26,7 @@ export default {
     getUser() {
       const loggedUser = JSON.parse(localStorage.getItem('korisnik'));
       this.userData = loggedUser;
+      this.userData.password = '';
     },
     updateUser() {
       axios.put('http://localhost:8081/logged-user/update', this.userData, {withCredentials: true})

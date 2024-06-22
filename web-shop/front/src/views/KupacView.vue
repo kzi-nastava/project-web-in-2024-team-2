@@ -41,33 +41,33 @@ export default {
     },
     searchProizvodi() {
       axios.get(`http://localhost:8081/products/search?naziv=${this.query}&opis=${this.query}`, {withCredentials: true})
-          .then((response) => {
-            this.proizvodi = response.data;
-          })
-          .catch((error) => {
-            console.log(error);
-            alert("Ne postoje proizvodi sa tim nazivom!");
-          });
+      .then((response) => {
+        this.proizvodi = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("Ne postoje proizvodi sa tim nazivom!");
+      });
     },
     getKategorije() {
       axios.get('http://localhost:8081/kategorije', {withCredentials: true})
-          .then((response) => {
-            this.kategorije = response.data;
-          })
-          .catch((error) => {
-            console.log(error);
-            alert("Ne postoji kategorija!");
-          })
+      .then((response) => {
+        this.kategorije = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("Ne postoji kategorija!");
+      })
     },
     filterProizvodi() {
       axios.get(`http://localhost:8081/products/filter?tipProdaje=${this.tipProdaje}`, {withCredentials: true})
-          .then((response) => {
-            this.proizvodi = response.data;
-          })
-          .catch((error) => {
-            console.log(error);
-            alert("Nema proizvoda!");
-          })
+      .then((response) => {
+        this.proizvodi = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("Nema proizvoda!");
+      });
     },
     seeMore(id) {
       this.$router.push('/product/' + id);
