@@ -8,6 +8,8 @@ import ProdavacView from "@/views/ProdavacView.vue"
 import ProfileUpdate from "@/views/ProfileUpdate.vue";
 import ProfilesView from "@/views/ProfilesView.vue";
 import ProfileView from "@/views/ProfileView.vue";
+import OceniKupca from "@/views/OceniKupca.vue";
+import OceniProdavca from "@/views/OceniProdavca.vue";
 
 const routes = [
   {
@@ -63,6 +65,16 @@ const routes = [
     path: '/profil/:id',
     name: 'profil',
     component: ProfileView
+  },
+  {
+    path: '/oceni-prodavca/:id',
+    name: 'oceni-prodavca',
+    component: OceniProdavca
+  },
+  {
+    path: '/oceni-kupca/:id',
+    name: 'oceni-kupca',
+    component: OceniKupca
   }
 ]
 

@@ -34,45 +34,60 @@ export default {
     <div><h2 class="Korisnici">Korisnici</h2></div>
     <div class="card-deck">
       <div v-for="korisnik in korisnici" class="card " style="width: 18rem;">
-      <img :src="korisnik.profilnaURL" class="card-img-top" alt="slika">
-      <div class="card-body">
-      <h5 class="card-title">{{korisnik.ime}} {{korisnik.prezime}} </h5>
-      <h5 class="card-title">{{korisnik.opis}}</h5>
-      <h5 class="card-title">{{korisnik.brojTelefona}}</h5>
-      <h5 class="card-title">{{korisnik.uloga}}</h5>
-        <h5 class="card-title">{{korisnik.id}}</h5>
-        <router-link :to="{ name: 'profil', params: { id: korisnik.id}}"> Vidi jos </router-link>
+        <img :src="korisnik.profilnaURL" class="card-img-top" alt="slika">
+        <div class="card-body">
+          <h5 class="card-title"> Korisnik: {{korisnik.ime}} {{korisnik.prezime}} </h5>
+          <h5 class="card-title"> Kontakt telefon: {{korisnik.brojTelefona}}</h5>
+          <h5 class="card-title"> Uloga: {{korisnik.uloga}}</h5>
+          <router-link :to="{ name: 'profil', params: { id: korisnik.id}}"> Vidi jos </router-link>
+        </div>
       </div>
     </div>
-  </div>
   </div>
 
 </template>
 
 <style scoped>
-.korisnici-container {
-margin: 20px auto;
-max-width: 1200px;
-padding: 20px;
+.card-deck {
+  display: flex; /* Koristimo fleksibilni prikaz */
+  flex-wrap: wrap; /* Omogućavamo omotavanje elemenata */
+  gap: 20px; /* Razmak između kartica */
+  justify-content: space-around; /* Ravnomerno raspoređivanje kartica */
 }
 
 .card {
-margin-bottom: 20px;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.card-img-top {
-max-height: 200px;
-object-fit: cover;
-}
-
-.card-title {
-font-size: 1.25rem;
-margin-bottom: 10px;
+  flex: 0 1 calc(33.3% - 20px); /* Fleksibilan raspored kartica sa razmakom */
+  max-width: calc(33.3% - 20px); /* Maksimalna širina kartice */
+  box-sizing: border-box; /* Uključuje granice i padding u izračun dimenzija */
+  height: 400px; /* Visina kartice */
+  overflow: hidden; /* Skrivanje prekoračenja sadržaja */
 }
 
 .card-body {
-padding: 1.25rem;
+  text-align: center; /* Centriranje sadržaja unutar kartice */
+}
+
+.card-title {
+  margin-bottom: 10px; /* Razmak između naslova */
+}
+
+.card-img-top {
+  max-width: 100%; /* Maksimalna širina slike unutar kartice */
+  height: auto; /* Automatska visina slike */
+}
+
+.router-link {
+  display: inline-block; /* Blokni element za router-link */
+  margin-top: 10px; /* Razmak između linka i prethodnog elementa */
+  text-decoration: none; /* Bez podvučenosti linka */
+  padding: 5px 10px; /* Prostor oko teksta linka */
+  background-color: #1e90ff; /* Tamno plava pozadinska boja */
+  color: white; /* Bela boja teksta */
+  border-radius: 5px; /* Zaobljeni ivičnjaci */
+}
+
+.router-link:hover {
+  background-color: #0069d9; /* Promena boje pozadine pri hoveru */
 }
 
 </style>

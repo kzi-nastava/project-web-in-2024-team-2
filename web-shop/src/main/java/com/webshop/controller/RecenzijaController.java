@@ -3,10 +3,7 @@ package com.webshop.controller;
 import com.webshop.dto.KupacProdavacDto;
 import com.webshop.dto.RecenzijaDto;
 import com.webshop.dto.RecenzijaProdavacaDto;
-import com.webshop.model.Korisnik;
-import com.webshop.model.Prodavac;
-import com.webshop.model.Recenzija;
-import com.webshop.model.Uloga;
+import com.webshop.model.*;
 import com.webshop.service.KorisnikService;
 import com.webshop.service.RecenzijaService;
 import jakarta.servlet.http.HttpSession;
@@ -19,6 +16,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 import static com.webshop.model.Uloga.KUPAC;
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 public class RecenzijaController {
@@ -63,8 +61,12 @@ public class RecenzijaController {
         if(recenzijaService.addRecenzija(recenzija, prodavacId, loggedKorisnik.getId()) == null) {
             return new ResponseEntity<>("Mozete oceniti prodavca samo ako ste od istog kupili proizvod!", HttpStatus.BAD_REQUEST);
         }
+        //dodate tri linije koda ispod(radi dobijanja nove prosecne ocene prodavca)
+        Prodavac prodavac = (Prodavac) korisnikService.getProdavacById(prodavacId);
+        prodavac.setProsecnaOcena((prodavac.getProsecnaOcena()+recenzija.getOcena())/2);
+        korisnikService.saveKorisnik(prodavac);
+
         return new ResponseEntity<>("Uspesno ste ostavili recenziju prodavca", HttpStatus.OK);
-        //return new ResponseEntity<>(recenzijaService.addRecenzija(recenzija, prodavacId, loggedKorisnik.getId()), HttpStatus.OK);
     }
 
     @PostMapping("/oceni-kupca/{id}")
@@ -80,9 +82,13 @@ public class RecenzijaController {
         if(recenzijaService.addRecenzija(recenzija, loggedKorisnik.getId(), kupacId) == null) {
             return new ResponseEntity<>("Mozete oceniti prodavca samo ako ste od istog kupili proizvod!", HttpStatus.BAD_REQUEST);
         }
+        //dodate tri linije koda ispod i getKupacById u korisnikService
+        Kupac kupac = (Kupac) korisnikService.getKupacById(kupacId);
+        kupac.setProsecnaOcena((kupac.getProsecnaOcena()+recenzija.getOcena())/2);
+        korisnikService.saveKorisnik(kupac);
+
         return new ResponseEntity<>("Uspesno ste ostavili recenziju prodavca", HttpStatus.OK);
 
-        //return new ResponseEntity<>(recenzijaService.addRecenzija(recenzija, loggedKorisnik.getId(), kupacId), HttpStatus.OK);
     }
 
 
