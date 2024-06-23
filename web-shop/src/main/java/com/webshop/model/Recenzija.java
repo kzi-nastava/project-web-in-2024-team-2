@@ -46,7 +46,7 @@ public class Recenzija implements Serializable {
     public Recenzija(RecenzijaDto recenzijaDto, Korisnik korisnik) {
         this.ocena = recenzijaDto.getOcena();
         this.komentar = recenzijaDto.getKomentar();
-        this.datumRecenzije = recenzijaDto.getDatumRecenzije();
+        this.datumRecenzije = LocalDate.now();
         this.podnosilac = korisnik;
     }
 

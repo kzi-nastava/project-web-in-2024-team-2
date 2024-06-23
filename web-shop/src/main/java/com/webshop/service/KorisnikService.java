@@ -29,6 +29,14 @@ public class KorisnikService {
         korisnikRepo.save(kupac);
     }
 
+    public Korisnik getKupacById(Long id) {
+        Optional<Korisnik> optionalKorisnik = korisnikRepo.findById(id);
+        if (optionalKorisnik.isPresent() && optionalKorisnik.get().getUloga() == Uloga.KUPAC) {
+            return optionalKorisnik.get();
+        }
+        return null;
+    }
+
     public void createProdavac(KorisnikDto korisnikDto) {
         Prodavac prodavac = new Prodavac(korisnikDto);
         korisnikRepo.save(prodavac);
