@@ -8,6 +8,7 @@ import ProdavacView from "@/views/ProdavacView.vue"
 import ProfileUpdate from "@/views/ProfileUpdate.vue";
 import AdministratorRecenzijeView from "@/views/AdministratorRecenzijeView.vue";
 import AdministratorPrijaveView from "@/views/AdministratorPrijaveView.vue";
+import EditRecenzijaView from "@/views/EditRecenzijaView.vue"
 
 const routes = [
   {
@@ -63,6 +64,11 @@ const routes = [
     path: '/administrator_prijave',
     name: 'administratorPrijave',
     component: AdministratorPrijaveView
+  },
+  {
+    path: '/administrator_prijave/edit/:id',
+    name: 'administratorPrijaveEdit',
+    component: EditRecenzijaView
   }
 ]
 

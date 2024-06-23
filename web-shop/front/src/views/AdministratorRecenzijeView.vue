@@ -7,7 +7,7 @@
       return {
         korisnik: {},
         recenzije: [],
-        editClicked: ''
+        review: {}
       };
     },
     mounted() {
@@ -41,11 +41,8 @@
           console.log(error);
         });
       },
-      isEditClicked() {
-        this.editClicked = false;
-        document.getElementById('editBtn').addEventListener("click", function () {
-          this.editClicked = true;
-        });
+      goEdit(id) {
+        this.$router.push('/administrator_prijave/edit/' + id);
       }
     }
   };
@@ -78,7 +75,7 @@
     </div>
   </nav>
 
-  <section @load="getRecenzije" v-for="recenzija in recenzije" class="p-4 p-md-5 text-center text-lg-start shadow-1-strong rounded">
+  <section @load="getRecenzije" v-for="recenzija in recenzije" :key="recenzija.id" class="p-4 p-md-5 text-center text-lg-start shadow-1-strong rounded">
     <div class="row d-flex justify-content-center">
       <div id="reviews" class="col-md-10">
         <div class="card">
@@ -96,7 +93,7 @@
               <div id="buttons" class="col-lg-4 d-flex justify-content-end align-items-end mb-4 mb-lg-0">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                   <form>
-                    <button id="editBtn" class="btn btn-primary me-md-2" type="button">Edit</button>
+                    <button v-on:click="goEdit(recenzija.id)" href="/administrator_view/edit/{{recenzija.id}}" id="editBtn" class="btn btn-primary me-md-2" type="button">Edit</button>
                     <input v-on:click="deleteRecenzija()" id="deleteBtn" type="submit" class="btn btn-primary me-md-2" value="Delete">
                   </form>
                 </div>

@@ -1,10 +1,8 @@
 package com.webshop.controller;
 
-import com.webshop.dto.KupacProdavacDto;
 import com.webshop.dto.RecenzijaDto;
 import com.webshop.dto.RecenzijaProdavacaDto;
 import com.webshop.model.Korisnik;
-import com.webshop.model.Prodavac;
 import com.webshop.model.Recenzija;
 import com.webshop.model.Uloga;
 import com.webshop.service.KorisnikService;
@@ -15,10 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.*;
-
-import static com.webshop.model.Uloga.KUPAC;
 
 @RestController
 public class RecenzijaController {
@@ -47,7 +42,16 @@ public class RecenzijaController {
         }
 
         return new ResponseEntity<>(recenzijaDtoList, HttpStatus.OK);
+    }
 
+    @GetMapping("/recenzija/{id}")
+    public ResponseEntity<?> getRecenzijaById(@PathVariable("id") Long id) {
+        Recenzija recenzija = recenzijaService.findById(id);
+        if (recenzija == null) {
+            return new ResponseEntity<>("Ne postoji recenzija sa tim id-jem!", HttpStatus.NOT_FOUND);
+        }
+        RecenzijaDto recenzijaDto = new RecenzijaDto(recenzija);
+        return new ResponseEntity<>(recenzijaDto, HttpStatus.OK);
     }
 
     @PostMapping("/oceni-prodavca/{id}")
@@ -86,7 +90,7 @@ public class RecenzijaController {
     }
 
 
-    @PostMapping("/izmeni-recenziju/{id}")
+    @PutMapping("/izmeni-recenziju/{id}")
     public ResponseEntity<?> izmeniRecenziju(@PathVariable Long id, @RequestBody RecenzijaDto komentar, HttpSession session) {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
         if (korisnik == null || korisnik.getUloga() != Uloga.ADMINISTRATOR) {

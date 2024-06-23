@@ -12,7 +12,7 @@ export default {
         password: '',
         mail: '',
         brojTelefona: '',
-        datumRodenja: '',
+        datumRodjenja: '',
         profilnaURL: '',
         opis: '',
         oldPassword: ''
