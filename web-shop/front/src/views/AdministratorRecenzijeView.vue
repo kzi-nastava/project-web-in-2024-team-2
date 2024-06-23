@@ -32,8 +32,8 @@
           console.log(error);
         });
       },
-      deleteRecenzija() {
-        axios.delete(`http://localhost:8081/obrisi-recenziju/${this.recenzije[0].id}`, {withCredentials: true})
+      deleteRecenzija(Id) {
+        axios.delete(`http://localhost:8081/obrisi-recenziju/${this.recenzije[Id].id}`, {withCredentials: true})
         .then((response) => {
           alert(response.data);
         })
@@ -94,7 +94,7 @@
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                   <form>
                     <button v-on:click="goEdit(recenzija.id)" href="/administrator_view/edit/{{recenzija.id}}" id="editBtn" class="btn btn-primary me-md-2" type="button">Edit</button>
-                    <input v-on:click="deleteRecenzija()" id="deleteBtn" type="submit" class="btn btn-primary me-md-2" value="Delete">
+                    <input v-on:click="deleteRecenzija(recenzija.id - 1)" id="deleteBtn" type="submit" class="btn btn-primary me-md-2" value="Delete">
                   </form>
                 </div>
               </div>
