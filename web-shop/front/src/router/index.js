@@ -9,6 +9,10 @@ import ProfileUpdate from "@/views/ProfileUpdate.vue";
 import AdministratorRecenzijeView from "@/views/AdministratorRecenzijeView.vue";
 import AdministratorPrijaveView from "@/views/AdministratorPrijaveView.vue";
 import EditRecenzijaView from "@/views/EditRecenzijaView.vue"
+import OceniKupcaView from "@/views/OceniKupcaView.vue";
+import OceniProdavcaView from "@/views/OceniProdavcaView.vue";
+import ProfileView from "@/views/ProfileView.vue";
+import ProfilesView from "@/views/ProfilesView.vue";
 
 const routes = [
   {
@@ -69,6 +73,26 @@ const routes = [
     path: '/administrator_prijave/edit/:id',
     name: 'administratorPrijaveEdit',
     component: EditRecenzijaView
+  },
+  {
+    path: '/profiles',
+    name: '/Profiles',
+    component: ProfilesView
+  },
+  {
+    path: '/profil/:id',
+    name: 'profil',
+    component: ProfileView
+  },
+  {
+    path: '/oceni-prodavca/:id',
+    name: 'oceni-prodavca',
+    component: OceniProdavcaView
+  },
+  {
+    path: '/oceni-kupca/:id',
+    name: 'oceni-kupca',
+    component: OceniKupcaView
   }
 ]
 
