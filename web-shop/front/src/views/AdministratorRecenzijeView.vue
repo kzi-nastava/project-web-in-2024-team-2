@@ -7,6 +7,7 @@
       return {
         korisnik: {},
         recenzije: [],
+        editClicked: ''
       };
     },
     mounted() {
@@ -29,6 +30,21 @@
         })
         .catch((error) => {
           console.log(error);
+        });
+      },
+      deleteRecenzija() {
+        axios.delete(`http://localhost:8081/obrisi-recenziju/${this.recenzije[0].id}`, {withCredentials: true})
+        .then((response) => {
+          alert(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      },
+      isEditClicked() {
+        this.editClicked = false;
+        document.getElementById('editBtn').addEventListener("click", function () {
+          this.editClicked = true;
         });
       }
     }
@@ -77,6 +93,14 @@
                 <p><b>Ocena:</b> {{recenzija.ocena}}</p>
                 <p><b>Datum:</b> {{recenzija.datumRecenzije}}</p>
               </div>
+              <div id="buttons" class="col-lg-4 d-flex justify-content-end align-items-end mb-4 mb-lg-0">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                  <form>
+                    <button id="editBtn" class="btn btn-primary me-md-2" type="button">Edit</button>
+                    <input v-on:click="deleteRecenzija()" id="deleteBtn" type="submit" class="btn btn-primary me-md-2" value="Delete">
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -87,10 +111,6 @@
 
 <style scoped>
 
-#reviews {
-  cursor: pointer;
-}
-
 #user {
   cursor: pointer;
 }
@@ -100,5 +120,13 @@
   height: 40px;
 }
 
+.col-lg-8 {
+  width: fit-content;
+}
+
+#deleteBtn {
+  background-color: #e80000;
+  border-color: #e80000;
+}
 
 </style>

@@ -11,6 +11,7 @@ import java.time.LocalDate;
  */
 public class RecenzijaDto implements Serializable {
 
+    private Long id;
     private Integer ocena;
     private String komentar;
     private LocalDate datumRecenzije;
@@ -38,10 +39,15 @@ public class RecenzijaDto implements Serializable {
     }
 
     public RecenzijaDto(Recenzija recenzija) {
+        this.id = recenzija.getId();
         this.ocena = recenzija.getOcena();
         this.komentar = recenzija.getKomentar();
         this.datumRecenzije = recenzija.getDatumRecenzije();
         this.podnosilac = recenzija.getPodnosilac();
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Integer getOcena() {

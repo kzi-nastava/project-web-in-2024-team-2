@@ -20,7 +20,7 @@ public class PrijavaProfila implements Serializable {
 
     private String razlogPrijave;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Korisnik podnosilac;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
