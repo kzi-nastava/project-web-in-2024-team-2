@@ -43,7 +43,8 @@ export default {
     <ul>
       <li v-for="recenzija in korisnik.recenzije"> {{recenzija.komentar}}, {{recenzija.ocena}}</li>
     </ul>
-    <router-link :to="{ name: 'oceni-kupca', params: { id: korisnik.id}}" class="vidi-jos-link"> Oceni kupca </router-link>
+    <router-link :to="{ name: 'oceni-kupca', params: { id: korisnik.id}}" class="vidi-jos-link"> Oceni kupca </router-link> <br>
+    <router-link :to="{ name: 'prijavi-kupca', params: { id: korisnik.id}}" class="vidi-jos-link"> Prijavi Kupca </router-link>
   </div>
 
     <div v-if="korisnik.uloga === 'PRODAVAC'"> <strong> Proizvodi na prodaju: </strong>
@@ -54,7 +55,8 @@ export default {
     <ul>
       <li v-for="recenzija in korisnik.recenzije"> {{recenzija.komentar}}, {{recenzija.ocena}}</li>
     </ul>
-    <router-link :to="{ name: 'oceni-prodavca', params: { id: korisnik.id}}" class="vidi-jos-link"> Oceni prodavca </router-link>
+    <router-link :to="{ name: 'oceni-prodavca', params: { id: korisnik.id}}" class="vidi-jos-link"> Oceni prodavca </router-link> <br>
+    <router-link :to="{ name: 'prijavi-prodavca', params: {id: korisnik.id}}" class="vidi-jos-link"> Prijavi prodavca </router-link>
   </div>
   </div>
 

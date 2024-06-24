@@ -13,6 +13,8 @@ import OceniKupcaView from "@/views/OceniKupcaView.vue";
 import OceniProdavcaView from "@/views/OceniProdavcaView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import ProfilesView from "@/views/ProfilesView.vue";
+import PrijaviProdavcaView from "@/views/PrijaviProdavcaView.vue";
+import PrijaviKupcaView from "@/views/PrijaviKupcaView.vue";
 
 const routes = [
   {
@@ -93,7 +95,18 @@ const routes = [
     path: '/oceni-kupca/:id',
     name: 'oceni-kupca',
     component: OceniKupcaView
+  },
+  {
+    path: '/prijavi-prodavca/:id',
+    name: 'prijavi-prodavca',
+    component: PrijaviProdavcaView
+  },
+  {
+    path: '/prijavi-kupca/:id',
+    name: 'prijavi-kupca',
+    component: PrijaviKupcaView
   }
+
 ]
 
 const router = createRouter({
