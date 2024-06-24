@@ -57,9 +57,6 @@ export default {
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
         </ul>
         <div v-if="korisnik === null" class="d-grid gap-2 d-md-flex justify-content-md-end">
           <button id="loginBtn" class="btn btn-primary me-md-2" style="margin-left: 40px" type="button" v-on:click="login()">Login</button>
@@ -69,7 +66,7 @@ export default {
           <img id="icon" :src="korisnik.profilnaURL" alt="user icon">
           <p><b>{{korisnik.username}}</b></p>
         </div>
-        <a v-on:click="logout()" href="#">Logout</a>
+        <a v-if="korisnik !== null" v-on:click="logout()" href="#">Logout</a>
       </div>
     </div>
   </nav>
