@@ -27,14 +27,16 @@
         axios.get('http://localhost:8081/recenzije', {withCredentials: true})
         .then((response) => {
           this.recenzije = response.data;
+          console.log(this.recenzije.length);
         })
         .catch((error) => {
           console.log(error);
         });
       },
-      deleteRecenzija(Id) {
-        axios.delete(`http://localhost:8081/obrisi-recenziju/${this.recenzije[Id].id}`, {withCredentials: true})
+      deleteRecenzija(id) {
+        axios.delete(`http://localhost:8081/obrisi-recenziju/${id}`, {withCredentials: true})
         .then((response) => {
+          console.log(response.data);
           alert(response.data);
         })
         .catch((error) => {
@@ -75,7 +77,7 @@
     </div>
   </nav>
 
-  <section @load="getRecenzije" v-for="recenzija in recenzije" :key="recenzija.id" class="p-4 p-md-5 text-center text-lg-start shadow-1-strong rounded">
+  <section v-if="recenzije.length !== 0" @load="getRecenzije" v-for="recenzija in recenzije" :key="recenzija.id" class="p-4 p-md-5 text-center text-lg-start shadow-1-strong rounded">
     <div class="row d-flex justify-content-center">
       <div id="reviews" class="col-md-10">
         <div class="card">
@@ -94,7 +96,7 @@
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                   <form>
                     <button v-on:click="goEdit(recenzija.id)" href="/administrator_view/edit/{{recenzija.id}}" id="editBtn" class="btn btn-primary me-md-2" type="button">Edit</button>
-                    <input v-on:click="deleteRecenzija(recenzija.id - 1)" id="deleteBtn" type="submit" class="btn btn-primary me-md-2" value="Delete">
+                    <input v-on:click="deleteRecenzija(recenzija.id)" id="deleteBtn" type="submit" class="btn btn-primary me-md-2" value="Delete">
                   </form>
                 </div>
               </div>
@@ -104,6 +106,7 @@
       </div>
     </div>
   </section>
+  <div v-else class="align-content-lg-center" style="margin-top: 5%;font-size: 150%;opacity: 40%;user-select: none;">Nema recenzija</div>
 </template>
 
 <style scoped>

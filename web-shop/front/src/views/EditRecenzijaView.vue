@@ -37,6 +37,7 @@ export default {
     edit() {
       axios.put(`http://localhost:8081/izmeni-recenziju/${this.recenzija.id}`, this.recenzija, {withCredentials: true})
       .then((response) => {
+        this.$router.push('/administrator_view');
         alert(response.data);
       })
       .catch((error) => {
@@ -92,7 +93,7 @@ export default {
                 <p><b>Ocena:</b> {{recenzija.ocena}}</p>
                 <p><b>Datum:</b> {{recenzija.datumRecenzije}}</p>
                 <form>
-                  <button v-on:click="edit()" href="/administrator_view/edit/{{recenzija.id}}" id="editBtn" class="btn btn-primary me-md-2" type="button">Edit</button>
+                  <button v-on:click="edit()" id="editBtn" class="btn btn-primary me-md-2" type="button">Edit</button>
                 </form>
               </div>
             </div>
