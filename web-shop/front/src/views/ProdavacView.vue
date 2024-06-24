@@ -23,9 +23,9 @@ export default {
     this.getProizvodi(this.page);
     this.searchProizvodi();
     this.getKategorije();
-    this.filterProizvodi();
-    this.getLoggedUser();
+    this.filterProizvodi();this.getLoggedUser();
     this.isUserLogged();
+
   },
   methods: {
     isUserLogged() {
@@ -122,6 +122,9 @@ export default {
           </li>
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/profiles">Profiles</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/add_product">Dodaj proizvod</a>
           </li>
         </ul>
         <div @load="getLoggedUser" class="d-grid gap-2 d-md-flex justify-content-md-end">

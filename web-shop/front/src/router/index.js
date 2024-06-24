@@ -15,6 +15,7 @@ import ProfileView from "@/views/ProfileView.vue";
 import ProfilesView from "@/views/ProfilesView.vue";
 import PrijaviProdavcaView from "@/views/PrijaviProdavcaView.vue";
 import PrijaviKupcaView from "@/views/PrijaviKupcaView.vue";
+import AddProizvodView from "@/views/AddProizvodView.vue"
 
 const routes = [
   {
@@ -105,6 +106,11 @@ const routes = [
     path: '/prijavi-kupca/:id',
     name: 'prijavi-kupca',
     component: PrijaviKupcaView
+  },
+  {
+    path: '/add_product',
+    name: 'addProduct',
+    component: AddProizvodView
   }
 
 ]
