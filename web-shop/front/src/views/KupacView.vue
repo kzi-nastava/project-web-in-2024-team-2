@@ -82,9 +82,6 @@ export default {
     },
     goUpdate() {
       this.$router.push('/update_profile');
-    },
-    prikaziProfile() {
-      this.$router.push('/profiles');
     }
   }
 };
@@ -102,8 +99,10 @@ export default {
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/">Home</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/profiles">Profiles</a>
+          </li>
         </ul>
-        <button type="submit" class="btn btn-outline-success" style="position: relative; right: 620px; top: 0px;" @click="prikaziProfile"> Profiles </button>
         <div @load="getLoggedUser" class="d-grid gap-2 d-md-flex justify-content-md-end">
           <form class="d-flex" role="search" @submit.prevent="searchProizvodi">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="query">

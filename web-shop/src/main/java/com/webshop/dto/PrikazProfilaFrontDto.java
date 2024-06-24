@@ -11,6 +11,7 @@ import java.util.Set;
 
 public class PrikazProfilaFrontDto implements Serializable {
 
+    private final long id;
     private final String ime;
     private final String prezime;
     private final String username;
@@ -19,12 +20,12 @@ public class PrikazProfilaFrontDto implements Serializable {
     private final String brojTelefona;
     private final Uloga uloga;
     private final double ocena;
-    private final long id;
+    private final String profilnaURL;
     private Set<Proizvod> proizvodi = new HashSet<Proizvod>();
     private Set<Recenzija> recenzije = new HashSet<Recenzija>();
 
     public PrikazProfilaFrontDto(String ime, String prezime, String username, String password, String mail, String brojTelefona, Uloga uloga,
-                                 double ocena, long id, Set<Proizvod> proizvodi, Set<Recenzija> recenzije) {
+                                 double ocena, long id, String profilnaURL, Set<Proizvod> proizvodi, Set<Recenzija> recenzije) {
         this.ime = ime;
         this.prezime = prezime;
         this.username = username;
@@ -34,6 +35,7 @@ public class PrikazProfilaFrontDto implements Serializable {
         this.uloga = uloga;
         this.ocena = ocena;
         this.id = id;
+        this.profilnaURL = profilnaURL;
         this.proizvodi = proizvodi;
         this.recenzije = recenzije;
     }
@@ -48,6 +50,7 @@ public class PrikazProfilaFrontDto implements Serializable {
         this.uloga = korisnik.getUloga();
         this.ocena = ocena;
         this.id = korisnik.getId();
+        this.profilnaURL = korisnik.getProfilnaURL();
         this.proizvodi = proizvodi;
         this.recenzije = recenzije;
     }
@@ -62,6 +65,7 @@ public class PrikazProfilaFrontDto implements Serializable {
         this.uloga = korisnik.getUloga();
         this.ocena = ocena;
         this.id = korisnik.getId();
+        this.profilnaURL = korisnik.getProfilnaURL();
     }
 
     public String getIme() {
@@ -98,6 +102,10 @@ public class PrikazProfilaFrontDto implements Serializable {
 
     public long getId() {
         return id;
+    }
+
+    public String getProfilnaURL() {
+        return profilnaURL;
     }
 
     public Set<Proizvod> getProizvodi() {

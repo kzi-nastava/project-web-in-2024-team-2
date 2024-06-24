@@ -8,9 +8,14 @@ export default {
     };
   },
   mounted() {
+    this.getLoggedUser();
     this.getKorisnici();
   },
   methods: {
+    getLoggedUser() {
+      this.korisnik = JSON.parse(localStorage.getItem('korisnik'));
+      console.log(this.korisnik);
+    },
     getKorisnici() {
       axios.get('http://localhost:8081/profiles', {withCredentials: true})
       .then((response)=> {
@@ -22,16 +27,50 @@ export default {
         alert(error.message);
       });
     },
+    logout() {
+      localStorage.removeItem('korisnik');
+      this.$router.push('/');
+    },
+    goUpdate() {
+      this.$router.push('/update_profile');
+    }
   }
 };
 </script>
 
 <template>
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">WebShop</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/profiles">Profiles</a>
+          </li>
+        </ul>
+        <div @load="getLoggedUser" class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <div v-on:click="goUpdate()" v-if="korisnik != null" id="user" class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <img id="icon" :src="korisnik.profilnaURL" alt="user icon">
+            <p><b>{{korisnik.username}}</b></p>
+          </div>
+          <a v-on:click="logout()" href="#">Logout</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
   <div class="korisnici-container">
     <div><h2 class="Korisnici">Korisnici</h2></div>
     <div class="card-deck">
       <div v-for="korisnik in korisnici" class="card " style="width: 18rem;">
-        <img :src="korisnik.profilnaURL" class="card-img-top" alt="slika">
+        <img id="profilna" :src="korisnik.profilnaURL" class="card-img-top" alt="slika">
         <div class="card-body">
           <h5 class="card-title"> Osnovne informacije o korisniku: </h5>
           <h5 class="card-title"> Korisnik: {{korisnik.ime}} {{korisnik.prezime}} </h5>
@@ -45,8 +84,22 @@ export default {
 </template>
 
 <style scoped>
+
+#user {
+  cursor: pointer;
+}
+
+#icon {
+  width: 40px;
+  height: 40px;
+}
+
 .korisnici-container {
   background-color: #198754;
+}
+
+#profilna {
+  width: 20%;
 }
 
 .card-deck {
@@ -64,6 +117,9 @@ export default {
   height: 400px; /* Visina kartice */
   overflow: hidden; /* Skrivanje prekoračenja sadržaja */
   background-color: #f0f0f0;
+  padding: 1%;
+  display: flex;
+  align-items: center;
 }
 
 .card-body {

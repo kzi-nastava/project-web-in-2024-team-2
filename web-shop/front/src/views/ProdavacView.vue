@@ -80,8 +80,8 @@ export default {
       localStorage.removeItem('korisnik');
       this.$router.push('/');
     },
-    prikaziProfile() {
-      this.$router.push('/profiles');
+    goUpdate() {
+      this.$router.push('/updat_profile');
     }
   }
 };
@@ -99,17 +99,20 @@ export default {
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/">Home</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/profiles">Profiles</a>
+          </li>
         </ul>
-        <button type="submit" class="btn btn-outline-success" style="position: relative; right: 620px; top: 0px;" @click="prikaziProfile"> Profiles </button>
         <div @load="getLoggedUser" class="d-grid gap-2 d-md-flex justify-content-md-end">
           <form class="d-flex" role="search" @submit.prevent="searchProizvodi">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="query">
             <button class="btn btn-outline-success">Search</button>
           </form>
-          <div v-if="korisnik != null" id="user" class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <div v-on:click="goUpdate()" v-if="korisnik != null" id="user" class="d-grid gap-2 d-md-flex justify-content-md-end">
             <img id="icon" :src="korisnik.profilnaURL" alt="user icon">
             <p><b>{{korisnik.username}}</b></p>
           </div>
+          <a v-on:click="logout()" href="#">Logout</a>
         </div>
       </div>
     </div>
@@ -165,8 +168,6 @@ export default {
       </div>
     </div>
   </div>
-
-  <a v-on:click="logout()" href="#">Logout</a>
 
   <footer>
     <p style="user-select: none">&copy; {{ new Date().getFullYear() }} - All rights reserved</p>

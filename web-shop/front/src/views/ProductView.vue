@@ -1,3 +1,50 @@
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      proizvod: null,
+      korisnik: {},
+    };
+  },
+  mounted() {
+    this.fetchProizvod();
+    this.getLoggedUser();
+  },
+  methods: {
+    fetchProizvod() {
+      const id = this.$route.params.id;
+      axios.get(`http://localhost:8081/product/${id}`, { withCredentials: true })
+          .then((response) => {
+            this.proizvod = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+            alert("Ne postoji proizvod sa tim ID-em");
+          });
+    },
+    getLoggedUser() {
+      this.korisnik = JSON.parse(localStorage.getItem('korisnik'));
+      console.log(this.korisnik);
+    },
+    login() {
+      this.$router.push('/login');
+    },
+    register() {
+      this.$router.push('/register');
+    },
+    logout() {
+      localStorage.removeItem('korisnik');
+      this.$router.push('/');
+    },
+    goUpdate() {
+      this.$router.push('/update_profile');
+    }
+  }
+};
+</script>
+
 <template>
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
@@ -18,17 +65,18 @@
           <button id="loginBtn" class="btn btn-primary me-md-2" style="margin-left: 40px" type="button" v-on:click="login()">Login</button>
           <button id="registerBtn" class="btn btn-primary" type="button" v-on:click="register()">Register</button>
         </div>
-        <div v-else id="user" class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <div v-on:click="goUpdate" v-else id="user" class="d-grid gap-2 d-md-flex justify-content-md-end">
           <img id="icon" :src="korisnik.profilnaURL" alt="user icon">
           <p><b>{{korisnik.username}}</b></p>
         </div>
+        <a v-on:click="logout()" href="#">Logout</a>
       </div>
     </div>
   </nav>
 
   <div v-if="proizvod">
     <h1 class="nazivProizvoda">{{ proizvod.ime }}</h1>
-    <img :src="proizvod.profilnaURL" alt="slika proizvoda" class="product-image">
+    <img id="proizvodImg" :src="proizvod.profilnaURL" alt="slika proizvoda" class="product-image">
     <p><strong>{{ proizvod.opis }}</strong></p>
     <ul>
       <li><strong>Cena:</strong> {{ proizvod.cena }} RSD</li>
@@ -40,47 +88,11 @@
   </div>
 </template>
 
-<script>
-import axios from 'axios';
-
-export default {
-  data() {
-    return {
-      proizvod: null,
-      korisnik: {},
-    };
-  },
-  mounted() {
-    this.fetchProizvod();
-    this.getLoggedUser();
-  },
-  methods: {
-    fetchProizvod() {
-      const id = this.$route.params.id;
-      axios.get(`http://localhost:8081/product/${id}`, { withCredentials: true })
-      .then((response) => {
-        this.proizvod = response.data;
-      })
-      .catch((error) => {
-        console.log(error);
-        alert("Ne postoji proizvod sa tim ID-em");
-      });
-    },
-    getLoggedUser() {
-      this.korisnik = JSON.parse(localStorage.getItem('korisnik'));
-      console.log(this.korisnik);
-    },
-    login() {
-      this.$router.push('/login');
-    },
-    register() {
-      this.$router.push('/register');
-    }
-  }
-};
-</script>
-
 <style scoped>
+
+#proizvodImg {
+  width: 40%;
+}
 
 #user {
   cursor: pointer;
