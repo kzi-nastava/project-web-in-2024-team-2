@@ -81,14 +81,56 @@ export default {
       })
     },
     filterProizvodi() {
-      axios.get(`http://localhost:8081/products/filter?tipProdaje=${this.tipProdaje}`, {withCredentials: true})
-      .then((response) => {
-        this.proizvodi = response.data;
-      })
-      .catch((error) => {
-        console.log(error);
-        alert("Nema proizvoda!");
-      });
+      if (this.tipProdaje !== '') {
+        axios.get(`http://localhost:8081/products/filter?tipProdaje=${this.tipProdaje}`, {withCredentials: true})
+            .then((response) => {
+              this.proizvodi = response.data;
+            })
+            .catch((error) => {
+              console.log(error);
+              alert("Nema proizvoda!");
+            });
+      }
+      else if (this.cenaMin !== '' && this.cenaMax !== '') {
+        axios.get(`http://localhost:8081/products/filter?cenaMin=${this.cenaMin}&cenaMax=${this.cenaMax}`, {withCredentials: true})
+            .then((response) => {
+              this.proizvodi = response.data;
+            })
+            .catch((error) => {
+              console.log(error);
+              alert("Nema proizvoda!");
+            });
+      }
+      else if (this.cenaMin !== '') {
+        axios.get(`http://localhost:8081/products/filter?cenaMin=${this.cenaMin}`, {withCredentials: true})
+            .then((response) => {
+              this.proizvodi = response.data;
+            })
+            .catch((error) => {
+              console.log(error);
+              alert("Nema proizvoda!");
+            });
+      }
+      else if (this.cenaMax !== '') {
+        axios.get(`http://localhost:8081/products/filter?cenaMax=${this.cenaMax}`, {withCredentials: true})
+            .then((response) => {
+              this.proizvodi = response.data;
+            })
+            .catch((error) => {
+              console.log(error);
+              alert("Nema proizvoda!");
+            });
+      }
+      else if (this.naziv !== '') {
+        axios.get(`http://localhost:8081/products/filter?kategorija=${this.naziv}`, {withCredentials: true})
+            .then((response) => {
+              this.proizvodi = response.data;
+            })
+            .catch((error) => {
+              console.log(error);
+              alert("Nema proizvoda!");
+            });
+      }
     },
     seeMore(id) {
       this.$router.push('/product/' + id);
@@ -103,6 +145,10 @@ export default {
     },
     goUpdate() {
       this.$router.push('/update_profile');
+    },
+    ocistiFiltere() {
+      window.location.reload();
+      // document.getElementById('filteri').reset();
     }
   }
 };
@@ -172,6 +218,7 @@ export default {
           </div>
         </div>
         <button type="submit" class="btn btn-primary">Filter</button>
+        <button v-on:click="ocistiFiltere" type="submit" class="btn btn-primary">Očisti filtere</button>
       </form>
     </div>
     <div class="proizvodi-container">
@@ -234,6 +281,7 @@ export default {
 .btn-primary {
   background-color: #198754;
   border-color: #198754;
+  margin-left: 2%;
 }
 
 .btn-primary:hover {

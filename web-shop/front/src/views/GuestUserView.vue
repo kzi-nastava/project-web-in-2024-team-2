@@ -217,7 +217,7 @@ export default {
           </div>
         </div>
         <button type="submit" class="btn btn-primary">Filter</button>
-        <button v-on:click="ocistiFiltere" n type="submit" class="btn btn-primary">Očisti filtere</button>
+        <button v-on:click="ocistiFiltere" type="submit" class="btn btn-primary">Očisti filtere</button>
       </form>
     </div>
     <div class="proizvodi-container">
