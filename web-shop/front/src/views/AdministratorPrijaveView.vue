@@ -8,9 +8,7 @@ export default {
       korisnik: {},
       prijave: [],
       prijavaId: '',
-      odbijenoDto: {
-        razlogOdbijanja: ''
-      }
+      razlogOdbijanja: ''
     };
   },
   mounted() {
@@ -48,13 +46,13 @@ export default {
       });
     },
     setOdbijena(id) {
-      axios.post(`http://localhost:8081/odbij-prijavu/${id}`, this.odbijenoDto, {withCredentials: true})
+      axios.post(`http://localhost:8081/odbij-prijavu/${id}`, this.razlogOdbijanja, {withCredentials: true})
       .then((response) => {
-        console.log(this.odbijenoDto);
+        console.log(this.razlogOdbijanja);
         console.log(response.data);
       })
       .catch((error) => {
-        console.log(this.odbijenoDto);
+        console.log(this.razlogOdbijanja);
         console.log(error);
       });
     }
@@ -107,7 +105,7 @@ export default {
                   <button v-on:click="setPrihvacena(prijava.id)" href="/administrator_view/edit/{{prijava.id}}" id="editBtn" class="btn btn-primary me-md-2" type="button">Prihvati</button>
                   <form @submit.prevent="setOdbijena(prijava.id)" class="display-5" action="">
                     <input id="cancelBtn" type="submit" class="btn btn-primary me-md-2" value="Odbij">
-                    <input class="form-control me-2" type="search" placeholder="razlog" aria-label="Search" v-model="odbijenoDto">
+                    <input class="form-control me-2" type="search" placeholder="razlog" aria-label="Search" v-model="razlogOdbijanja">
                   </form>
                 </div>
                 <p v-else><b>Status prijave: </b>{{prijava.statusPrijave}}</p>
