@@ -59,14 +59,7 @@ public class PrijavaProfilaController {
     }
 
     @PostMapping("/odbij-prijavu/{id}")
-    public ResponseEntity<?> odbijPrijavu(@RequestBody OdbijenoDto razlogOdbijanja, @PathVariable Long id, HttpSession session) {
-//        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
-//        if(korisnik == null) {
-//            return new ResponseEntity<>("Niste prijavljeni!", HttpStatus.FORBIDDEN);
-//        }
-//        if(korisnik.getUloga() != ADMINISTRATOR) {
-//            return new ResponseEntity<>("Niste admin!", HttpStatus.FORBIDDEN);
-//        }
+    public ResponseEntity<?> odbijPrijavu(@RequestBody String razlogOdbijanja, @PathVariable Long id, HttpSession session) {
         PrijavaProfila prijavaProfila = prijavaProfilaService.getPrijavaProfilaById(id);
 
         if(prijavaProfila == null) {
@@ -77,20 +70,12 @@ public class PrijavaProfilaController {
         }
         prijavaProfila.setStatusPrijave(ODBIJENA);
         prijavaProfilaService.savePrijava(prijavaProfila);
-        OdbijenoDto razlog = new OdbijenoDto(razlogOdbijanja);
-        emailService.sendEmail(prijavaProfila.getOdnosiSe().getMail(), "PRIJAVA ODBIJENA!", razlog.getRazlogOdbijanja());
+        emailService.sendEmail(prijavaProfila.getOdnosiSe().getMail(), "PRIJAVA ODBIJENA!", razlogOdbijanja);
         return new ResponseEntity<>("Prijava Profila odbijena!", HttpStatus.OK);
     }
 
     @PostMapping("/prihvati-prijavu/{id}")
     public ResponseEntity<?> prihvatiPrijavu(@PathVariable Long id, HttpSession session) {
-//        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
-//        if(korisnik == null) {
-//            return new ResponseEntity<>("Niste prijavljeni!", HttpStatus.FORBIDDEN);
-//        }
-//        if(korisnik.getUloga() != ADMINISTRATOR){
-//            return new ResponseEntity<>("Niste admin!", HttpStatus.FORBIDDEN);
-//        }
         PrijavaProfila prijavaProfila = prijavaProfilaService.getPrijavaProfilaById(id);
         if(prijavaProfila == null) {
             return new ResponseEntity<>("Ne postoji data prijava profila!", HttpStatus.FORBIDDEN);
