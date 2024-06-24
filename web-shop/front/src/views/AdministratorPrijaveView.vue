@@ -7,6 +7,10 @@ export default {
     return {
       korisnik: {},
       prijave: [],
+      prijavaId: '',
+      odbijenoDto: {
+        razlogOdbijanja: ''
+      }
     };
   },
   mounted() {
@@ -28,6 +32,29 @@ export default {
         this.prijave = response.data;
       })
       .catch((error) => {
+        console.log(error);
+      });
+    },
+    obradi(id) {
+      this.prijavaId = id;
+    },
+    setPrihvacena(id) {
+      axios.post(`http://localhost:8081/prihvati-prijavu/${id}`, {withCredentials: true})
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    },
+    setOdbijena(id) {
+      axios.post(`http://localhost:8081/odbij-prijavu/${id}`, this.odbijenoDto, {withCredentials: true})
+      .then((response) => {
+        console.log(this.odbijenoDto);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(this.odbijenoDto);
         console.log(error);
       });
     }
@@ -62,9 +89,11 @@ export default {
     </div>
   </nav>
 
-  <section @load="getPrijave" v-for="prijava in prijave" class="p-4 p-md-5 text-center text-lg-start shadow-1-strong rounded">
+  <h3>Prijave Profila</h3>
+
+  <section v-if="prijave.length !== 0" @load="getPrijave" v-for="prijava in prijave" class="p-4 p-md-5 text-center text-lg-start shadow-1-strong rounded">
     <div class="row d-flex justify-content-center">
-      <div id="reviews" class="col-md-10">
+      <div id="prijave" class="col-md-10">
         <div class="card">
           <div class="card-body m-3">
             <div class="row">
@@ -73,9 +102,31 @@ export default {
               </div>
               <div class="col-lg-8">
                 <p class="fw-bold lead mb-2"><strong>{{prijava.podnosilac.ime}} {{prijava.podnosilac.prezime}} ({{prijava.podnosilac.uloga}})</strong></p>
-                <p class="text-muted fw-light mb-4">{{recenzija.komentar}}</p>
-                <p><b>Razlog prijave:</b> {{prijava.razlogPrijave}}</p>
+                <p class="text-muted fw-light mb-4">{{prijava.razlogPrijave}}</p>
+                <div v-if="prijavaId === prijava.id" class="col-md-6">
+                  <button v-on:click="setPrihvacena(prijava.id)" href="/administrator_view/edit/{{prijava.id}}" id="editBtn" class="btn btn-primary me-md-2" type="button">Prihvati</button>
+                  <form @submit.prevent="setOdbijena(prijava.id)" class="display-5" action="">
+                    <input id="cancelBtn" type="submit" class="btn btn-primary me-md-2" value="Odbij">
+                    <input class="form-control me-2" type="search" placeholder="razlog" aria-label="Search" v-model="odbijenoDto">
+                  </form>
+                </div>
+                <p v-else><b>Status prijave: </b>{{prijava.statusPrijave}}</p>
+                <p><b>Odnosi se na:</b> {{prijava.odnosiSe.ime}} {{prijava.odnosiSe.prezime}}</p>
                 <p><b>Datum:</b> {{prijava.datumPodnosenjaPrijave}}</p>
+              </div>
+              <div v-if="prijavaId !== prijava.id" id="buttons" class="col-lg-4 d-flex justify-content-end align-items-end mb-4 mb-lg-0">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                  <form>
+                    <button v-on:click="obradi(prijava.id)" id="editBtn" class="btn btn-primary me-md-2" type="button">Obradi</button>
+                  </form>
+                </div>
+              </div>
+              <div v-else id="buttons" class="col-lg-4 d-flex justify-content-end align-items-end mb-4 mb-lg-0">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                  <form>
+                    <input v-on:click="obradi(prijava.id)" id="cancelBtn" type="submit" class="btn btn-primary me-md-2" value="Cancel">
+                  </form>
+                </div>
               </div>
             </div>
           </div>
@@ -83,11 +134,31 @@ export default {
       </div>
     </div>
   </section>
+
+  <div v-else class="align-content-lg-center" style="margin-top: 5%;font-size: 150%;opacity: 40%;user-select: none;">Nema prijava profila</div>
 </template>
 
 <style scoped>
-#reviews {
-  cursor: pointer;
+
+.me-2 {
+  width: 200px;
+}
+
+h3 {
+  margin-top: 1%;
+}
+
+.col-md-6 {
+  display: flex;
+}
+
+.col-lg-8 {
+  width: fit-content;
+}
+
+#cancelBtn {
+  background-color: #e80000;
+  border-color: #e80000;
 }
 
 #user {

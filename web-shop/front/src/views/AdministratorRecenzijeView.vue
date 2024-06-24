@@ -77,6 +77,8 @@
     </div>
   </nav>
 
+  <h3>Recenzije</h3>
+
   <section v-if="recenzije.length !== 0" @load="getRecenzije" v-for="recenzija in recenzije" :key="recenzija.id" class="p-4 p-md-5 text-center text-lg-start shadow-1-strong rounded">
     <div class="row d-flex justify-content-center">
       <div id="reviews" class="col-md-10">
@@ -110,6 +112,10 @@
 </template>
 
 <style scoped>
+
+h3 {
+  margin-top: 1%;
+}
 
 #user {
   cursor: pointer;
