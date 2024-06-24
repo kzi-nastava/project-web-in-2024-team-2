@@ -60,7 +60,7 @@ const routes = [
     component: AdministratorRecenzijeView,
   },
   {
-    path: '/update_profile',
+    path: '/updateProfile',
     name: 'update',
     component: ProfileUpdate
   },

@@ -79,6 +79,9 @@ export default {
     logout() {
       localStorage.removeItem('korisnik');
       this.$router.push('/');
+    },
+    prikaziProfile() {
+      this.$router.push('/profiles');
     }
   }
 };
@@ -97,6 +100,7 @@ export default {
             <a class="nav-link active" aria-current="page" href="/">Home</a>
           </li>
         </ul>
+        <button type="submit" class="btn btn-outline-success" style="position: relative; right: 620px; top: 0px;" @click="prikaziProfile"> Profiles </button>
         <div @load="getLoggedUser" class="d-grid gap-2 d-md-flex justify-content-md-end">
           <form class="d-flex" role="search" @submit.prevent="searchProizvodi">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="query">

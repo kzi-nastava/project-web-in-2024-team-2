@@ -1,5 +1,6 @@
 package com.webshop.controller;
 
+import com.webshop.dto.KupacProdavacDto;
 import com.webshop.dto.RecenzijaDto;
 import com.webshop.dto.RecenzijaProdavacaDto;
 import com.webshop.model.*;
@@ -11,7 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.*;
+
+import static com.webshop.model.Uloga.KUPAC;
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 public class RecenzijaController {
@@ -72,6 +77,7 @@ public class RecenzijaController {
         korisnikService.saveKorisnik(prodavac);
 
         return new ResponseEntity<>("Uspesno ste ostavili recenziju prodavca", HttpStatus.OK);
+        //return new ResponseEntity<>(recenzijaService.addRecenzija(recenzija, prodavacId, loggedKorisnik.getId()), HttpStatus.OK);
     }
 
     @PostMapping("/oceni-kupca/{id}")
@@ -95,6 +101,7 @@ public class RecenzijaController {
 
         return new ResponseEntity<>("Uspesno ste ostavili recenziju prodavca", HttpStatus.OK);
 
+        //return new ResponseEntity<>(recenzijaService.addRecenzija(recenzija, loggedKorisnik.getId(), kupacId), HttpStatus.OK);
     }
 
 

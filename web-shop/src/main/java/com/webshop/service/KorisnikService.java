@@ -81,4 +81,13 @@ public class KorisnikService {
         return null;
     }
 
+    //dodato
+    public Korisnik getKupacById(Long id) {
+        Optional<Korisnik> optionalKorisnik = korisnikRepo.findById(id);
+        if (optionalKorisnik.isPresent() && optionalKorisnik.get().getUloga() == Uloga.KUPAC) {
+            return optionalKorisnik.get();
+        }
+        return null;
+    }
+
 }

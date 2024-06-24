@@ -15,7 +15,7 @@ export default {
         datumRodjenja: '',
         profilnaURL: '',
         opis: '',
-        oldPassword: ''
+        oldPassword: '',
       }
     };
   },
