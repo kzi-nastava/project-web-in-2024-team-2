@@ -5,6 +5,9 @@ export default {
   name: "GuestUserView",
   data() {
     return {
+      page: 0,
+      size: 5,
+      hasNextPage: true,
       proizvodi: [],
       query: '',
       kategorije: [],
@@ -15,7 +18,8 @@ export default {
     };
   },
   mounted() {
-    this.getProizvodi();
+    this.defaultProizvodi();
+    this.getProizvodi(this.page);
     this.searchProizvodi();
     this.getKategorije();
     this.filterProizvodi();
@@ -39,10 +43,27 @@ export default {
         }
       }
     },
-    getProizvodi() {
-      axios.get('http://localhost:8081/all-products', {withCredentials: true})
+    defaultProizvodi() {
+      this.getProizvodi(this.page);
+    },
+    getProizvodi(page) {
+      axios.get(`http://localhost:8081/all-products`, {
+        params: {
+          page: page,
+          size: this.size,
+        }
+      }, {withCredentials: true})
       .then((response) => {
-        this.proizvodi = response.data;
+        console.log(response.data);
+        if (response.status === 204 || response.data.length === 0) {
+          this.proizvodi = [];
+          this.hasNextPage = false;
+        }
+        else {
+          this.proizvodi = response.data;
+          this.page = page;
+          this.hasNextPage = response.data.length === this.size;
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -213,6 +234,11 @@ export default {
         </div>
       </div>
     </div>
+  </div>
+
+  <div>
+    <button class="btn btn-primary me-md-2" @click="getProizvodi(page - 1)" :disabled="page <= 0">Prethodna</button>
+    <button class="btn btn-primary me-md-2" @click="getProizvodi(page + 1)" :disabled="!hasNextPage">Sledeća</button>
   </div>
 
   <footer>
