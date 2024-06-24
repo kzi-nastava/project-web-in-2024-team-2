@@ -81,7 +81,7 @@ export default {
       this.$router.push('/');
     },
     goUpdate() {
-      this.$router.push('/updat_profile');
+      this.$router.push('/update_profile');
     }
   }
 };

@@ -24,12 +24,13 @@ export default {
     },
     OceniKupca() {
       const id = this.$route.params.id;
-      axios.post(`http://localhost:8081/oceni-prodavca/${id}`, this.recenzija, {withCredentials: true})
+      axios.post(`http://localhost:8081/oceni-kupca/${id}`, this.recenzija, {withCredentials: true})
           .then((res) => {
             alert("Uspesno ste podneli recenziju!");
             this.$router.push('/profiles');
           })
           .catch((error) => {
+            console.log(error.data);
             alert("Ne mozete da podnesete recenziju");
             this.$router.push('/profiles');
           });
@@ -43,7 +44,7 @@ export default {
   <div class="main">
     <h3>Ocenite kupca: <br> {{korisnik.ime}} {{korisnik.prezime}} </h3>
 
-    <form class="profile-form"  @submit.prevent="OceniKupca">
+    <form class="profile-form" @submit.prevent="OceniKupca">
       <label for="ocena">Ocena:</label>
       <input v-model="recenzija.ocena" type="number" id="ocena" name="ocena" min="1" max="5">
 

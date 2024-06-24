@@ -71,13 +71,13 @@ export default {
     },
     filterProizvodi() {
       axios.get(`http://localhost:8081/products/filter?tipProdaje=${this.tipProdaje}`, {withCredentials: true})
-        .then((response) => {
-          this.proizvodi = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("Nema proizvoda!");
-        })
+      .then((response) => {
+        this.proizvodi = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("Nema proizvoda!");
+      });
     },
     seeMore(id) {
       this.$router.push('/product/' + id);
@@ -87,6 +87,9 @@ export default {
     },
     register() {
       this.$router.push('/register');
+    },
+    ocistiFiltere() {
+      document.getElementById('filteri').reset();
     }
   }
 };
@@ -119,7 +122,7 @@ export default {
 
   <div class="page">
     <div class="filter">
-      <form @submit.prevent="filterProizvodi">
+      <form id="filteri" @submit.prevent="filterProizvodi">
         <div class="mb-4">
           <label for="minPrice" class="form-label">Najmanja cena:</label>
           <input type="number" class="form-control" id="minPrice" name="minPrice" placeholder="Cena od..." v-model="cenaMin">
@@ -150,6 +153,7 @@ export default {
           </div>
         </div>
         <button type="submit" class="btn btn-primary">Filter</button>
+        <button v-on:click="ocistiFiltere" n type="submit" class="btn btn-primary">Očisti filtere</button>
       </form>
     </div>
     <div class="proizvodi-container">
@@ -216,6 +220,7 @@ export default {
 .btn-primary {
   background-color: #198754;
   border-color: #198754;
+  margin-left: 2%;
 }
 
 .btn-primary:hover {
