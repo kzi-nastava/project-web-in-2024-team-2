@@ -286,6 +286,7 @@ export default {
 .card-img-top {
   width: 100%;
 }
+
 .btn-primary {
   background-color: #198754;
   border-color: #198754;

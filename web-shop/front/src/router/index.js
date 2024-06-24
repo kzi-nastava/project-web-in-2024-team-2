@@ -16,6 +16,7 @@ import ProfilesView from "@/views/ProfilesView.vue";
 import PrijaviProdavcaView from "@/views/PrijaviProdavcaView.vue";
 import PrijaviKupcaView from "@/views/PrijaviKupcaView.vue";
 import AddProizvodView from "@/views/AddProizvodView.vue"
+import UpdateProizvodView from "@/views/UpdateProizvodView.vue";
 
 const routes = [
   {
@@ -111,6 +112,11 @@ const routes = [
     path: '/add_product',
     name: 'addProduct',
     component: AddProizvodView
+  },
+  {
+    path: '/update_product/:id',
+    name: 'updateProduct',
+    component: UpdateProizvodView
   }
 
 ]

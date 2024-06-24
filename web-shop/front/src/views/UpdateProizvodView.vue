@@ -1,46 +1,55 @@
 <script>
-import axios from "axios";
+  import axios from "axios";
 
-export default {
-  name: 'AddProizvodView',
-  data() {
-    return {
-      korisnik: {},
-      proizvod: {}
-    };
-  },
-  mounted() {
-    this.getLoggedUser();
-    this.isUserLogged();
-  },
-  methods: {
-    isUserLogged() {
-      if (localStorage.getItem('korisnik') == null) {
+  export default {
+    name: "UpdateProizvodView",
+    data() {
+      return {
+        korisnik: {},
+        proizvod: {},
+        kategorija: {},
+        kat: false
+      };
+    },
+    mounted() {
+      this.getLoggedUser();
+      this.getProizvod();
+    },
+    methods: {
+      getLoggedUser() {
+        this.korisnik = JSON.parse(localStorage.getItem('korisnik'));
+        console.log(this.korisnik);
+      },
+      getProizvod() {
+        const id = this.$route.params.id;
+        axios.get(`http://localhost:8081/product/${id}`, {withCredentials: true})
+        .then((response) => {
+          this.proizvod = response.data;
+          this.kategorija = response.data.kategorija;
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      },
+      updateProizvod() {
+        axios.post(`http://localhost:8081/azuriraj-proizvod/${this.proizvod.id}`, this.proizvod, {withCredentials: true})
+        .then((response) => {
+          alert(response.data);
+          this.$router.push('/product/' + this.proizvod.id);
+        })
+        .catch((error) => {
+          alert(error.response.data);
+        });
+      },
+      logout() {
+        localStorage.removeItem('korisnik');
         this.$router.push('/');
+      },
+      goUpdate() {
+        this.$router.push('/update_profile');
       }
-    },
-    addProduct() {
-      axios.post('http://localhost:8081/dodaj-proizvod', this.proizvod, {withCredentials: true}).then((response) => {
-        console.log(response.data);
-        this.$router.push('/');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    },
-    getLoggedUser() {
-      this.korisnik = JSON.parse(localStorage.getItem('korisnik'));
-      console.log(this.korisnik);
-    },
-    logout() {
-      localStorage.removeItem('korisnik');
-      this.$router.push('/');
-    },
-    goUpdate() {
-      this.$router.push('/update_profile');
     }
   }
-};
 </script>
 
 <template>
@@ -55,26 +64,22 @@ export default {
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/profiles">Profiles</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/add_proizvod">Dodaj proizvod</a>
-          </li>
         </ul>
-        <div @load="getLoggedUser" class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <div v-on:click="goUpdate()" v-if="korisnik != null" id="user" class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <img id="icon" :src="korisnik.profilnaURL" alt="user icon">
-            <p><b>{{korisnik.username}}</b></p>
-          </div>
-          <a v-on:click="logout()" href="#">Logout</a>
+        <div v-if="korisnik === null" class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button id="loginBtn" class="btn btn-primary me-md-2" style="margin-left: 40px" type="button" v-on:click="login()">Login</button>
+          <button id="registerBtn" class="btn btn-primary" type="button" v-on:click="register()">Register</button>
         </div>
+        <div v-on:click="goUpdate" v-else id="user" class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <img id="icon" :src="korisnik.profilnaURL" alt="user icon">
+          <p><b>{{korisnik.username}}</b></p>
+        </div>
+        <a v-if="korisnik !== null" v-on:click="logout()" href="#">Logout</a>
       </div>
     </div>
   </nav>
 
-  <form class="row g-3" @submit.prevent="addProduct">
-    <h1><b>Dodaj proizvod</b></h1>
+  <form class="row g-3" @submit.prevent="updateProizvod">
+    <h1><b>Ažuriraj proizvod</b></h1>
     <div class="col-md-6">
       <label for="inputNaziv" class="form-label"><b>Naziv</b></label>
       <input type="text" class="form-control" id="inputNaziv" v-model="proizvod.naziv">
@@ -105,15 +110,16 @@ export default {
     </div>
     <div class="col-md-6">
       <label for="inputProdavac" class="form-label"><b>Prodavac</b></label>
-      <input type="text" class="form-control" id="inputProdavac" v-model="korisnik.uloga">
+      <input type="text" class="form-control" id="inputProdavac" v-model="korisnik.uloga" disabled>
     </div>
     <div class="col-12">
-      <button class="btn btn-primary" id="btn-register">Dodaj</button>
+      <button class="btn btn-primary" id="btn-register">Ažuriraj</button>
     </div>
   </form>
 </template>
 
 <style scoped>
+
 .btn-primary {
   background-color: #198754;
   border-color: #198754;

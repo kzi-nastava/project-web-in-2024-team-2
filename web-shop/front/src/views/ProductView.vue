@@ -16,13 +16,14 @@ export default {
     fetchProizvod() {
       const id = this.$route.params.id;
       axios.get(`http://localhost:8081/product/${id}`, { withCredentials: true })
-          .then((response) => {
-            this.proizvod = response.data;
-          })
-          .catch((error) => {
-            console.log(error);
-            alert("Ne postoji proizvod sa tim ID-em");
-          });
+      .then((response) => {
+        this.proizvod = response.data;
+        console.log(this.proizvod);
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("Ne postoji proizvod sa tim ID-em");
+      });
     },
     getLoggedUser() {
       this.korisnik = JSON.parse(localStorage.getItem('korisnik'));
@@ -40,6 +41,9 @@ export default {
     },
     goUpdate() {
       this.$router.push('/update_profile');
+    },
+    goUpdateProduct(id) {
+      this.$router.push(`/update_product/` + id);
     }
   }
 };
@@ -56,6 +60,9 @@ export default {
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/profiles">Profiles</a>
           </li>
         </ul>
         <div v-if="korisnik === null" class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -79,6 +86,7 @@ export default {
       <li><strong>Cena:</strong> {{ proizvod.cena }} RSD</li>
       <li><strong>Kategorija:</strong> {{ proizvod.kategorija.naziv }}</li>
     </ul>
+    <a class="btn btn-primary" v-on:click="goUpdateProduct(proizvod.id)">Ažuriraj</a>
   </div>
   <div v-else>
     <h4>Proizvod se učitava ili ne postoji.</h4>
@@ -86,6 +94,17 @@ export default {
 </template>
 
 <style scoped>
+
+.btn-primary {
+  background-color: #198754;
+  border-color: #198754;
+  margin-left: 2%;
+  margin-bottom: 2%;
+}
+
+.btn-primary:hover {
+  background-color: #12613e;
+}
 
 #proizvodImg {
   width: 40%;
