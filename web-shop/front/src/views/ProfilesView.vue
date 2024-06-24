@@ -36,10 +36,11 @@ export default {
       <div v-for="korisnik in korisnici" class="card " style="width: 18rem;">
         <img :src="korisnik.profilnaURL" class="card-img-top" alt="slika">
         <div class="card-body">
+          <h5 class="card-title"> Osnovne informacije o korisniku: </h5>
           <h5 class="card-title"> Korisnik: {{korisnik.ime}} {{korisnik.prezime}} </h5>
           <h5 class="card-title"> Kontakt telefon: {{korisnik.brojTelefona}}</h5>
           <h5 class="card-title"> Uloga: {{korisnik.uloga}}</h5>
-          <router-link :to="{ name: 'profil', params: { id: korisnik.id}}"> Vidi jos </router-link>
+          <router-link :to="{ name: 'profil', params: { id: korisnik.id}}" class="vidi-jos-link"> Prikazi profil </router-link>
         </div>
       </div>
     </div>
@@ -48,6 +49,10 @@ export default {
 </template>
 
 <style scoped>
+.korisnici-container {
+  background-color: #198754;
+}
+
 .card-deck {
   display: flex; /* Koristimo fleksibilni prikaz */
   flex-wrap: wrap; /* Omogućavamo omotavanje elemenata */
@@ -55,12 +60,14 @@ export default {
   justify-content: space-around; /* Ravnomerno raspoređivanje kartica */
 }
 
+
 .card {
   flex: 0 1 calc(33.3% - 20px); /* Fleksibilan raspored kartica sa razmakom */
   max-width: calc(33.3% - 20px); /* Maksimalna širina kartice */
   box-sizing: border-box; /* Uključuje granice i padding u izračun dimenzija */
   height: 400px; /* Visina kartice */
   overflow: hidden; /* Skrivanje prekoračenja sadržaja */
+  background-color: #f0f0f0;
 }
 
 .card-body {
@@ -68,7 +75,15 @@ export default {
 }
 
 .card-title {
-  margin-bottom: 10px; /* Razmak između naslova */
+  font-family: Arial, sans-serif; /* Promenite font ako želite neki drugi */
+  font-size: 0.8em; /* Promenite veličinu fonta po potrebi */
+  color: #333; /* Promenite boju teksta */
+  text-transform: uppercase; /* Pretvara tekst u velika slova */
+  text-align: center; /* Centriranje teksta */
+  padding: 10px; /* Dodajte prostor oko teksta */
+  background-color: #f0f0f0; /* Promenite pozadinu ako je potrebno */
+  border: 1px solid #ccc; /* Dodajte ivicu oko naslova */
+  border-radius: 5px; /* Zaoblite ivice */
 }
 
 .card-img-top {
@@ -76,18 +91,21 @@ export default {
   height: auto; /* Automatska visina slike */
 }
 
-.router-link {
-  display: inline-block; /* Blokni element za router-link */
-  margin-top: 10px; /* Razmak između linka i prethodnog elementa */
-  text-decoration: none; /* Bez podvučenosti linka */
-  padding: 5px 10px; /* Prostor oko teksta linka */
-  background-color: #1e90ff; /* Tamno plava pozadinska boja */
-  color: white; /* Bela boja teksta */
-  border-radius: 5px; /* Zaobljeni ivičnjaci */
+
+.vidi-jos-link {
+  display: inline-block;
+  margin-top: 10px;
+  text-decoration: none;
+  padding: 5px 10px;
+  background-color: #198754;
+  color: white;
+  border: 1px solid #198754; /* Dodajemo plavi okvir */
+  border-radius: 5px;
 }
 
-.router-link:hover {
-  background-color: #0069d9; /* Promena boje pozadine pri hoveru */
+.vidi-jos-link:hover {
+  background-color: #0069d9;
+  border-color: #0069d9; /* Promena boje okvira pri hoveru */
 }
 
 </style>
